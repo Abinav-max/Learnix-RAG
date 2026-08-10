@@ -240,13 +240,16 @@ def search_critiques_db(query: str, attack_vector: Optional[str] = None, source:
         processed_critiques.append(critique_chunk)
         save_critique_chunk_db(critique_chunk)
 
-    # Include custom ingested items from Supabase if relevant
+    # Include custom ingested items from Supabase ONLY if they match query keywords
     if source is None or source.lower() == "all":
         all_stored = get_all_critiques_db()
+        query_words = set(w.lower() for w in re.findall(r'\w+', clean_query) if len(w) > 3)
         for existing in all_stored:
             if existing.get("source") == "User Ingest" or "custom" in str(existing.get("id", "")):
-                if not any(p["id"] == existing["id"] for p in processed_critiques):
-                    processed_critiques.append(existing)
+                text_to_check = (existing.get("title", "") + " " + existing.get("text", "")).lower()
+                if query_words and any(w in text_to_check for w in query_words):
+                    if not any(p["id"] == existing["id"] for p in processed_critiques):
+                        processed_critiques.append(existing)
 
     return processed_critiques
 

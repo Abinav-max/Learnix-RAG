@@ -96,6 +96,12 @@ class TestAdversarialAcademicDirect(unittest.TestCase):
         data = ingest_endpoint(req)
         self.assertEqual(data["limitation_chunks_stored"], 1)
         self.assertEqual(data["marketing_chunks_dropped"], 1)
+        try:
+            from backend.db import get_supabase
+            sb = get_supabase()
+            sb.table("critiques").delete().eq("title", "SuperFastNet").execute()
+        except Exception:
+            pass
         print("[OK] Ingestion DistilBERT Classifier: Stored 1 critique chunk, dropped 1 marketing claim!")
 
     def test_sentiment_gate_filters_supportive_survey(self):
