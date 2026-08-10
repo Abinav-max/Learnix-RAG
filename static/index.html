@@ -1,0 +1,3745 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>The Laboratory | Learnix Research</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/static/favicon.svg" />
+  <!-- Material Symbols -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <!-- Google Fonts: Playfair Display, Source Serif 4, Geist -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;family=Geist:wght@100..900&amp;display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed-variant": "#364c3c",
+            "tertiary-container": "#462200",
+            "background": "#fcf9f8",
+            "on-background": "#1c1b1b",
+            "error-container": "#ffdad6",
+            "outline-variant": "#c3c8c1",
+            "tertiary": "#281100",
+            "surface-container-low": "#f6f3f2",
+            "primary-container": "#1b3022",
+            "tertiary-fixed-dim": "#ffb77d",
+            "secondary-fixed": "#e3e2df",
+            "on-secondary-container": "#626360",
+            "on-primary-fixed": "#0b2013",
+            "inverse-on-surface": "#f3f0ef",
+            "on-surface-variant": "#434843",
+            "tertiary-fixed": "#ffdcc3",
+            "inverse-primary": "#b4cdb8",
+            "surface-tint": "#4d6453",
+            "on-surface": "#1c1b1b",
+            "primary-fixed": "#d0e9d4",
+            "on-secondary": "#ffffff",
+            "on-primary": "#ffffff",
+            "secondary-container": "#e0e0dc",
+            "inverse-surface": "#313030",
+            "error": "#ba1a1a",
+            "secondary": "#5e5f5c",
+            "surface-container": "#f0edec",
+            "surface-container-high": "#ebe7e7",
+            "on-tertiary-container": "#dc790a",
+            "surface": "#fcf9f8",
+            "secondary-fixed-dim": "#c7c7c3",
+            "surface-container-lowest": "#ffffff",
+            "surface-bright": "#fcf9f8",
+            "on-secondary-fixed": "#1b1c1a",
+            "on-secondary-fixed-variant": "#464744",
+            "surface-dim": "#dcd9d9",
+            "surface-container-highest": "#e5e2e1",
+            "primary": "#061b0e",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed": "#2f1500",
+            "surface-variant": "#e5e2e1",
+            "primary-fixed-dim": "#b4cdb8",
+            "outline": "#737973",
+            "on-primary-container": "#819986",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed-variant": "#6e3900"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-mobile": "16px",
+            "max-content-width": "1140px",
+            "gutter": "24px",
+            "margin-desktop": "64px",
+            "unit": "4px"
+          },
+          "fontFamily": {
+            "label-md": ["Geist"],
+            "headline-sm": ["Playfair Display"],
+            "headline-md": ["Playfair Display"],
+            "body-lg": ["\"Source Serif 4\""],
+            "mono-data": ["Geist"],
+            "display-lg": ["Playfair Display"],
+            "label-sm": ["Geist"],
+            "body-md": ["\"Source Serif 4\""]
+          },
+          "fontSize": {
+            "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+            "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "headline-md": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "600" }],
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      background-color: #fcf9f8;
+      background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+      background-repeat: repeat;
+    }
+
+    .grain-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.02;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+
+    .hanging-indent {
+      padding-left: 2rem;
+      text-indent: -2rem;
+    }
+
+    .highlight-adversarial {
+      background-color: rgba(220, 121, 10, 0.12);
+      border-bottom: 2px solid #dc790a;
+      cursor: help;
+      padding: 0 4px;
+    }
+
+    .paper-shadow {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    .risk-amber-border {
+      border-left: 4px solid #dc790a;
+    }
+
+    .severity-fatal {
+      background-color: #1c1b1b;
+      color: #ffdad6;
+    }
+
+    @media print {
+
+      header,
+      footer,
+      #auth-screen,
+      #legal-modal-overlay,
+      #preview-modal,
+      aside,
+      button,
+      .grain-overlay {
+        display: none !important;
+      }
+
+      #view-reports {
+        display: block !important;
+        max-width: 100% !important;
+        padding: 20px !important;
+        margin: 0 !important;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+  <div class="grain-overlay"></div>
+
+  <!-- Authentication Screen Overlay (Learnix Web App Theme) -->
+  <div id="auth-screen"
+    class="hidden fixed inset-0 z-[100] bg-[#fcf9f8] bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')] text-[#1c1b1b] flex flex-col items-center justify-center p-4 overflow-y-auto">
+
+    <!-- Main Auth Card Container -->
+    <div class="w-full max-w-4xl bg-white border border-[#c3c8c1]/60 rounded-3xl shadow-xl p-8 md:p-12 transition-all">
+
+      <!-- Alert / Status message container -->
+      <div id="auth-alert"
+        class="hidden mb-6 p-4 rounded-xl text-sm font-medium flex items-center space-x-3 transition-all"></div>
+
+      <!-- VIEW 1: SIGN IN VIEW -->
+      <div id="view-login" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
+        <!-- Left Column -->
+        <div class="flex flex-col justify-between h-full space-y-4">
+          <div>
+            <div class="inline-flex items-center space-x-3 text-[#061b0e] mb-6">
+              <svg width="32" height="32" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+                <circle cx="40" cy="40" r="38" fill="#fcf9f8" stroke="#061b0e" stroke-width="4"/>
+                <path d="M28 25 L28 55 L43 55" stroke="#061b0e" stroke-width="5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                <path d="M38.5 35.5 L52 35.5 C56.5 35.5 56.5 44.5 52 44.5 L40 44.5 L50.5 55" stroke="#061b0e" stroke-width="4.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="28" cy="25" r="4.5" fill="#dc790a"/>
+                <circle cx="52" cy="35.5" r="3" fill="#dc790a"/>
+                <circle cx="50.5" cy="55" r="3.5" fill="#061b0e"/>
+                <circle cx="43" cy="55" r="3.5" fill="#061b0e"/>
+              </svg>
+              <span class="font-bold text-lg font-headline-sm">Learnix Research</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold font-headline-md text-[#061b0e] tracking-tight leading-tight">Sign
+              in</h1>
+            <p class="text-[#5e5f5c] text-sm mt-3 leading-relaxed">to continue to Peer-Review Devil's Advocate &amp; RAG
+              Engine</p>
+          </div>
+          <div class="hidden md:block text-xs text-[#5e5f5c] pt-8 border-t border-[#c3c8c1]/40">
+            Secure academic authentication powered by Learnix Research.
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <form onsubmit="handleLoginSubmit(event)" class="space-y-6">
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-[#1c1b1b] mb-1.5 font-label-md">Email address</label>
+              <input type="email" id="login-email" required
+                class="w-full px-4 py-3 bg-[#fcf9f8] border border-[#c3c8c1] rounded-xl text-sm text-[#1c1b1b] focus:outline-none focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] transition-all">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-[#1c1b1b] mb-1.5 font-label-md">Password</label>
+              <div class="relative">
+                <input type="password" id="login-password" required
+                  class="w-full pl-4 pr-12 py-3 bg-[#fcf9f8] border border-[#c3c8c1] rounded-xl text-sm text-[#1c1b1b] focus:outline-none focus:border-[#061b0e] focus:ring-1 focus:ring-[#061b0e] transition-all">
+                <button type="button" onclick="togglePasswordVisibility('login-password', this)"
+                  class="absolute right-3 top-3 text-[#5e5f5c] hover:text-[#061b0e]">
+                  <span class="material-symbols-outlined text-xl">visibility</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+              <button type="button" onclick="switchAuthView('forgot')"
+                class="text-xs font-semibold text-[#dc790a] hover:underline">
+                Forgot password?
+              </button>
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="flex items-center justify-between pt-6 border-t border-[#c3c8c1]/40">
+            <button type="button" onclick="goToRegStep(1)"
+              class="text-sm font-semibold text-[#061b0e] hover:bg-[#061b0e]/5 px-4 py-2 rounded-full transition-all">
+              Create account
+            </button>
+            <button type="submit" id="btn-login-submit"
+              class="bg-[#061b0e] text-white font-semibold text-sm px-7 py-2.5 rounded-full hover:bg-[#1b3022] transition-all shadow-md flex items-center space-x-2">
+              <span>Sign In</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- VIEW 2: REGISTER STEP 1 (Name & Email) -->
+      <div id="view-reg-step-1" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start hidden">
+        <!-- Left Column -->
+        <div class="flex flex-col justify-between h-full space-y-4">
+          <div>
+            <div class="inline-flex items-center gap-2.5 text-[#061b0e] mb-6">
+              <!-- SVG Icon Mark: LR Node Monogram -->
+              <svg width="34" height="34" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+                <path d="M24 20 L24 60 L44 60" stroke="#061b0e" stroke-width="6" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                <path d="M38 34 L56 34 C62 34 62 46 56 46 L40 46 L54 60" stroke="#061b0e" stroke-width="5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="24" cy="20" r="5" fill="#dc790a"/>
+                <circle cx="56" cy="34" r="3" fill="#dc790a"/>
+                <circle cx="54" cy="60" r="4" fill="#061b0e"/>
+                <circle cx="44" cy="60" r="4" fill="#061b0e"/>
+              </svg>
+              <div class="flex flex-col leading-none gap-0.5">
+                <span class="font-bold text-[15px] tracking-tight text-[#061b0e]" style="font-family:'Playfair Display',serif;">Learnix</span>
+                <span class="text-[9px] font-semibold tracking-[0.18em] uppercase text-[#5e5f5c]" style="font-family:'Geist',sans-serif;">Research</span>
+              </div>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold font-headline-md text-[#061b0e] tracking-tight leading-tight">
+              Create a Learnix Account</h1>
+            <p class="text-[#5e5f5c] text-sm mt-3 leading-relaxed">Enter your full name and email address to get started
+            </p>
+          </div>
+          <div class="hidden md:block text-xs text-[#5e5f5c] pt-8 border-t border-[#c3c8c1]/40">
+            Step 1 of 3 &bull; Basic Information
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-6">
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-[#1c1b1b] mb-1.5 font-label-md">Full Name</label>
+              <input type="text" id="reg-name" required
+                class="w-full px-4 py-3 bg-[#fcf9f8] border border-[#c3c8c1] rounded-xl text-sm text-[#1c1b1b] focus:outline-none focus:border-[#061b0e] transition-all">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-[#1c1b1b] mb-1.5 font-label-md">Email address</label>
+              <input type="email" id="reg-email" required
+                class="w-full px-4 py-3 bg-[#fcf9f8] border border-[#c3c8c1] rounded-xl text-sm text-[#1c1b1b] focus:outline-none focus:border-[#061b0e] transition-all">
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="flex items-center justify-between pt-6 border-t border-[#c3c8c1]/40">
+            <button type="button" onclick="switchAuthView('login')"
+              class="text-sm font-semibold text-[#061b0e] hover:bg-[#061b0e]/5 px-4 py-2 rounded-full transition-all">
+              Sign in instead
+            </button>
+            <button type="button" id="btn-next-step-1" onclick="handleStep1Next()"
+              class="bg-[#061b0e] text-white font-semibold text-sm px-7 py-2.5 rounded-full hover:bg-[#1b3022] transition-all shadow-md flex items-center space-x-2">
+              <span>Next</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 3: REGISTER STEP 2 (Verify Email OTP) -->
+      <div id="view-reg-step-2" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start hidden">
+        <!-- Left Column -->
+        <div class="flex flex-col justify-between h-full space-y-4">
+          <div>
+            <div class="inline-flex items-center gap-2.5 text-[#061b0e] mb-6">
+              <!-- SVG Icon Mark: LR Node Monogram -->
+              <svg width="34" height="34" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+                <path d="M24 20 L24 60 L44 60" stroke="#061b0e" stroke-width="6" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                <path d="M38 34 L56 34 C62 34 62 46 56 46 L40 46 L54 60" stroke="#061b0e" stroke-width="5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="24" cy="20" r="5" fill="#dc790a"/>
+                <circle cx="56" cy="34" r="3" fill="#dc790a"/>
+                <circle cx="54" cy="60" r="4" fill="#061b0e"/>
+                <circle cx="44" cy="60" r="4" fill="#061b0e"/>
+              </svg>
+              <div class="flex flex-col leading-none gap-0.5">
+                <span class="font-bold text-[15px] tracking-tight text-[#061b0e]" style="font-family:'Playfair Display',serif;">Learnix</span>
+                <span class="text-[9px] font-semibold tracking-[0.18em] uppercase text-[#5e5f5c]" style="font-family:'Geist',sans-serif;">Research</span>
+              </div>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold font-headline-md text-[#061b0e] tracking-tight leading-tight">
+              Verify your email</h1>
+            <p class="text-[#5e5f5c] text-sm mt-3 leading-relaxed">Enter the 6-digit verification code sent to <span
+                id="display-reg-email" class="font-bold text-[#061b0e]">your email</span></p>
+          </div>
+          <div class="hidden md:block text-xs text-[#5e5f5c] pt-8 border-t border-[#c3c8c1]/40">
+            Step 2 of 3 &bull; Security Verification
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-6">
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-[#1c1b1b] mb-1.5 font-label-md">6-Digit Email OTP
+                Code</label>
+              <div class="flex space-x-3 items-center">
+                <input type="text" id="reg-otp" maxlength="6"
+                  class="w-full text-center tracking-widest font-mono text-xl font-bold py-3 bg-[#fcf9f8] border border-[#c3c8c1] rounded-xl text-[#061b0e] focus:outline-none focus:border-[#061b0e] transition-all">
+                <button type="button" id="btn-send-reg-otp" onclick="handleSendOTP('registration')"
+                  class="px-4 py-3 bg-[#e0e0dc] text-[#1c1b1b] hover:bg-[#c7c7c3] font-semibold text-xs rounded-xl transition-all whitespace-nowrap">
+                  Resend OTP
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="flex items-center justify-between pt-6 border-t border-[#c3c8c1]/40">
+            <button type="button" onclick="goToRegStep(1)"
+              class="text-sm font-semibold text-[#5e5f5c] hover:text-[#061b0e] px-4 py-2 rounded-full transition-all">
+              Back
+            </button>
+            <button type="button" id="btn-next-step-2" onclick="handleStep2Next()"
+              class="bg-[#061b0e] text-white font-semibold text-sm px-7 py-2.5 rounded-full hover:bg-[#1b3022] transition-all shadow-md flex items-center space-x-2">
+              <span>Verify &amp; Next</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 4: REGISTER STEP 3 (Create Password & Confirm) -->
+      <div id="view-reg-step-3" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start hidden">
+        <!-- Left Column -->
+        <div class="flex flex-col justify-between h-full space-y-4">
+          <div>
+            <div class="inline-flex items-center gap-2.5 text-[#061b0e] mb-6">
+              <!-- SVG Icon Mark: LR Node Monogram -->
+              <svg width="34" height="34" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+                <path d="M24 20 L24 60 L44 60" stroke="#061b0e" stroke-width="6" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                <path d="M38 34 L56 34 C62 34 62 46 56 46 L40 46 L54 60" stroke="#061b0e" stroke-width="5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="24" cy="20" r="5" fill="#dc790a"/>
+                <circle cx="56" cy="34" r="3" fill="#dc790a"/>
+                <circle cx="54" cy="60" r="4" fill="#061b0e"/>
+                <circle cx="44" cy="60" r="4" fill="#061b0e"/>
+              </svg>
+              <div class="flex flex-col leading-none gap-0.5">
+                <span class="font-bold text-[15px] tracking-tight text-[#061b0e]" style="font-family:'Playfair Display',serif;">Learnix</span>
+                <span class="text-[9px] font-semibold tracking-[0.18em] uppercase text-[#5e5f5c]" style="font-family:'Geist',sans-serif;">Research</span>
+              </div>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold font-headline-md text-[#061b0e] tracking-tight leading-tight">
+              Create a strong password</h1>
+            <p class="text-[#5e5f5c] text-sm mt-3 leading-relaxed">Choose a password that meets all security
+              requirements below</p>
+          </div>
+
+          <!-- Security Requirements Box -->
+          <div class="bg-[#f6f3f2] border border-[#c3c8c1]/60 rounded-2xl p-4 space-y-2 text-xs">
+            <div class="text-xs font-bold text-[#061b0e] mb-2 flex items-center space-x-1.5">
+              <span class="material-symbols-outlined text-sm text-[#061b0e]">shield</span>
+              <span>Password Security Criteria</span>
+            </div>
+            <div class="flex items-center space-x-2" id="req-length">
+              <span class="material-symbols-outlined text-sm text-[#ba1a1a]">cancel</span>
+              <span class="text-[#5e5f5c]">At least 8 characters</span>
+            </div>
+            <div class="flex items-center space-x-2" id="req-upper">
+              <span class="material-symbols-outlined text-sm text-[#ba1a1a]">cancel</span>
+              <span class="text-[#5e5f5c]">Uppercase letter (A-Z)</span>
+            </div>
+            <div class="flex items-center space-x-2" id="req-lower">
+              <span class="material-symbols-outlined text-sm text-[#ba1a1a]">cancel</span>
+              <span class="text-[#5e5f5c]">Lowercase letter (a-z)</span>
+            </div>
+            <div class="flex items-center space-x-2" id="req-number">
+              <span class="material-symbols-outlined text-sm text-[#ba1a1a]">cancel</span>
+              <span class="text-[#5e5f5c]">Numeric digit (0-9)</span>
+            </div>
+            <div class="flex items-center space-x-2" id="req-special">
+              <span class="material-symbols-outlined text-sm text-[#ba1a1a]">cancel</span>
+              <span class="text-[#5e5f5c]">Special character (!@#$%^&amp;*...)</span>
+            </div>
+            <div class="flex items-center space-x-2" id="req-match">
+              <span class="material-symbols-outlined text-sm text-[#ba1a1a]">cancel</span>
+              <span class="text-[#5e5f5c]">Passwords match</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <form onsubmit="handleRegisterSubmit(event)" class="space-y-6">
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-[#1c1b1b] mb-1.5 font-label-md">Password</label>
+              <div class="relative">
+                <input type="password" id="reg-password" oninput="updatePasswordStrengthMeter()" required
+                  class="w-full pl-4 pr-12 py-3 bg-[#fcf9f8] border border-[#c3c8c1] rounded-xl text-sm text-[#1c1b1b] focus:outline-none focus:border-[#061b0e] transition-all">
+                <button type="button" onclick="togglePasswordVisibility('reg-password', this)"
+                  class="absolute right-3 top-3 text-[#5e5f5c] hover:text-[#061b0e]">
+                  <span class="material-symbols-outlined text-xl">visibility</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-[#1c1b1b] mb-1.5 font-label-md">Confirm Password</label>
+              <input type="password" id="reg-confirm-password" oninput="updatePasswordStrengthMeter()" required
+                class="w-full px-4 py-3 bg-[#fcf9f8] border border-[#c3c8c1] rounded-xl text-sm text-[#1c1b1b] focus:outline-none focus:border-[#061b0e] transition-all">
+            </div>
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="flex items-center justify-between pt-6 border-t border-[#c3c8c1]/40">
+            <button type="button" onclick="goToRegStep(2)"
+              class="text-sm font-semibold text-[#5e5f5c] hover:text-[#061b0e] px-4 py-2 rounded-full transition-all">
+              Back
+            </button>
+            <button type="submit" id="btn-reg-submit" disabled
+              class="bg-[#061b0e] text-white font-semibold text-sm px-7 py-2.5 rounded-full opacity-50 cursor-not-allowed hover:bg-[#1b3022] transition-all shadow-md flex items-center space-x-2">
+              <span>Create Account</span>
+              <span class="material-symbols-outlined text-sm">check_circle</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- VIEW 5: FORGOT PASSWORD VIEW -->
+      <div id="view-forgot" class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start hidden">
+        <!-- Left Column -->
+        <div class="flex flex-col justify-between h-full space-y-4">
+          <div>
+            <div class="inline-flex items-center gap-2.5 text-[#061b0e] mb-6">
+              <!-- SVG Icon Mark: LR Node Monogram -->
+              <svg width="34" height="34" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+                <path d="M24 20 L24 60 L44 60" stroke="#061b0e" stroke-width="6" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                <path d="M38 34 L56 34 C62 34 62 46 56 46 L40 46 L54 60" stroke="#061b0e" stroke-width="5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="24" cy="20" r="5" fill="#dc790a"/>
+                <circle cx="56" cy="34" r="3" fill="#dc790a"/>
+                <circle cx="54" cy="60" r="4" fill="#061b0e"/>
+                <circle cx="44" cy="60" r="4" fill="#061b0e"/>
+              </svg>
+              <div class="flex flex-col leading-none gap-0.5">
+                <span class="font-bold text-[15px] tracking-tight text-[#061b0e]" style="font-family:'Playfair Display',serif;">Learnix</span>
+                <span class="text-[9px] font-semibold tracking-[0.18em] uppercase text-[#5e5f5c]" style="font-family:'Geist',sans-serif;">Research</span>
+              </div>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold font-headline-md text-[#061b0e] tracking-tight leading-tight">
+              Password Recovery</h1>
+            <p class="text-[#5e5f5c] text-sm mt-3 leading-relaxed">Enter your registered email and verification code to
+              set a new password</p>
+          </div>
+
+          <div class="bg-[#f6f3f2] border border-[#c3c8c1]/60 rounded-2xl p-4 space-y-2 text-xs">
+            <div class="text-xs font-bold text-[#061b0e] mb-2 flex items-center space-x-1.5">
+              <span class="material-symbols-outlined text-sm text-[#061b0e]">shield</span>
+              <span>New Password Requirements</span>
+            </div>
+            <div class="flex items-center space-x-2" id="reset-req-length">
+              <span class="material-symbols-outlined text-sm text-[#ba1a1a]">cancel</span>
+              <span class="text-[#5e5f5c]">At least 8 characters</span>
+            </div>
+            <div class="flex items-center space-x-2" id="reset-req-upper">
+              <span class="material-symbols-outlined text-sm text-[#ba1a1a]">cancel</span>
+              <span class="text-[#5e5f5c]">Uppercase letter (A-Z)</span>
+            </div>
+            <div class="flex items-center space-x-2" id="reset-req-lower">
+              <span class="material-symbols-outlined text-sm text-[#ba1a1a]">cancel</span>
+              <span class="text-[#5e5f5c]">Lowercase letter (a-z)</span>
+            </div>
+            <div class="flex items-center space-x-2" id="reset-req-number">
+              <span class="material-symbols-outlined text-sm text-[#ba1a1a]">cancel</span>
+              <span class="text-[#5e5f5c]">Numeric digit (0-9)</span>
+            </div>
+            <div class="flex items-center space-x-2" id="reset-req-special">
+              <span class="material-symbols-outlined text-sm text-[#ba1a1a]">cancel</span>
+              <span class="text-[#5e5f5c]">Special character (!@#$%^&*...)</span>
+            </div>
+            <div class="flex items-center space-x-2" id="reset-req-match">
+              <span class="material-symbols-outlined text-sm text-[#ba1a1a]">cancel</span>
+              <span class="text-[#5e5f5c]">Passwords match</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <form onsubmit="handleResetSubmit(event)" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-[#1c1b1b] mb-1 font-label-md">Registered Email
+              Address</label>
+            <div class="flex space-x-2">
+              <input type="email" id="reset-email" required
+                class="w-full px-4 py-2.5 bg-[#fcf9f8] border border-[#c3c8c1] rounded-xl text-sm text-[#1c1b1b] focus:outline-none focus:border-[#061b0e] transition-all">
+              <button type="button" id="btn-send-reset-otp" onclick="handleSendOTP('reset')"
+                class="px-4 py-2.5 bg-[#e0e0dc] text-[#1c1b1b] hover:bg-[#c7c7c3] font-semibold text-xs rounded-xl transition-all whitespace-nowrap">
+                Send Code
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-[#1c1b1b] mb-1 font-label-md">Reset Verification Code</label>
+            <input type="text" id="reset-otp" maxlength="6"
+              class="w-full text-center tracking-widest font-mono text-base font-bold py-2.5 bg-[#fcf9f8] border border-[#c3c8c1] rounded-xl text-[#061b0e] focus:outline-none focus:border-[#061b0e] transition-all">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-[#1c1b1b] mb-1 font-label-md">New Password</label>
+            <input type="password" id="reset-password" oninput="updateResetPasswordMeter()" required
+              class="w-full px-4 py-2.5 bg-[#fcf9f8] border border-[#c3c8c1] rounded-xl text-sm text-[#1c1b1b] focus:outline-none focus:border-[#061b0e] transition-all">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-[#1c1b1b] mb-1 font-label-md">Confirm New Password</label>
+            <input type="password" id="reset-confirm-password" oninput="updateResetPasswordMeter()" required
+              class="w-full px-4 py-2.5 bg-[#fcf9f8] border border-[#c3c8c1] rounded-xl text-sm text-[#1c1b1b] focus:outline-none focus:border-[#061b0e] transition-all">
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="flex items-center justify-between pt-6 border-t border-[#c3c8c1]/40">
+            <button type="button" onclick="switchAuthView('login')"
+              class="text-sm font-semibold text-[#061b0e] hover:bg-[#061b0e]/5 px-4 py-2 rounded-full transition-all">
+              Back to Sign in
+            </button>
+            <button type="submit" id="btn-reset-submit" disabled
+              class="bg-[#061b0e] text-white font-semibold text-sm px-6 py-2.5 rounded-full opacity-50 cursor-not-allowed hover:bg-[#1b3022] transition-all shadow-md flex items-center space-x-2">
+              <span>Reset Password</span>
+              <span class="material-symbols-outlined text-sm">lock_reset</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Bottom Footer with Working Separate Modal Windows -->
+    <div class="w-full max-w-4xl flex items-center justify-between mt-6 px-4 text-xs text-[#5e5f5c]">
+      <div>English (United States)</div>
+      <div class="flex space-x-6">
+        <button type="button" onclick="openLegalModal('help')"
+          class="hover:underline hover:text-[#061b0e]">Help</button>
+        <button type="button" onclick="openLegalModal('privacy')"
+          class="hover:underline hover:text-[#061b0e]">Privacy</button>
+        <button type="button" onclick="openLegalModal('terms')"
+          class="hover:underline hover:text-[#061b0e]">Terms</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Separate Windows / Modals for Help, Privacy, Terms -->
+  <div id="legal-modal-overlay"
+    class="fixed inset-0 z-[150] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div
+      class="w-full max-w-2xl bg-white border border-[#c3c8c1] rounded-2xl shadow-2xl p-8 relative max-h-[85vh] overflow-y-auto">
+      <button onclick="closeLegalModal()"
+        class="absolute top-4 right-4 text-[#5e5f5c] hover:text-[#061b0e] p-2 rounded-full hover:bg-black/5">
+        <span class="material-symbols-outlined text-xl">close</span>
+      </button>
+
+      <!-- HELP MODAL CONTENT -->
+      <div id="legal-content-help" class="space-y-4 hidden">
+        <h2 class="font-headline-md text-2xl font-bold text-[#061b0e]">Learnix Research Help &amp; Support</h2>
+        <p class="text-sm text-[#5e5f5c] leading-relaxed">Welcome to Learnix Research Portal. Here is how to create an
+          account and access the Devil's Advocate RAG Engine:</p>
+        <div class="space-y-2 text-sm text-[#1c1b1b]">
+          <p><strong>Step 1:</strong> Enter your full name and registered email address, then click Next.</p>
+          <p><strong>Step 2:</strong> Check your email inbox for a 6-digit verification OTP code. Enter the code and
+            click Verify.</p>
+          <p><strong>Step 3:</strong> Create a strong password containing at least 8 characters, upper/lowercase
+            letters, numbers, and special symbols.</p>
+        </div>
+        <p class="text-sm text-[#5e5f5c]">If you encounter any issues receiving your email OTP code, check your
+          Spam/Junk folder or contact support at <code>learnix.research@gmail.com</code>.</p>
+      </div>
+
+      <!-- PRIVACY MODAL CONTENT -->
+      <div id="legal-content-privacy" class="space-y-4 hidden">
+        <h2 class="font-headline-md text-2xl font-bold text-[#061b0e]">Privacy Policy</h2>
+        <p class="text-sm text-[#5e5f5c] leading-relaxed">Learnix Research values your academic privacy and data
+          integrity.</p>
+        <div class="space-y-3 text-sm text-[#1c1b1b]">
+          <h3 class="font-bold text-[#061b0e]">1. Information We Collect</h3>
+          <p class="text-xs text-[#5e5f5c]">We collect your full name, email address, and hashed passwords solely for
+            authenticating your session on the Peer-Review RAG Engine.</p>
+          <h3 class="font-bold text-[#061b0e]">2. Data Security &amp; Encryption</h3>
+          <p class="text-xs text-[#5e5f5c]">All passwords are salted and hashed using PBKDF2 HMAC SHA-256 standard
+            encryption. Plain text passwords are never stored or logged.</p>
+          <h3 class="font-bold text-[#061b0e]">3. No Third-Party Selling</h3>
+          <p class="text-xs text-[#5e5f5c]">Your research papers, query telemetry, and user information are never sold
+            to external data brokers.</p>
+        </div>
+      </div>
+
+      <!-- TERMS MODAL CONTENT -->
+      <div id="legal-content-terms" class="space-y-4 hidden">
+        <h2 class="font-headline-md text-2xl font-bold text-[#061b0e]">Terms of Service</h2>
+        <p class="text-sm text-[#5e5f5c] leading-relaxed">By accessing Learnix Research Portal, you agree to comply with
+          the following academic guidelines:</p>
+        <div class="space-y-3 text-sm text-[#1c1b1b]">
+          <h3 class="font-bold text-[#061b0e]">1. Academic Verification</h3>
+          <p class="text-xs text-[#5e5f5c]">The Devil's Advocate engine is designed to audit papers for data leakage and
+            methodological flaws. Outputs are generated using LLM reasoning and cross-encoder retrieval.</p>
+          <h3 class="font-bold text-[#061b0e]">2. Responsible Use</h3>
+          <p class="text-xs text-[#5e5f5c]">Users must not attempt automated scraping or abuse of the Gemini 2.0 Flash
+            agent API endpoints.</p>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-4 border-t border-[#c3c8c1]/40 text-right">
+        <button onclick="closeLegalModal()"
+          class="px-6 py-2 bg-[#061b0e] text-white font-semibold text-sm rounded-full hover:bg-[#1b3022]">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TopAppBar -->
+  <header class="bg-background border-b border-outline-variant/20 sticky top-0 z-50 transition-all">
+    <div class="flex justify-between items-center w-full px-6 h-16">
+      <!-- Logo + Wordmark -->
+      <div class="flex items-center gap-2.5 cursor-pointer select-none group" onclick="switchView('lab')" title="Learnix Research — Home">
+        <!-- SVG Icon Mark: LR Node Monogram -->
+        <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0 transition-transform duration-300 group-hover:scale-105">
+          <circle cx="50" cy="50" r="44" stroke="#061b0e" stroke-width="7" fill="#ffffff"/>
+          <path d="M34 26 L34 68 L54 68" stroke="#061b0e" stroke-width="6.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+          <path d="M46 41 L64 41 C71 41 71 52 64 52 L47 52 L62 68" stroke="#061b0e" stroke-width="6" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="34" cy="26" r="5.5" fill="#dc790a"/>
+          <circle cx="64" cy="41" r="4.5" fill="#dc790a"/>
+          <circle cx="62" cy="68" r="4.5" fill="#061b0e"/>
+          <circle cx="44" cy="68" r="4.5" fill="#061b0e"/>
+        </svg>
+        <!-- Wordmark -->
+        <div class="flex flex-col leading-none gap-0.5">
+          <span class="font-bold text-[15px] tracking-tight text-[#061b0e] group-hover:text-[#dc790a] transition-colors duration-200" style="font-family:'Playfair Display',serif;">Learnix</span>
+          <span class="text-[9px] font-semibold tracking-[0.18em] uppercase text-[#5e5f5c]" style="font-family:'Geist',sans-serif;">Research</span>
+        </div>
+      </div>
+      <nav class="hidden md:flex space-x-8 items-center h-full">
+        <button id="nav-lab"
+          class="font-label-md text-label-md text-primary border-b-2 border-primary pb-1 transition-colors"
+          onclick="switchView('lab')">Laboratory</button>
+        <button id="nav-feed"
+          class="font-label-md text-label-md text-secondary pb-1 hover:text-primary transition-colors"
+          onclick="switchView('feed')">Feed</button>
+        <button id="nav-reports"
+          class="font-label-md text-label-md text-secondary pb-1 hover:text-primary transition-colors hidden"
+          onclick="switchView('reports')">Reports</button>
+        <button id="nav-deepdive"
+          class="font-label-md text-label-md text-secondary pb-1 hover:text-primary transition-colors"
+          onclick="switchView('deepdive')">Deep-Dive</button>
+      </nav>
+      <div class="flex items-center space-x-4">
+        <button
+          class="bg-primary-container text-on-primary-container px-3 py-1.5 font-label-sm text-label-sm border border-primary/20 hover:bg-primary hover:text-on-primary transition-all flex items-center space-x-1"
+          onclick="openIngestModal()">
+          <span class="material-symbols-outlined text-sm">upload_file</span>
+          <span>Ingest Paper</span>
+        </button>
+        <div id="user-header-badge" class="hidden relative">
+          <!-- Circular Profile Avatar Button -->
+          <button onclick="toggleProfileDropdown(event)" id="user-avatar-btn"
+            class="w-10 h-10 rounded-full bg-[#061b0e] text-white flex items-center justify-center font-bold text-sm cursor-pointer shadow-md hover:ring-2 hover:ring-[#061b0e]/40 transition-all overflow-hidden border border-[#c3c8c1]/40"
+            title="User Profile">
+            <span id="user-avatar-initial">A</span>
+            <img id="user-avatar-img" src="" class="hidden w-full h-full object-cover" />
+          </button>
+
+          <!-- Sleek Profile Dropdown Menu -->
+          <div id="profile-dropdown"
+            class="hidden absolute right-0 mt-2 w-64 bg-white border border-[#c3c8c1] rounded-2xl shadow-2xl p-4 z-[180] space-y-3">
+            <div class="flex items-center space-x-3 pb-3 border-b border-[#c3c8c1]/40">
+              <div id="dropdown-avatar-container"
+                class="w-10 h-10 rounded-full bg-[#061b0e] text-white flex items-center justify-center font-bold text-sm overflow-hidden shrink-0">
+                <span id="dropdown-avatar-initial">A</span>
+                <img id="dropdown-avatar-img" src="" class="hidden w-full h-full object-cover" />
+              </div>
+              <div class="min-w-0">
+                <p id="dropdown-user-name" class="font-bold text-xs text-[#061b0e] truncate">Abinav</p>
+                <p id="dropdown-user-email" class="text-[11px] text-[#5e5f5c] truncate">abinavwff@gmail.com</p>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <button onclick="openUserProfileModal('info')"
+                class="w-full flex items-center space-x-2.5 px-3 py-2 text-xs font-semibold text-[#061b0e] hover:bg-[#f6f3f2] rounded-xl transition-all">
+                <span class="material-symbols-outlined text-sm text-[#061b0e]">account_circle</span>
+                <span>View &amp; Edit Profile</span>
+              </button>
+
+              <button onclick="openUserProfileModal('security')"
+                class="w-full flex items-center space-x-2.5 px-3 py-2 text-xs font-semibold text-[#061b0e] hover:bg-[#f6f3f2] rounded-xl transition-all">
+                <span class="material-symbols-outlined text-sm text-[#061b0e]">lock_reset</span>
+                <span>Change Password</span>
+              </button>
+
+              <button onclick="handleLogout()"
+                class="w-full flex items-center space-x-2.5 px-3 py-2 text-xs font-semibold text-[#ba1a1a] hover:bg-[#ba1a1a]/10 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-sm text-[#ba1a1a]">logout</span>
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="flex-1 flex w-full">
+
+    <!-- Left History & Navigation Sidebar -->
+    <aside id="history-sidebar"
+      class="w-64 shrink-0 min-h-[calc(100vh-64px)] bg-[#f6f3f2] border-r border-[#c3c8c1]/40 flex flex-col p-4 transition-all duration-300 select-none">
+      
+      <!-- Brand Logo in Sidebar -->
+      <div class="flex justify-center mb-6 mt-2">
+        <svg width="60" height="60" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0 drop-shadow-sm transition-transform hover:scale-105">
+          <circle cx="40" cy="40" r="38" fill="#fcf9f8" stroke="#061b0e" stroke-width="4"/>
+          <path d="M28 25 L28 55 L43 55" stroke="#061b0e" stroke-width="5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+          <path d="M38.5 35.5 L52 35.5 C56.5 35.5 56.5 44.5 52 44.5 L40 44.5 L50.5 55" stroke="#061b0e" stroke-width="4.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="28" cy="25" r="4.5" fill="#dc790a"/>
+          <circle cx="52" cy="35.5" r="3" fill="#dc790a"/>
+          <circle cx="50.5" cy="55" r="3.5" fill="#061b0e"/>
+          <circle cx="43" cy="55" r="3.5" fill="#061b0e"/>
+        </svg>
+      </div>
+
+      <!-- Top Header with Toggle -->
+      <div class="flex items-center justify-between pb-3 border-b border-[#c3c8c1]/30 mb-4">
+        <div class="flex items-center space-x-2 text-[#061b0e]" id="history-sidebar-title">
+          <span class="material-symbols-outlined text-lg text-[#061b0e]">history</span>
+          <span class="font-bold text-xs uppercase tracking-wider font-label-md sidebar-text">Recents &amp; Nav</span>
+        </div>
+        <button onclick="toggleHistorySidebar()"
+          class="p-1 rounded-lg text-[#5e5f5c] hover:text-[#061b0e] hover:bg-[#e0e0dc] transition-all"
+          title="Toggle Sidebar">
+          <span id="sidebar-toggle-icon" class="material-symbols-outlined text-xl">menu_open</span>
+        </button>
+      </div>
+
+      <!-- Action Items -->
+      <div class="space-y-1.5 mb-6">
+        <button onclick="startNewInquiry()"
+          class="w-full flex items-center space-x-2.5 px-3 py-2 bg-[#061b0e] text-white hover:bg-[#1b3022] font-semibold text-xs rounded-xl shadow-sm transition-all"
+          title="New Inquiry">
+          <span class="material-symbols-outlined text-sm">edit_square</span>
+          <span class="sidebar-text">New Inquiry</span>
+        </button>
+
+        <button onclick="openResourcesModal()"
+          class="w-full flex items-center space-x-2.5 px-3 py-2 text-[#1c1b1b] hover:bg-[#e0e0dc] font-semibold text-xs rounded-xl transition-all"
+          title="Resources">
+          <span class="material-symbols-outlined text-sm text-[#061b0e]">library_books</span>
+          <span class="sidebar-text">Resources</span>
+        </button>
+
+        <button onclick="openSavedPapersModal()"
+          class="w-full flex items-center justify-between px-3 py-2 text-[#1c1b1b] hover:bg-[#e0e0dc] font-semibold text-xs rounded-xl transition-all"
+          title="Saved Papers">
+          <div class="flex items-center space-x-2.5">
+            <span class="material-symbols-outlined text-sm text-[#dc790a]">bookmark</span>
+            <span class="sidebar-text">Saved Papers</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Recents Search History List -->
+      <div class="flex-1 flex flex-col min-h-0 pt-2 border-t border-[#c3c8c1]/30">
+        <div class="flex items-center justify-between mb-2 px-1">
+          <span class="text-[10px] font-bold text-[#5e5f5c] uppercase tracking-wider sidebar-text">Recents</span>
+          <button onclick="clearSearchHistory()" class="text-[10px] text-[#ba1a1a] hover:underline sidebar-text"
+            title="Clear History">Clear</button>
+        </div>
+        <div id="search-history-list" class="flex-1 overflow-y-auto space-y-1 pr-1 text-xs">
+          <!-- Dynamic Search History Items -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- VIEW 1: LABORATORY CANVAS -->
+    <main id="view-lab" class="flex-1 px-8 py-12 w-full max-w-full">
+      <!-- Hero Section -->
+      <section class="mb-16 text-center">
+        <div
+          class="mb-4 inline-block px-4 py-1 border border-on-tertiary-container/30 text-on-tertiary-container font-label-sm text-label-sm">
+          PHASE 4: STRESS TEST ACTIVE
+        </div>
+        <h1 class="font-display-lg text-display-lg mb-4 text-primary">Test Your Thesis. Find the Flaws.</h1>
+        <p class="font-body-lg text-body-lg max-w-2xl mx-auto text-secondary italic">
+          The analysis engine utilizes rigorous Bayesian networks to review methodological over-reach in modern academic
+          literature.
+        </p>
+      </section>
+
+      <!-- Adversarial Search Section -->
+      <section class="w-full mb-24 relative">
+        <div class="bg-surface p-8 border border-outline/20 relative z-10 paper-shadow">
+          <label class="block font-label-md text-label-md text-primary mb-4 tracking-widest uppercase"
+            for="methodology-input">
+            Input Methodology for Review
+          </label>
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="relative flex-1">
+              <input
+                class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline-variant focus:border-primary focus:ring-0 font-body-lg text-body-lg py-4 pl-2 pr-16 placeholder:text-secondary-fixed-dim placeholder:italic transition-all"
+                id="methodology-input" name="academic_research_search_query" autocomplete="off" autocorrect="off"
+                autocapitalize="none" spellcheck="false"
+                placeholder="e.g., Are Large Language Models capable of true logical reasoning?" type="search"
+                onkeydown="if(event.key==='Enter') triggerAdversarialSearch()" />
+              <div class="absolute right-4 top-1/2 -translate-y-1/2 flex space-x-2">
+              </div>
+            </div>
+            <button
+              class="bg-primary text-on-primary px-8 py-4 font-label-md text-label-md hover:bg-on-primary-fixed transition-colors"
+              onclick="triggerAdversarialSearch()">
+              DEEP SEARCH
+            </button>
+          </div>
+
+          <div class="mt-4 flex flex-wrap gap-3">
+            <span class="font-label-sm text-label-sm text-secondary">Quick Hooks:</span>
+            <button
+              class="font-label-sm text-label-sm text-on-tertiary-container border-b border-on-tertiary-container/20 hover:border-on-tertiary-container transition-all"
+              onclick="presetQuery('Are Large Language Models capable of true logical reasoning?')">LLM Logical
+              Reasoning Check</button>
+            <button
+              class="font-label-sm text-label-sm text-on-tertiary-container border-b border-on-tertiary-container/20 hover:border-on-tertiary-container transition-all"
+              onclick="presetQuery('Should I use Transformers or Graph Neural Networks for forecasting?')">Transformers
+              vs GNNs for forecasting</button>
+            <button
+              class="font-label-sm text-label-sm text-on-tertiary-container border-b border-on-tertiary-container/20 hover:border-on-tertiary-container transition-all"
+              onclick="presetQuery('Is the sky blue?')">Fact Check: Is the sky blue?</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Current Hotspots -->
+      <section>
+        <div class="flex items-end justify-between mb-8 border-b border-outline-variant/20 pb-4">
+          <div>
+            <h2 class="font-headline-md text-headline-md text-primary">Current Hotspots</h2>
+            <p class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mt-1">Trending Reviews via
+              PubPeer
+              &amp; ArXiv</p>
+          </div>
+          <button class="font-label-md text-label-md text-on-tertiary-container hover:underline transition-all"
+            onclick="switchView('feed')">View All Activity</button>
+        </div>
+        <div id="hotspots-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+          <!-- Loaded dynamically -->
+        </div>
+      </section>
+
+
+    </main>
+
+    <!-- VIEW 2: ADVERSARIAL FEED / SEARCH RESULTS -->
+    <main id="view-feed" class="hidden flex-1 px-8 py-10 w-full max-w-full flex flex-col xl:flex-row gap-8 items-start">
+
+      <!-- Feed Column -->
+      <div class="flex-1 w-full">
+        <header class="mb-12">
+          <h1 class="font-display-lg text-display-lg text-primary mb-2">The Adversarial Feed</h1>
+          <p class="font-body-lg text-body-lg text-secondary italic border-l-2 border-outline-variant pl-4">
+            Scrutinizing: <span id="feed-query-text" class="font-bold text-on-surface">"Are Large Language Models
+              capable
+              of true logical reasoning?"</span>
+          </p>
+          <div id="feed-transformed-container"
+            class="mt-3 text-xs font-mono-data text-on-tertiary-container bg-tertiary-fixed/30 p-2 rounded border border-on-tertiary-container/20">
+            Adversarial Vector Transformation: <span id="feed-transformed-text">Query + [insufficient baseline
+              methodological flaw data leakage]</span>
+          </div>
+          <div class="flex flex-wrap gap-4 mt-4 items-center">
+            <span id="feed-source-badge"
+              class="bg-primary-container text-on-primary-container px-3 py-1 text-label-sm font-label-sm border border-primary/20">Source:
+              All Active Attacks</span>
+            <span id="feed-match-count"
+              class="bg-surface-container-highest px-3 py-1 text-label-sm font-label-sm border border-outline-variant/40">11
+              Matches Found → Filtered to Top 3 Relevant</span>
+            <span id="feed-severity-badge"
+              class="bg-on-tertiary-container/10 text-on-tertiary-container px-3 py-1 text-label-sm font-label-sm border border-on-tertiary-container/20">Critical
+              Severity High</span>
+          </div>
+          <div class="flex justify-center mt-8 pb-4">
+            <button
+              id="generate-risk-report-btn"
+              class="bg-primary text-on-primary px-8 py-4 text-label-lg font-bold tracking-widest hover:bg-on-primary-fixed transition-colors shadow-md rounded uppercase border border-outline/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              onclick="generateReportForCurrentQuery()">
+              Generate Risk Report
+            </button>
+          </div>
+        </header>
+
+        <div id="status-banner" class="hidden mb-6 p-4 rounded text-sm font-body-md border-l-4">
+          <!-- Dynamic status banner for facts or zero matches -->
+        </div>
+
+        <section id="critique-cards-container" class="space-y-8">
+          <!-- Dynamic Critique Feed Cards -->
+        </section>
+
+        <!-- Dynamic Quick Debunk & Verified Skepticism Bento Box -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+          <article id="quick-debunk-card"
+            class="bg-surface-container-high/50 border border-outline-variant/20 p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between mb-4">
+                <span class="text-label-sm font-mono-data text-outline uppercase tracking-tighter">Quick Debunk</span>
+                <span class="material-symbols-outlined text-on-tertiary-container">warning</span>
+              </div>
+              <h3 id="quick-debunk-title" class="font-headline-sm text-headline-sm text-primary mb-3">Relevance Filter
+                Active</h3>
+              <p id="quick-debunk-body" class="font-body-md text-body-md text-on-surface-variant">No unrelated critiques
+                to display. All retrieved papers are semantically relevant to your thesis query.</p>
+            </div>
+            <div class="mt-6 flex items-center justify-between">
+              <span id="quick-debunk-badge"
+                class="text-label-sm font-bold bg-primary-container text-on-primary-container px-2 py-0.5">FILTERED</span>
+              <span id="quick-debunk-ref" class="text-label-sm text-outline">Semantic Cross-Encoder</span>
+            </div>
+          </article>
+          <article class="bg-primary text-on-primary p-6 flex flex-col justify-center items-center text-center">
+            <span class="material-symbols-outlined text-4xl mb-4">verified_user</span>
+            <h3 class="font-headline-sm text-headline-sm mb-2">Verified Scepticism</h3>
+            <p class="font-label-md text-label-md opacity-80 mb-6 px-4">DistilBERT paragraph classifier &amp; Semantic
+              Re-Ranker filtered out 82% of supportive paper marketing fluff and off-topic spillover.</p>
+            <button
+              class="bg-on-primary text-primary px-6 py-2 font-label-md text-label-md font-bold uppercase tracking-wider"
+              onclick="switchView('reports')">Inspect Full Report</button>
+          </article>
+        </div>
+      </div> <!-- End Feed Column -->
+
+      <!-- Right Sidebar for Reference Papers -->
+      <aside class="hidden xl:block w-80 shrink-0 sticky top-24 space-y-6">
+        <div class="border-b border-outline-variant/30 pb-2 mb-4">
+          <h3 class="font-headline-sm text-headline-sm text-primary flex items-center space-x-2">
+            <span class="material-symbols-outlined text-[20px]">library_books</span>
+            <span>Contextual Literature</span>
+          </h3>
+          <p class="font-label-sm text-label-sm text-secondary mt-1">Foundational papers retrieved for this query</p>
+        </div>
+        <div id="reference-papers-container" class="space-y-4">
+          <!-- Dynamic reference papers -->
+          <div class="text-sm text-secondary italic">Searching literature...</div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- VIEW 3: ACADEMIC RISK REPORT -->
+    <main id="view-reports" class="hidden flex-1 px-8 py-10 w-full max-w-full">
+      <!-- Report Header -->
+      <div class="mb-12 border-b-4 border-primary pb-8">
+        <div class="flex justify-between items-end mb-4">
+          <p id="report-doc-id" class="font-mono-data text-mono-data uppercase tracking-widest text-on-surface-variant">
+            Internal Document ID: AA-2026-X921</p>
+          <p id="report-timestamp" class="font-mono-data text-mono-data text-on-surface-variant">Timestamp:
+            2026.07.31.14:30:00</p>
+        </div>
+        <h1 class="font-display-lg text-display-lg text-primary mb-2">The Academic Risk Report</h1>
+        <p id="report-query-subtitle" class="font-body-lg text-body-lg italic text-secondary">Final Synthesis: Neural
+          Architecture Evaluation</p>
+      </div>
+
+      <!-- Section 01: The Claim -->
+      <section class="mb-16">
+        <h2
+          class="font-label-md text-label-md uppercase tracking-widest text-primary mb-6 border-b border-outline-variant/30 pb-2">
+          01. The Claim</h2>
+        <div class="bg-surface-container-low p-8 rounded-sm paper-shadow border border-outline-variant/10">
+          <blockquote id="report-claim-text" class="font-body-lg text-body-lg text-on-surface italic leading-relaxed">
+            "The proposed methodology attempts to deploy the thesis claim to achieve state-of-the-art accuracy."
+          </blockquote>
+        </div>
+      </section>
+
+      <!-- Section 02: Severity Assessment -->
+      <section class="mb-16">
+        <h2
+          class="font-label-md text-label-md uppercase tracking-widest text-primary mb-6 border-b border-outline-variant/30 pb-2">
+          02. Severity Assessment</h2>
+        <div
+          class="severity-fatal p-8 rounded-sm flex flex-col md:flex-row items-center gap-8 paper-shadow overflow-hidden relative">
+          <div class="relative z-10 flex-1">
+            <div id="report-severity-badge"
+              class="inline-block px-3 py-1 bg-on-tertiary-container text-on-tertiary text-label-sm rounded-full mb-4">
+              CRITICAL VULNERABILITY</div>
+            <h3 id="report-severity-label" class="font-headline-md text-headline-md mb-2">SEVERITY: FATAL</h3>
+            <p id="report-severity-reasoning" class="font-body-md text-body-md leading-relaxed opacity-90">
+              Methodological flaws detected in core baseline. Benchmark contamination or brittle heuristics invalidate
+              reported reasoning gains.
+            </p>
+          </div>
+          <div
+            class="relative z-10 w-32 h-32 flex items-center justify-center border-4 border-on-tertiary-container rounded-full">
+            <div class="text-center">
+              <span id="report-vulnerability-score" class="block font-headline-sm text-headline-sm">9.4</span>
+              <span class="block font-label-sm text-label-sm uppercase">Score</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 03: Exposed Flaws -->
+      <section class="mb-16">
+        <h2
+          class="font-label-md text-label-md uppercase tracking-widest text-primary mb-6 border-b border-outline-variant/30 pb-2">
+          03. Exposed Flaws</h2>
+        <div id="report-flaws-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Loaded dynamically -->
+        </div>
+        <div class="mt-8 space-y-4">
+          <h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Bibliography of Contradictions
+          </h4>
+          <div id="report-bibliography" class="space-y-2">
+            <!-- Bibliography items loaded dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 04: Suggested Mitigations -->
+      <section class="mb-16">
+        <h2
+          class="font-label-md text-label-md uppercase tracking-widest text-primary mb-6 border-b border-outline-variant/30 pb-2">
+          04. Suggested Mitigations</h2>
+        <div class="bg-primary-container p-8 rounded-sm text-on-primary-container border border-primary/20">
+          <ul id="report-mitigations-list" class="space-y-6">
+            <!-- Loaded dynamically -->
+          </ul>
+          <div class="mt-10 pt-8 border-t border-on-primary-container/20 flex justify-between items-center">
+            <button id="btn-download-pdf"
+              class="px-6 py-2.5 bg-[#ffffff] text-[#061b0e] hover:bg-[#d0e9d4] font-label-md font-bold transition-all rounded-xl shadow border border-outline-variant/40 flex items-center space-x-2"
+              onclick="downloadPDFDigest()">
+              <span class="material-symbols-outlined text-sm">download</span>
+              <span>Download PDF Digest</span>
+            </button>
+            <div class="flex space-x-2">
+              <div class="w-2 h-2 rounded-full bg-on-tertiary-container animate-pulse"></div>
+              <div class="w-2 h-2 rounded-full bg-on-tertiary-container animate-pulse" style="animation-delay: 0.2s">
+              </div>
+              <div class="w-2 h-2 rounded-full bg-on-tertiary-container animate-pulse" style="animation-delay: 0.4s">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- VIEW 4: PEER REVIEW DEEP-DIVE -->
+    <main id="view-deepdive" class="hidden flex-1 px-8 py-10 w-full max-w-full">
+      <section class="mb-8">
+        <div
+          class="flex items-center space-x-2 text-on-tertiary-container font-label-sm mb-4 uppercase tracking-widest">
+          <span class="material-symbols-outlined text-[16px]">verified_user</span>
+          <span id="deepdive-thread-id">Deep-Dive: Thread #Bv7a1X</span>
+        </div>
+        <h1 id="deepdive-title" class="font-display-lg text-display-lg text-on-background mb-4 leading-tight">
+          Paper Review Audit
+        </h1>
+        <div class="flex flex-wrap gap-4 items-center text-sm">
+          <div class="flex items-center space-x-2">
+            <div
+              class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center font-bold text-on-secondary-container text-xs">
+              R3</div>
+            <span id="deepdive-author" class="font-label-md text-on-surface">Reviewer #3 (Official Review)</span>
+          </div>
+          <div class="text-outline">•</div>
+          <div id="deepdive-source" class="font-label-md text-secondary">OpenReview Forum</div>
+          <div class="text-outline">•</div>
+          <div id="deepdive-tag" class="font-label-md text-on-tertiary-container bg-tertiary-fixed px-2 py-0.5 rounded">
+            Deep Review</div>
+        </div>
+      </section>
+
+      <!-- DistilBERT Highlighting Interface -->
+      <section
+        class="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-8 shadow-sm relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-4">
+          <div class="flex items-center space-x-2 bg-secondary-container/50 px-3 py-1 rounded-full">
+            <span class="w-2 h-2 rounded-full bg-on-tertiary-container animate-pulse"></span>
+            <span class="font-mono-data text-mono-data text-secondary uppercase">DistilBERT Active</span>
+          </div>
+        </div>
+
+        <div class="prose max-w-none">
+          <div class="flex items-center space-x-3 mb-6">
+            <div class="w-10 h-10 border border-primary flex items-center justify-center font-bold">R3</div>
+            <div>
+              <p class="font-label-md text-primary m-0">Reviewer #3 (Official Review)</p>
+              <p class="font-label-sm text-secondary m-0">Confidence: 5/5 | Rating: 4 (Reject)</p>
+            </div>
+          </div>
+
+          <div id="deepdive-text-content"
+            class="font-body-lg text-body-lg text-on-background space-y-6 leading-relaxed">
+            <p>
+              The authors present an ambitious framework. While theoretical underpinnings are elegant, empirical
+              validation remains significantly detached from core claims.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-outline-variant/20 flex justify-between items-center">
+          <a id="deepdive-url-btn" href="#" target="_blank"
+            class="font-label-sm text-primary hover:underline flex items-center space-x-1">
+            <span>Open Original Source</span>
+            <span class="material-symbols-outlined text-sm">open_in_new</span>
+          </a>
+          <button class="font-label-sm text-on-tertiary-container font-bold hover:underline"
+            onclick="switchView('reports')">Generate Full Risk Report →</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Right Research Sidebar -->
+    <aside id="research-sidebar"
+      class="hidden lg:flex flex-col h-full py-6 px-4 space-y-4 bg-surface-container-low border-l border-outline-variant/30 w-64 shrink-0 min-h-[calc(100vh-64px)] select-none ml-auto">
+      <div class="px-2 mb-6">
+        <h2 class="font-headline-sm text-headline-sm text-primary">Research Sidebar</h2>
+        <p class="font-label-sm text-label-sm opacity-70">Live Claim Review</p>
+      </div>
+      <nav class="space-y-1 text-xs">
+        <button id="sidebar-btn-all"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm rounded bg-primary-container text-on-primary-container border-l-4 border-on-tertiary-container transition-all font-bold"
+          onclick="filterBySource('All')">
+          <span class="material-symbols-outlined text-sm">gavel</span>
+          <span>All Sources (Smart)</span>
+        </button>
+        <button id="sidebar-btn-arxiv"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onclick="filterBySource('ArXiv')">
+          <span class="material-symbols-outlined text-sm">menu_book</span>
+          <span>ArXiv</span>
+        </button>
+        <button id="sidebar-btn-biorxiv"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onclick="filterBySource('bioRxiv')">
+          <span class="material-symbols-outlined text-sm">science</span>
+          <span>BioRxiv</span>
+        </button>
+        <button id="sidebar-btn-medrxiv"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onclick="filterBySource('medRxiv')">
+          <span class="material-symbols-outlined text-sm">medical_services</span>
+          <span>MedRxiv</span>
+        </button>
+        <button id="sidebar-btn-openalex"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onclick="filterBySource('OpenAlex')">
+          <span class="material-symbols-outlined text-sm">hub</span>
+          <span>OpenAlex</span>
+        </button>
+        <button id="sidebar-btn-semanticscholar"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onclick="filterBySource('SemanticScholar')">
+          <span class="material-symbols-outlined text-sm">auto_stories</span>
+          <span>Semantic Scholar</span>
+        </button>
+        <button id="sidebar-btn-pmc"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onclick="filterBySource('PMC')">
+          <span class="material-symbols-outlined text-sm">health_and_safety</span>
+          <span>PubMed Central</span>
+        </button>
+        <button id="sidebar-btn-doaj"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onclick="filterBySource('DOAJ')">
+          <span class="material-symbols-outlined text-sm">library_books</span>
+          <span>DOAJ Open Access</span>
+        </button>
+        <button id="sidebar-btn-zenodo"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onclick="filterBySource('Zenodo')">
+          <span class="material-symbols-outlined text-sm">folder_open</span>
+          <span>Zenodo Repos</span>
+        </button>
+        <button id="sidebar-btn-openaire"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onclick="filterBySource('OpenAIRE')">
+          <span class="material-symbols-outlined text-sm">public</span>
+          <span>OpenAIRE</span>
+        </button>
+        <button id="sidebar-btn-openreview"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onclick="filterBySource('OpenReview')">
+          <span class="material-symbols-outlined text-sm">rate_review</span>
+          <span>OpenReview</span>
+        </button>
+        <button id="sidebar-btn-pubpeer"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onclick="filterBySource('PubPeer')">
+          <span class="material-symbols-outlined text-sm">forum</span>
+          <span>PubPeer Feed</span>
+        </button>
+      </nav>
+
+      <div class="pt-4 space-y-2">
+        <div class="text-[10px] font-bold text-outline uppercase tracking-tighter px-2">Current Attack Vectors</div>
+        <div class="space-y-1 px-2 text-xs">
+          <div class="flex items-center justify-between cursor-pointer hover:text-on-tertiary-container"
+            onclick="filterByVector('Benchmark Contamination')">
+            <span>Benchmark Contamination</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+          </div>
+          <div class="flex items-center justify-between cursor-pointer hover:text-on-tertiary-container"
+            onclick="filterByVector('Heuristic Shortcut')">
+            <span>Heuristic Shortcut</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+          </div>
+          <div class="flex items-center justify-between cursor-pointer hover:text-on-tertiary-container"
+            onclick="filterByVector('Compositional Reasoning')">
+            <span>Lack of Compositional Reasoning</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+          </div>
+          <div class="flex items-center justify-between cursor-pointer hover:text-on-tertiary-container"
+            onclick="filterByVector('Look-ahead Bias')">
+            <span>Look-ahead Bias</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-auto space-y-1 pt-6 border-t border-outline-variant/30">
+        <div class="flex items-center space-x-3 px-3 py-1 font-label-sm text-label-sm text-on-surface-variant">
+          <span class="material-symbols-outlined text-sm text-on-tertiary-container">memory</span>
+          <span id="system-status-text">Re-Ranker Active (Cross-Encoder)</span>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Ingest Paper Modal -->
+  <div id="ingest-modal"
+    class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-surface p-8 max-w-2xl w-full border border-outline-variant/30 paper-shadow relative">
+      <button class="absolute top-4 right-4 text-secondary hover:text-primary" onclick="closeIngestModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <h3 class="font-headline-sm text-headline-sm text-primary mb-2">Ingest New Paper Manuscript</h3>
+      <p class="font-body-md text-secondary mb-6 text-sm">Paste paper text below. The DistilBERT Paragraph Classifier
+        will evaluate every paragraph, filter out positive marketing fluff, and store only Limitation &amp; Critique
+        chunks in the Adversarial Vector Store.</p>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block font-label-sm text-xs font-bold uppercase mb-1">Paper Title</label>
+          <input id="ingest-title" type="text"
+            class="w-full bg-surface-container-low border border-outline-variant p-2 font-body-md text-sm"
+            placeholder="e.g., Deep Learning for Automated Scientific Discovery" />
+        </div>
+        <div>
+          <label class="block font-label-sm text-xs font-bold uppercase mb-1">Source / Venue</label>
+          <input id="ingest-source" type="text"
+            class="w-full bg-surface-container-low border border-outline-variant p-2 font-body-md text-sm"
+            placeholder="e.g., ArXiv / OpenReview / PubMed" />
+        </div>
+        <div>
+          <label class="block font-label-sm text-xs font-bold uppercase mb-1">Raw Manuscript Paragraphs</label>
+          <textarea id="ingest-text" rows="6"
+            class="w-full bg-surface-container-low border border-outline-variant p-2 font-body-md text-sm"
+            placeholder="Paste paragraphs here..."></textarea>
+        </div>
+        <button
+          class="w-full bg-primary text-on-primary py-3 font-label-md text-label-md hover:opacity-90 transition-opacity"
+          onclick="submitPaperIngestion()">
+          RUN DISTILBERT CLASSIFIER &amp; INGEST CRITIQUES
+        </button>
+      </div>
+      <div id="ingest-result"
+        class="hidden mt-4 p-4 bg-surface-container-high text-xs font-mono-data border border-outline-variant/30">
+        <!-- Results populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Interrogation Preview Modal -->
+  <div id="preview-modal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div
+      class="bg-surface border border-outline-variant w-full max-w-2xl mx-4 max-h-[80vh] overflow-y-auto paper-shadow">
+      <div class="p-6 border-b border-outline-variant/30">
+        <div class="flex justify-between items-center">
+          <h3 class="font-headline-sm text-headline-sm text-primary">Live Interrogation — Preview Candidates</h3>
+          <button class="text-secondary hover:text-error" onclick="closePreviewModal()">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <p class="font-body-md text-secondary text-sm mt-2">Review candidate sources before full search. Approve to
+          proceed, or cancel to refine your query.</p>
+      </div>
+      <div id="preview-domain-info"
+        class="px-6 py-3 bg-surface-container-low border-b border-outline-variant/20 font-mono-data text-mono-data text-secondary">
+      </div>
+      <div id="preview-candidates-list" class="p-6 space-y-3">
+        <!-- Populated dynamically -->
+      </div>
+      <div class="p-6 border-t border-outline-variant/30 flex justify-between items-center">
+        <span id="preview-count" class="font-label-sm text-secondary"></span>
+        <div class="flex space-x-3">
+          <button
+            class="px-6 py-2 border border-outline-variant text-secondary font-label-md hover:bg-surface-container-high transition-colors"
+            onclick="closePreviewModal()">CANCEL</button>
+          <button id="btn-approve-preview"
+            class="px-6 py-2 bg-primary/40 text-on-primary/60 font-label-md cursor-not-allowed opacity-50 flex items-center space-x-2"
+            disabled onclick="approvePreviewSearch()">
+            <span class="material-symbols-outlined animate-spin text-sm">autorenew</span>
+            <span>Loading Preview...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Saved Papers Modal -->
+  <div id="saved-papers-modal"
+    class="hidden fixed inset-0 z-[160] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div
+      class="w-full max-w-3xl bg-white border border-[#c3c8c1] rounded-2xl shadow-2xl p-6 relative max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center pb-4 border-b border-[#c3c8c1]/40">
+        <div class="flex items-center space-x-2">
+          <span class="material-symbols-outlined text-xl text-[#dc790a]">bookmark</span>
+          <h2 class="font-headline-sm text-xl font-bold text-[#061b0e]">Saved Articles &amp; Literature</h2>
+        </div>
+        <button onclick="closeSavedPapersModal()"
+          class="text-[#5e5f5c] hover:text-[#061b0e] p-2 rounded-full hover:bg-black/5">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <div id="saved-papers-container" class="flex-1 overflow-y-auto py-4 space-y-4">
+        <!-- Dynamically rendered saved papers -->
+      </div>
+
+      <div class="pt-4 border-t border-[#c3c8c1]/40 flex justify-end items-center text-xs text-[#5e5f5c]">
+        <button onclick="closeSavedPapersModal()"
+          class="px-5 py-2 bg-[#061b0e] text-white font-semibold rounded-full hover:bg-[#1b3022]">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resources Reference Modal -->
+  <div id="resources-modal"
+    class="hidden fixed inset-0 z-[160] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div
+      class="w-full max-w-2xl bg-white border border-[#c3c8c1] rounded-2xl shadow-2xl p-6 relative max-h-[85vh] overflow-y-auto space-y-4">
+      <div class="flex justify-between items-center pb-3 border-b border-[#c3c8c1]/40">
+        <div class="flex items-center space-x-2">
+          <span class="material-symbols-outlined text-xl text-[#061b0e]">library_books</span>
+          <h2 class="font-headline-sm text-xl font-bold text-[#061b0e]">Academic Repositories &amp; Resources</h2>
+        </div>
+        <button onclick="closeResourcesModal()"
+          class="text-[#5e5f5c] hover:text-[#061b0e] p-2 rounded-full hover:bg-black/5">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-[#1c1b1b]">
+        <a href="https://arxiv.org" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>ArXiv Pre-Prints</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">Open-access research papers across AI, Computer Science, and Physics.
+          </p>
+        </a>
+
+        <a href="https://openreview.net" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>OpenReview Forum</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">Transparent peer reviews and official conference decision audits.</p>
+        </a>
+
+        <a href="https://pubpeer.com" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>PubPeer Audits</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">Post-publication critique feed for image manipulation and
+            methodological flaws.</p>
+        </a>
+
+        <a href="https://openalex.org" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>OpenAlex Index</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">Global catalog of 250M+ scholarly works, citations, and authors.</p>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Profile & Account Settings Modal -->
+  <div id="user-profile-modal"
+    class="hidden fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div
+      class="w-full max-w-xl bg-white border border-[#c3c8c1] rounded-2xl shadow-2xl p-6 relative max-h-[90vh] overflow-y-auto space-y-6">
+      <!-- Header -->
+      <div class="flex justify-between items-center pb-4 border-b border-[#c3c8c1]/40">
+        <div class="flex items-center space-x-2">
+          <span class="material-symbols-outlined text-2xl text-[#061b0e]">account_circle</span>
+          <h2 class="font-headline-sm text-xl font-bold text-[#061b0e]">Profile &amp; Account Settings</h2>
+        </div>
+        <button onclick="closeUserProfileModal()"
+          class="text-[#5e5f5c] hover:text-[#061b0e] p-2 rounded-full hover:bg-black/5">
+          <span class="material-symbols-outlined text-xl">close</span>
+        </button>
+      </div>
+
+      <!-- Tab Navigation Header -->
+      <div class="flex space-x-2 border-b border-[#c3c8c1]/40 pb-3">
+        <button id="profile-tab-btn-info" onclick="switchProfileTab('info')" type="button"
+          class="flex-1 py-2 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-2 bg-[#061b0e] text-white shadow-sm">
+          <span class="material-symbols-outlined text-sm">person</span>
+          <span>Personal Profile</span>
+        </button>
+        <button id="profile-tab-btn-security" onclick="switchProfileTab('security')" type="button"
+          class="flex-1 py-2 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-2 bg-[#f6f3f2] text-[#5e5f5c] hover:bg-[#e0e0dc] hover:text-[#061b0e]">
+          <span class="material-symbols-outlined text-sm">lock_reset</span>
+          <span>Password &amp; Security</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: PERSONAL PROFILE VIEW -->
+      <div id="profile-tab-view-info" class="space-y-5">
+        <!-- Avatar Upload Section -->
+        <div class="flex items-center space-x-5 p-4 bg-[#f6f3f2] rounded-2xl border border-[#c3c8c1]/40">
+          <div
+            class="relative w-16 h-16 rounded-full bg-[#061b0e] text-white flex items-center justify-center font-bold text-2xl overflow-hidden shrink-0 shadow-md border-2 border-white">
+            <span id="modal-avatar-initial">A</span>
+            <img id="modal-avatar-img" src="" class="hidden w-full h-full object-cover" />
+          </div>
+          <div class="space-y-1.5 flex-1">
+            <p class="font-bold text-xs text-[#061b0e]">Profile Photo</p>
+            <div class="flex space-x-2">
+              <label
+                class="cursor-pointer px-3 py-1.5 bg-[#061b0e] text-white font-semibold text-xs rounded-xl hover:bg-[#1b3022] transition-all flex items-center space-x-1">
+                <span class="material-symbols-outlined text-xs">upload</span>
+                <span>Upload Photo</span>
+                <input type="file" accept="image/*" class="hidden" onchange="handleAvatarFileSelect(event)" />
+              </label>
+              <button onclick="removeAvatarPhoto()" type="button"
+                class="px-3 py-1.5 text-[#ba1a1a] font-semibold text-xs rounded-xl hover:bg-[#ba1a1a]/10 transition-all">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- General Info Form -->
+        <div class="space-y-4">
+          <h3 class="font-bold text-xs uppercase tracking-wider text-[#061b0e]">Personal Information</h3>
+          <div>
+            <label class="block text-xs font-bold text-[#5e5f5c] mb-1">Display Name</label>
+            <input id="profile-name-input" type="text"
+              class="w-full bg-[#f6f3f2] border border-[#c3c8c1] p-3 rounded-xl text-sm font-semibold text-[#061b0e] focus:border-[#061b0e] outline-none"
+              placeholder="Your Name" />
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="block text-xs font-bold text-[#5e5f5c]">Email Address</label>
+              <button type="button" onclick="sendNewEmailOTP()" id="btn-send-email-otp"
+                class="hidden text-[11px] font-bold text-[#dc790a] hover:underline">
+                Send Verification Code
+              </button>
+            </div>
+            <input id="profile-email-input" type="email" oninput="checkEmailChanged()"
+              class="w-full bg-[#f6f3f2] border border-[#c3c8c1] p-3 rounded-xl text-sm font-semibold text-[#061b0e] focus:border-[#061b0e] outline-none"
+              placeholder="name@example.com" />
+          </div>
+
+          <!-- Inline section for email verification code if email changed -->
+          <div id="email-change-otp-container"
+            class="hidden space-y-2 p-3 bg-[#f6f3f2] border border-[#c3c8c1]/60 rounded-xl">
+            <label class="block text-xs font-bold text-[#061b0e]">6-Digit Email Verification Code</label>
+            <p class="text-[11px] text-[#5e5f5c]">Enter the code sent to your new email address to verify ownership.</p>
+            <input id="profile-email-otp-input" type="text" maxlength="6" autocomplete="off"
+              class="w-full bg-white border border-[#c3c8c1] p-2.5 rounded-lg text-sm font-mono-data font-bold tracking-widest text-center text-[#061b0e]"
+              placeholder="123456" />
+          </div>
+
+          <button onclick="submitProfileInfoUpdate()" type="button"
+            class="w-full py-3 bg-[#061b0e] text-white font-bold text-xs rounded-xl hover:bg-[#1b3022] transition-all shadow-sm">
+            Save Profile Changes
+          </button>
+          <div id="profile-info-status" class="hidden p-3 rounded-xl text-xs font-semibold text-center"></div>
+        </div>
+      </div>
+
+      <!-- TAB 2: PASSWORD & SECURITY VIEW (NEW DEDICATED TAB) -->
+      <div id="profile-tab-view-security" class="hidden space-y-4">
+        <div class="p-5 bg-[#f6f3f2] rounded-2xl border border-[#c3c8c1]/60 space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-[#c3c8c1]/40">
+            <div>
+              <h3 class="font-bold text-sm text-[#061b0e]">Password Reset Verification</h3>
+              <p class="text-[11px] text-[#5e5f5c] mt-0.5">Click below to receive a 6-digit verification code in your
+                email.</p>
+            </div>
+            <button onclick="sendProfilePasswordOTP()" id="btn-profile-send-otp" type="button"
+              class="px-4 py-2 bg-[#dc790a] text-white font-bold text-xs rounded-xl hover:bg-[#b06007] transition-all shadow-sm flex items-center space-x-1.5">
+              <span class="material-symbols-outlined text-sm">mark_email_read</span>
+              <span>Send Code via Email</span>
+            </button>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-[#5e5f5c] mb-1 font-label-md">6-Digit Verification Code</label>
+              <input id="profile-otp-input" type="text" maxlength="6" autocomplete="off"
+                class="w-full bg-white border border-[#c3c8c1] p-3 rounded-xl text-sm font-mono-data font-bold tracking-widest text-[#061b0e] text-center"
+                placeholder="123456" />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-[#5e5f5c] mb-1 font-label-md">New Password</label>
+                <input id="profile-new-pass-input" type="password" autocomplete="new-password"
+                  class="w-full bg-white border border-[#c3c8c1] p-3 rounded-xl text-sm font-semibold text-[#061b0e]"
+                  placeholder="New Password" />
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-[#5e5f5c] mb-1 font-label-md">Confirm New Password</label>
+                <input id="profile-confirm-pass-input" type="password" autocomplete="new-password"
+                  class="w-full bg-white border border-[#c3c8c1] p-3 rounded-xl text-sm font-semibold text-[#061b0e]"
+                  placeholder="Confirm Password" />
+              </div>
+            </div>
+
+            <button onclick="submitPasswordResetWithOTP()" type="button"
+              class="w-full py-3 bg-[#061b0e] text-white font-bold text-xs rounded-xl hover:bg-[#1b3022] transition-all shadow-sm flex items-center justify-center space-x-1.5">
+              <span class="material-symbols-outlined text-sm">lock_reset</span>
+              <span>Verify Code &amp; Reset Password</span>
+            </button>
+            <div id="profile-pass-status" class="hidden p-3 rounded-xl text-xs font-semibold text-center"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-background border-t border-outline-variant/20 mt-auto">
+    <div
+      class="w-full py-8 px-margin-desktop flex flex-col md:flex-row justify-between items-center max-w-max-content-width mx-auto">
+      <div class="mb-4 md:mb-0">
+        <span class="font-label-md text-label-md font-bold text-primary">Learnix Research</span>
+        <p class="font-label-sm text-label-sm text-secondary mt-1">© 2026 Peer-Review Devil's Advocate. Rigorous
+          Scepticism by Design.</p>
+      </div>
+      <div class="flex space-x-6">
+        <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors underline"
+          onclick="switchView('lab')">Laboratory</button>
+        <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors"
+          onclick="switchView('feed')">Adversarial Feed</button>
+        <button id="footer-reports"
+          class="font-label-sm text-on-surface-variant hover:text-primary transition-colors hidden"
+          onclick="switchView('reports')">Risk Reports</button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let currentQuery = "Are Large Language Models capable of true logical reasoning?";
+    let activeSourceFilter = "All";
+    let activeVectorFilter = "All";
+    let previewModeEnabled = true;
+    let historySidebarCollapsed = false;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadHotspots();
+      setInterval(loadHotspots, 60000); // Background refresh every 60 seconds
+      renderSearchHistory();
+      updateSavedPapersBadge();
+      const searchInput = document.getElementById('methodology-input');
+      const placeholders = [
+        "e.g., Are Large Language Models capable of true logical reasoning?",
+        "e.g., Should I use Transformers or Graph Neural Networks for forecasting?",
+        "e.g., Fact Check: Is the sky blue?"
+      ];
+      let pIndex = 0;
+      setInterval(() => {
+        pIndex = (pIndex + 1) % placeholders.length;
+        if (searchInput) searchInput.placeholder = placeholders[pIndex];
+      }, 3500);
+    });
+
+    function toggleHistorySidebar() {
+      const sidebar = document.getElementById('history-sidebar');
+      const toggleIcon = document.getElementById('sidebar-toggle-icon');
+      const title = document.getElementById('history-sidebar-title');
+      const texts = document.querySelectorAll('.sidebar-text');
+
+      historySidebarCollapsed = !historySidebarCollapsed;
+      if (historySidebarCollapsed) {
+        sidebar.classList.remove('w-64', 'p-4');
+        sidebar.classList.add('w-16', 'p-2');
+        if (toggleIcon) toggleIcon.innerText = 'side_navigation';
+        if (title) title.classList.add('hidden');
+        texts.forEach(el => el.classList.add('hidden'));
+      } else {
+        sidebar.classList.remove('w-16', 'p-2');
+        sidebar.classList.add('w-64', 'p-4');
+        if (toggleIcon) toggleIcon.innerText = 'menu_open';
+        if (title) title.classList.remove('hidden');
+        texts.forEach(el => el.classList.remove('hidden'));
+      }
+    }
+
+    function startNewInquiry() {
+      const input = document.getElementById('methodology-input');
+      if (input) {
+        input.value = "";
+        input.focus();
+      }
+      switchView('lab');
+    }
+
+    function getSearchHistory() {
+      try {
+        return JSON.parse(localStorage.getItem('learnix_search_history') || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    async function saveSearchHistory(query) {
+      if (!query || !query.trim()) return;
+      let history = getSearchHistory();
+      history = history.filter(item => item.toLowerCase() !== query.trim().toLowerCase());
+      history.unshift(query.trim());
+      if (history.length > 15) history = history.slice(0, 15);
+      localStorage.setItem('learnix_search_history', JSON.stringify(history));
+      renderSearchHistory();
+
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        try {
+          await fetch('/api/chat/message', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ role: 'user', message: query.trim() })
+          });
+        } catch (e) {}
+      }
+    }
+
+    async function removeSearchHistoryItem(e, index) {
+      if (e) e.stopPropagation();
+      let history = getSearchHistory();
+      const removedItem = history[index];
+      history.splice(index, 1);
+      localStorage.setItem('learnix_search_history', JSON.stringify(history));
+      renderSearchHistory();
+
+      const token = localStorage.getItem('auth_token');
+      if (token && removedItem) {
+        try {
+          await fetch('/api/chat/delete-item', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ message: removedItem })
+          });
+        } catch (e) {}
+      }
+    }
+
+    async function clearSearchHistory() {
+      localStorage.removeItem('learnix_search_history');
+      renderSearchHistory();
+
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        try {
+          await fetch('/api/chat/clear', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+        } catch (e) {}
+      }
+    }
+
+    function renderSearchHistory() {
+      const container = document.getElementById('search-history-list');
+      if (!container) return;
+      const history = getSearchHistory();
+      if (history.length === 0) {
+        container.innerHTML = '<div class="p-3 text-center text-[11px] text-[#5e5f5c] italic sidebar-text">No recent queries yet</div>';
+        return;
+      }
+      container.innerHTML = history.map((q, idx) => `
+        <div onclick="presetQuery('${q.replace(/'/g, "\\'")}')" class="group flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-[#e0e0dc] text-[#1c1b1b] cursor-pointer transition-all" title="${q}">
+          <div class="flex items-center space-x-2 min-w-0">
+            <span class="material-symbols-outlined text-xs text-[#5e5f5c] shrink-0">chat_bubble_outline</span>
+            <span class="truncate sidebar-text font-medium text-[11px]">${q}</span>
+          </div>
+          <button onclick="removeSearchHistoryItem(event, ${idx})" class="opacity-0 group-hover:opacity-100 text-[#ba1a1a] hover:bg-black/5 p-0.5 rounded transition-all sidebar-text" title="Delete from history">
+            <span class="material-symbols-outlined text-xs">delete</span>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function getSavedPapers() {
+      try {
+        return JSON.parse(localStorage.getItem('learnix_saved_papers') || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function isPaperSaved(paperId) {
+      const saved = getSavedPapers();
+      return saved.some(p => p.id === paperId || p.paper_id === paperId);
+    }
+
+    async function toggleSavePaper(paperId, event) {
+      if (event && event.stopPropagation) event.stopPropagation();
+      let saved = getSavedPapers();
+      const existsIndex = saved.findIndex(p => p.id === paperId || p.paper_id === paperId);
+
+      let isRemoving = existsIndex >= 0;
+      let paperObj = null;
+
+      if (isRemoving) {
+        paperObj = saved[existsIndex];
+        saved.splice(existsIndex, 1);
+      } else {
+        if (window.lastSearchResults) {
+          paperObj = window.lastSearchResults.find(p => p.id === paperId);
+        }
+        if (!paperObj && window.lastHotspots) {
+          paperObj = window.lastHotspots.find(p => p.id === paperId);
+        }
+        if (!paperObj && window.currentDeepDiveCard && (window.currentDeepDiveCard.id === paperId || window.currentDeepDiveCard.paper_id === paperId)) {
+          paperObj = window.currentDeepDiveCard;
+        }
+        if (paperObj) {
+          saved.unshift(paperObj);
+        }
+      }
+
+      localStorage.setItem('learnix_saved_papers', JSON.stringify(saved));
+      updateSavedPapersBadge();
+
+      const iconEl = document.getElementById(`save-icon-${paperId}`);
+      const textEl = document.getElementById(`save-text-${paperId}`);
+      const savedNow = isPaperSaved(paperId);
+      if (iconEl) iconEl.innerText = savedNow ? 'bookmark_added' : 'bookmark';
+      if (textEl) textEl.innerText = savedNow ? 'Saved' : 'Save';
+
+      renderSavedPapers();
+
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        try {
+          if (isRemoving) {
+            await fetch('/api/papers/remove', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+              body: JSON.stringify({ paper_id: paperId })
+            });
+          } else if (paperObj) {
+            await fetch('/api/papers/save', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+              body: JSON.stringify({
+                paper_id: paperObj.id || paperId,
+                title: paperObj.title || '',
+                authors: paperObj.authors || '',
+                abstract: paperObj.abstract || '',
+                source: paperObj.source || 'ArXiv',
+                source_id: paperObj.source_id || '',
+                attack_vector: paperObj.attack_vector || 'Peer Review',
+                url: paperObj.url || ''
+              })
+            });
+          }
+        } catch (e) {}
+      }
+    }
+
+    async function syncUserDataFromDB() {
+      const token = localStorage.getItem('auth_token');
+      if (!token) return;
+
+      try {
+        const res = await fetch('/api/chat/history', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const dbQueries = [];
+          if (data.history && Array.isArray(data.history)) {
+            const seen = new Set();
+            for (let i = data.history.length - 1; i >= 0; i--) {
+              const msg = data.history[i].message;
+              if (msg && !seen.has(msg.toLowerCase())) {
+                seen.add(msg.toLowerCase());
+                dbQueries.push(msg);
+              }
+            }
+          }
+          localStorage.setItem('learnix_search_history', JSON.stringify(dbQueries));
+          renderSearchHistory();
+        }
+      } catch (e) {
+        console.error("Error syncing chat history:", e);
+      }
+
+      try {
+        const res = await fetch('/api/papers/saved', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          let formattedPapers = [];
+          if (data.papers && Array.isArray(data.papers)) {
+            formattedPapers = data.papers.map(p => ({
+              id: p.paper_id,
+              paper_id: p.paper_id,
+              title: p.title || 'Untitled',
+              authors: p.authors || '',
+              abstract: p.abstract || '',
+              source: p.source || 'ArXiv',
+              source_id: p.source_id || p.paper_id,
+              attack_vector: p.attack_vector || 'Peer Review',
+              url: p.url || ''
+            }));
+          }
+          localStorage.setItem('learnix_saved_papers', JSON.stringify(formattedPapers));
+          updateSavedPapersBadge();
+          renderSavedPapers();
+        }
+      } catch (e) {
+        console.error("Error syncing saved papers:", e);
+      }
+    }
+
+    function updateSavedPapersBadge() {
+      // Count badges disabled per user request
+    }
+
+    function openSavedPapersModal() {
+      renderSavedPapers();
+      document.getElementById('saved-papers-modal').classList.remove('hidden');
+    }
+
+    function closeSavedPapersModal() {
+      document.getElementById('saved-papers-modal').classList.add('hidden');
+    }
+
+    function openResourcesModal() {
+      document.getElementById('resources-modal').classList.remove('hidden');
+    }
+
+    function closeResourcesModal() {
+      document.getElementById('resources-modal').classList.add('hidden');
+    }
+
+    function renderSavedPapers() {
+      const container = document.getElementById('saved-papers-container');
+      if (!container) return;
+      const saved = getSavedPapers();
+
+      if (saved.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-[#5e5f5c] italic space-y-2">
+            <span class="material-symbols-outlined text-4xl text-[#dc790a]">bookmark_border</span>
+            <p class="font-semibold text-sm">No saved articles yet.</p>
+            <p class="text-xs">Click the bookmark icon on any paper card in the feed to save it for future reference.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = saved.map(card => `
+        <div class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl space-y-2 relative group hover:border-[#061b0e] transition-all">
+          <div class="flex justify-between items-start">
+            <div class="flex items-center space-x-2 text-xs font-mono-data text-[#5e5f5c]">
+              <span class="bg-[#061b0e] text-white px-2 py-0.5 text-[10px] font-bold rounded">${card.source}</span>
+              <span>ID: #${card.source_id}</span>
+              <span class="text-[#dc790a] font-bold">&bull; ${card.attack_vector}</span>
+            </div>
+            <button onclick="toggleSavePaper('${card.id}')" class="text-[#ba1a1a] hover:bg-black/5 p-1 rounded-full text-xs flex items-center space-x-1" title="Remove from saved">
+              <span class="material-symbols-outlined text-base">delete</span>
+            </button>
+          </div>
+          <h4 class="font-bold text-sm text-[#061b0e] leading-snug">${card.title}</h4>
+          <p class="text-xs text-[#1c1b1b] line-clamp-2 italic">"${card.text}"</p>
+          <div class="flex justify-between items-center pt-2 border-t border-[#c3c8c1]/30 text-xs">
+            <span class="text-[#5e5f5c] text-[11px]">${card.authors || 'Unknown'} (${card.year || '2025'})</span>
+            <button onclick="closeSavedPapersModal(); openDeepDive('${card.id}')" class="text-[#061b0e] font-bold hover:underline flex items-center space-x-1">
+              <span>Inspect Thread</span>
+              <span class="material-symbols-outlined text-xs">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function switchView(viewName, pushHistory = true) {
+      const validViews = ['lab', 'feed', 'reports', 'deepdive'];
+      if (!validViews.includes(viewName)) viewName = 'lab';
+
+      validViews.forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        const navBtn = document.getElementById(`nav-${v}`);
+        if (el) el.classList.add('hidden');
+        if (navBtn) {
+          navBtn.classList.remove('text-primary', 'border-b-2', 'border-primary');
+          navBtn.classList.add('text-secondary');
+        }
+      });
+
+      const activeEl = document.getElementById(`view-${viewName}`);
+      const activeNav = document.getElementById(`nav-${viewName}`);
+      if (activeEl) activeEl.classList.remove('hidden');
+      if (activeNav) {
+        activeNav.classList.remove('text-secondary');
+        activeNav.classList.add('text-primary', 'border-b-2', 'border-primary');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (pushHistory) {
+        const targetHash = `#${viewName}`;
+        if (window.location.hash !== targetHash) {
+          history.pushState({ view: viewName }, '', targetHash);
+        }
+      }
+      try {
+        sessionStorage.setItem('learnix_active_view', viewName);
+      } catch (e) {}
+    }
+
+    async function loadHotspots(force = false) {
+      try {
+        const url = force ? '/api/hotspots?refresh=true' : '/api/hotspots';
+        const res = await fetch(url);
+        const data = await res.json();
+        window.lastHotspots = data;
+        const grid = document.getElementById('hotspots-grid');
+        if (!grid) return;
+
+        grid.innerHTML = data.map(item => {
+          const savedNow = isPaperSaved(item.id);
+          return `
+<div class="bg-surface-container-low border border-outline/10 p-6 flex flex-col group hover:border-on-tertiary-container/30 transition-all cursor-pointer relative overflow-hidden rounded-xl" onclick="openDeepDive('${item.id}')">
+<div class="flex justify-between items-center mb-4 gap-2 min-w-0">
+<span class="font-mono-data text-mono-data bg-tertiary-fixed text-on-tertiary-fixed px-2 py-0.5 rounded text-xs truncate shrink min-w-0 max-w-[55%] sm:max-w-[65%]" title="${item.source_tag}">${item.source_tag}</span>
+<div class="flex items-center gap-2 shrink-0 ml-auto">
+<button class="flex items-center gap-1 text-xs font-mono px-2.5 py-1 rounded bg-surface-container-highest/70 hover:bg-surface-container-highest text-on-surface transition-colors border border-outline-variant/30 shrink-0" onclick="toggleSavePaper('${item.id}', event)" title="${savedNow ? 'Remove from Saved Papers' : 'Save Paper'}">
+<span class="material-symbols-outlined text-[16px] text-amber-600" id="save-icon-${item.id}">${savedNow ? 'bookmark_added' : 'bookmark'}</span>
+<span id="save-text-${item.id}" class="font-bold">${savedNow ? 'Saved' : 'Save'}</span>
+</button>
+<span class="material-symbols-outlined text-error text-lg shrink-0">${item.badge_icon}</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-3 leading-tight group-hover:text-on-tertiary-container transition-colors">${item.title}</h3>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-3 mb-6">${item.summary}</p>
+<div class="mt-auto space-y-4">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="text-secondary">${item.metric_label}</span>
+<span class="text-on-tertiary-container font-bold">${item.skepticism_index}%</span>
+</div>
+<div class="w-full h-1 bg-surface-container-highest">
+<div class="bg-on-tertiary-container h-full" style="width: ${item.skepticism_index}%"></div>
+</div>
+<div class="flex items-center space-x-2 font-label-sm text-label-sm text-secondary">
+<span class="material-symbols-outlined text-[16px]">history</span>
+<span>${item.updated}</span>
+</div>
+</div>
+</div>
+`;
+        }).join('');
+      } catch (e) {
+        console.error("Error loading hotspots:", e);
+      }
+    }
+
+    function presetQuery(queryText) {
+      const input = document.getElementById('methodology-input');
+      if (input) input.value = queryText;
+      triggerAdversarialSearch();
+    }
+
+    async function triggerAdversarialSearch() {
+      const input = document.getElementById('methodology-input');
+      const query = input ? input.value.trim() : "";
+      if (!query) return;
+
+      currentQuery = query;
+
+      if (previewModeEnabled) {
+        showPreviewSearch(query);
+      } else {
+        performSearch(query, activeSourceFilter, activeVectorFilter);
+        switchView('feed');
+      }
+    }
+
+    async function showPreviewSearch(query) {
+      document.getElementById('preview-modal').classList.remove('hidden');
+
+      const approveBtn = document.getElementById('btn-approve-preview');
+      if (approveBtn) {
+        approveBtn.disabled = true;
+        approveBtn.className = "px-6 py-2 bg-primary/40 text-on-primary/60 font-label-md cursor-not-allowed opacity-50 flex items-center space-x-2";
+        approveBtn.innerHTML = `<span class="material-symbols-outlined animate-spin text-sm">autorenew</span><span>Loading Preview...</span>`;
+      }
+
+      const domainInfo = document.getElementById('preview-domain-info');
+      domainInfo.innerHTML = `Analyzing: <strong>${query}</strong>`;
+      const list = document.getElementById('preview-candidates-list');
+      list.innerHTML = '<div class="p-8 text-center text-secondary italic"><span class="material-symbols-outlined animate-spin align-middle text-4xl mb-4 text-primary">autorenew</span><br/>Analyzing query and searching sources...</div>';
+      document.getElementById('preview-count').innerText = "Searching...";
+
+      try {
+        const res = await fetch('/api/preview-search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: query, source: activeSourceFilter, attack_vector: activeVectorFilter })
+        });
+        const data = await res.json();
+
+        const domainInfo = document.getElementById('preview-domain-info');
+        domainInfo.innerHTML = `Domain: <strong>${data.domain}</strong> | Keywords: <strong>${data.query_keywords.join(', ')}</strong>${data.has_explicit_ids ? ' | <span class="text-on-tertiary-container font-bold">EXACT-ID MODE</span>' : ''}`;
+
+        const list = document.getElementById('preview-candidates-list');
+        if (data.candidates.length === 0) {
+          list.innerHTML = '<div class="p-4 text-center text-secondary italic">No candidate sources found for this query.</div>';
+        } else {
+          list.innerHTML = data.candidates.map((c, i) => `
+<div class="flex items-start justify-between p-3 border border-outline-variant/20 ${c.exact_id_fetch ? 'bg-primary-container/30 border-l-4 border-l-primary' : 'hover:bg-surface-container-low'} transition-colors">
+<div class="flex-1 min-w-0">
+<div class="flex items-center space-x-2 mb-1">
+<svg width="14" height="14" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
+  <circle cx="40" cy="40" r="38" fill="#fcf9f8" stroke="#061b0e" stroke-width="4"/>
+  <path d="M28 25 L28 55 L43 55" stroke="#061b0e" stroke-width="5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M38.5 35.5 L52 35.5 C56.5 35.5 56.5 44.5 52 44.5 L40 44.5 L50.5 55" stroke="#061b0e" stroke-width="4.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="28" cy="25" r="4.5" fill="#dc790a"/>
+  <circle cx="52" cy="35.5" r="3" fill="#dc790a"/>
+  <circle cx="50.5" cy="55" r="3.5" fill="#061b0e"/>
+  <circle cx="43" cy="55" r="3.5" fill="#061b0e"/>
+</svg>
+<span class="font-mono-data text-[10px] text-outline">${c.source}</span>
+${c.exact_id_fetch ? '<span class="font-mono-data text-[10px] bg-primary text-on-primary px-1.5 py-0.5">EXACT ID</span>' : ''}
+<span class="font-mono-data text-[10px] ${c.relevance_score >= 0.20 ? 'text-on-tertiary-container font-bold' : 'text-error'}">Relevance: ${c.relevance_score.toFixed(2)}</span>
+</div>
+<p class="font-label-md text-sm text-on-surface truncate">${c.title}</p>
+<p class="font-mono-data text-[10px] text-secondary mt-0.5">${c.attack_vector} | Keywords: ${c.keyword_overlap || 0}</p>
+</div>
+</div>
+`).join('');
+        }
+
+        document.getElementById('preview-count').innerText = `${data.total_candidates} candidate(s) found`;
+
+        // Enable Approve Button ONLY AFTER candidate sources have loaded!
+        if (approveBtn) {
+          approveBtn.disabled = false;
+          approveBtn.className = "px-6 py-2 bg-primary text-on-primary font-label-md hover:opacity-90 transition-all cursor-pointer font-bold flex items-center space-x-2 shadow-md";
+          approveBtn.innerHTML = `<span>APPROVE &amp; SEARCH</span><span class="material-symbols-outlined text-sm">arrow_forward</span>`;
+        }
+
+      } catch (e) {
+        console.error("Preview search error:", e);
+        if (approveBtn) {
+          approveBtn.disabled = false;
+          approveBtn.className = "px-6 py-2 bg-primary text-on-primary font-label-md hover:opacity-90 transition-all cursor-pointer font-bold";
+          approveBtn.innerHTML = `<span>APPROVE &amp; SEARCH</span>`;
+        }
+      }
+    }
+
+    function closePreviewModal() {
+      document.getElementById('preview-modal').classList.add('hidden');
+    }
+
+    function hideReportsTab() {
+      const navReports = document.getElementById('nav-reports');
+      if (navReports) navReports.classList.add('hidden');
+      const footerReports = document.getElementById('footer-reports');
+      if (footerReports) footerReports.classList.add('hidden');
+    }
+
+    function revealReportsTab() {
+      const navReports = document.getElementById('nav-reports');
+      if (navReports) {
+        navReports.classList.remove('hidden');
+        navReports.innerText = "Reports";
+      }
+      const footerReports = document.getElementById('footer-reports');
+      if (footerReports) footerReports.classList.remove('hidden');
+    }
+
+    function showSystemThinkingIndicator(title = "System Executing Audit & Reasoning...") {
+      const statusBanner = document.getElementById('status-banner');
+      if (statusBanner) {
+        statusBanner.className = "mb-6 p-6 bg-[#061b0e] text-white rounded-2xl shadow-xl border border-[#1b3022] space-y-3";
+        statusBanner.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <span class="material-symbols-outlined text-2xl text-[#d0e9d4] animate-spin">sync</span>
+              <div>
+                <h3 class="font-headline-sm font-bold text-base text-white">${title}</h3>
+                <p class="text-xs text-[#819986]" id="thinking-step-label">Fetching arXiv pre-prints &amp; querying DistilBERT semantic cross-encoders...</p>
+              </div>
+            </div>
+            <span class="bg-[#1b3022] text-[#d0e9d4] px-3 py-1 text-[11px] font-bold font-mono-data rounded-full border border-[#819986]/30">PROCESSING</span>
+          </div>
+          <div class="w-full bg-[#1b3022] h-1.5 rounded-full overflow-hidden">
+            <div class="bg-[#d0e9d4] h-full animate-pulse w-3/4"></div>
+          </div>
+        `;
+        statusBanner.classList.remove('hidden');
+      }
+    }
+
+    async function approvePreviewSearch() {
+      closePreviewModal();
+      hideReportsTab();
+      switchView('feed');
+      showSystemThinkingIndicator("Auditing Paper & Fetching Literature...");
+      await performSearch(currentQuery, activeSourceFilter, activeVectorFilter);
+    }
+
+    function updateSidebarUI(source) {
+      const buttons = {
+        'All': document.getElementById('sidebar-btn-all'),
+        'ArXiv': document.getElementById('sidebar-btn-arxiv'),
+        'bioRxiv': document.getElementById('sidebar-btn-biorxiv'),
+        'medRxiv': document.getElementById('sidebar-btn-medrxiv'),
+        'OpenAlex': document.getElementById('sidebar-btn-openalex'),
+        'SemanticScholar': document.getElementById('sidebar-btn-semanticscholar'),
+        'PMC': document.getElementById('sidebar-btn-pmc'),
+        'DOAJ': document.getElementById('sidebar-btn-doaj'),
+        'Zenodo': document.getElementById('sidebar-btn-zenodo'),
+        'OpenAIRE': document.getElementById('sidebar-btn-openaire'),
+        'OpenReview': document.getElementById('sidebar-btn-openreview'),
+        'PubPeer': document.getElementById('sidebar-btn-pubpeer')
+      };
+      const activeClass = "w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm rounded bg-primary-container text-on-primary-container border-l-4 border-on-tertiary-container transition-all font-bold";
+      const inactiveClass = "w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all";
+
+      Object.keys(buttons).forEach(key => {
+        const btn = buttons[key];
+        if (btn) {
+          if (key.toLowerCase() === (source || 'all').toLowerCase()) {
+            btn.className = activeClass;
+          } else {
+            btn.className = inactiveClass;
+          }
+        }
+      });
+    }
+
+    function filterBySource(source) {
+      activeSourceFilter = source;
+      if (source === "All") {
+        activeVectorFilter = "All";
+      }
+      updateSidebarUI(source);
+      hideReportsTab();
+      if (previewModeEnabled) {
+        showPreviewSearch(currentQuery);
+      } else {
+        showSystemThinkingIndicator("Filtering Literature Sources...");
+        performSearch(currentQuery, activeSourceFilter, activeVectorFilter);
+        switchView('feed');
+      }
+    }
+
+    function filterByVector(vector) {
+      activeVectorFilter = vector;
+      hideReportsTab();
+      if (previewModeEnabled) {
+        showPreviewSearch(currentQuery);
+      } else {
+        showSystemThinkingIndicator("Re-Ranking Attack Vectors...");
+        performSearch(currentQuery, activeSourceFilter, activeVectorFilter);
+        switchView('feed');
+      }
+    }
+
+    async function performSearch(query, source = "All", attackVector = "All") {
+      try {
+        const reportBtn = document.getElementById('generate-risk-report-btn');
+        if (reportBtn) reportBtn.disabled = true;
+        saveSearchHistory(query);
+        updateSidebarUI(source);
+        const sourceBadgeMap = {
+          'All': 'Source: All Active Attacks',
+          'OpenReview': 'Source: OpenReview Forum',
+          'ArXiv': 'Source: ArXiv Pre-Prints',
+          'PubPeer': 'Source: PubPeer Feed'
+        };
+        const sourceBadgeEl = document.getElementById('feed-source-badge');
+        if (sourceBadgeEl) {
+          sourceBadgeEl.innerText = sourceBadgeMap[source] || `Source: ${source}`;
+        }
+
+        document.getElementById('feed-query-text').innerText = `"${query}"`;
+        const container = document.getElementById('critique-cards-container');
+        container.innerHTML = `
+          <div class="p-8 text-center bg-surface border border-outline-variant/30 rounded-2xl shadow-sm space-y-3">
+            <span class="material-symbols-outlined animate-spin align-middle text-4xl text-primary">autorenew</span>
+            <div class="font-headline-sm font-bold text-base text-primary">Fetching Literature &amp; Auditing Claims...</div>
+            <p class="text-xs text-secondary">Cross-Encoder Re-Ranking &bull; DistilBERT Severity Tagging</p>
+          </div>
+        `;
+
+        const refContainer = document.getElementById('reference-papers-container');
+        refContainer.innerHTML = '<div class="text-sm text-secondary italic p-4 text-center"><span class="material-symbols-outlined animate-spin align-middle mb-2">autorenew</span><br/>Fetching literature...</div>';
+
+        showSystemThinkingIndicator("Auditing Claims &amp; Fetching Pre-prints...");
+
+        const res = await fetch('/api/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: query, source: source, attack_vector: attackVector })
+        });
+        const data = await res.json();
+        
+        try {
+          sessionStorage.setItem('learnix_search_data', JSON.stringify(data));
+          sessionStorage.setItem('learnix_current_query', query);
+          sessionStorage.setItem('learnix_source_filter', source);
+          sessionStorage.setItem('learnix_vector_filter', attackVector);
+        } catch(e) {}
+        
+        renderFeedData(data, query, source);
+        document.getElementById('generate-risk-report-btn').disabled = false;
+
+      } catch (e) {
+        console.error("Search error:", e);
+        document.getElementById('generate-risk-report-btn').disabled = false;
+      }
+    }
+
+    function renderFeedData(data, query, source) {
+        window.lastSearchResults = data.results || [];
+        
+        const sourceBadgeMap = {
+          'All': 'Source: All Active Attacks',
+          'OpenReview': 'Source: OpenReview Forum',
+          'ArXiv': 'Source: ArXiv Pre-Prints',
+          'PubPeer': 'Source: PubPeer Feed'
+        };
+        const sourceBadgeEl = document.getElementById('feed-source-badge');
+        if (sourceBadgeEl) {
+          sourceBadgeEl.innerText = sourceBadgeMap[source] || `Source: ${source}`;
+        }
+        
+        const statusBanner = document.getElementById('status-banner');
+        const refContainer = document.getElementById('reference-papers-container');
+        const container = document.getElementById('critique-cards-container');
+
+        document.getElementById('feed-query-text').innerText = `"${data.user_query}"`;
+        document.getElementById('feed-transformed-text').innerText = data.transformed_query;
+        document.getElementById('feed-match-count').innerText = `${data.total_matches} Match${data.total_matches === 1 ? '' : 'es'} Found (Cross-Encoder Re-Ranked)`;
+
+        if (data.references && data.references.length > 0) {
+          refContainer.innerHTML = data.references.map(ref => `
+              <a href="${ref.url}" target="_blank" class="block p-4 border border-outline-variant/30 bg-surface hover:bg-surface-container-low hover:border-outline-variant transition-colors group">
+                <div class="font-label-md text-primary group-hover:underline line-clamp-2 leading-tight">${ref.title}</div>
+                <div class="text-xs text-secondary mt-2 flex items-center justify-between">
+                  <span>${ref.source}</span>
+                  <span class="font-mono-data opacity-70">${ref.year}</span>
+                </div>
+              </a>
+            `).join('');
+        } else {
+          refContainer.innerHTML = `<div class="text-sm text-secondary italic p-4 bg-surface-container-lowest border border-outline-variant/20">No direct reference literature found for this query.</div>`;
+        }
+
+        if (data.is_fact) {
+          statusBanner.className = "mb-6 p-6 bg-primary-container text-on-primary-container text-sm font-body-md border-l-4 border-primary rounded paper-shadow";
+          statusBanner.innerHTML = `
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-2xl text-on-primary-fixed-variant">check_circle</span>
+<div>
+<strong class="block text-base font-bold">Established Physical Fact / Scientific Consensus</strong>
+<p class="mt-1">${data.status_message}</p>
+</div>
+</div>
+`;
+          statusBanner.classList.remove('hidden');
+          document.getElementById('feed-severity-badge').className = "bg-primary-container text-on-primary-container px-3 py-1 text-label-sm font-label-sm border border-primary/20";
+          document.getElementById('feed-severity-badge').innerText = "Severity: Clean (0 Flaws)";
+          container.innerHTML = `<div class="p-8 text-center text-secondary italic bg-surface border border-outline-variant/20 rounded">No contradictory peer reviews or methodological flaws found for this query. Claim is verified physics/fact.</div>`;
+          updateDynamicQuickDebunk(null, query);
+          return;
+        }
+
+        if (data.total_matches === 0) {
+          statusBanner.className = "mb-6 p-4 bg-surface-container-high text-on-surface-variant text-sm font-body-md border-l-4 border-outline";
+          statusBanner.innerHTML = `<div>${data.status_message || "No matching peer-reviewed critiques found for this specific query scope."}</div>`;
+          statusBanner.classList.remove('hidden');
+          document.getElementById('feed-severity-badge').className = "bg-surface-container-highest text-secondary px-3 py-1 text-label-sm font-label-sm";
+          document.getElementById('feed-severity-badge').innerText = "Severity: Low / Uncontested";
+          container.innerHTML = `<div class="p-8 text-center text-secondary">No critique chunks match the selected filters.</div>`;
+          updateDynamicQuickDebunk(null, query);
+          return;
+        }
+
+        statusBanner.classList.add('hidden');
+        document.getElementById('feed-severity-badge').className = "bg-on-tertiary-container/10 text-on-tertiary-container px-3 py-1 text-label-sm font-label-sm border border-on-tertiary-container/20";
+        document.getElementById('feed-severity-badge').innerText = "Critical Severity High";
+
+        container.innerHTML = data.results.map((card, idx) => `
+<article class="bg-surface border border-outline-variant/20 hover:border-outline transition-all p-6 relative overflow-hidden group paper-shadow">
+<div class="absolute left-0 top-0 bottom-0 w-1 ${card.severity === 'Fatal' ? 'bg-error' : 'bg-on-tertiary-container'}"></div>
+<div class="flex justify-between items-center mb-4 gap-2 flex-wrap sm:flex-nowrap min-w-0">
+<div class="flex items-center space-x-3 min-w-0 truncate">
+<span class="text-label-sm font-mono-data text-outline shrink-0">SOURCE: ${card.source.toUpperCase()}</span>
+<span class="text-outline shrink-0">•</span>
+<span class="text-label-sm font-mono-data text-outline truncate" title="${card.source_id}">ID: #${card.source_id}</span>
+</div>
+<div class="flex items-center space-x-2 shrink-0 ml-auto">
+<span class="text-[10px] font-mono-data text-secondary bg-surface-container-highest px-2 py-0.5 shrink-0">Relevance: ${(card.relevance_score || 0.85).toFixed(2)}</span>
+<span class="${card.severity === 'Fatal' ? 'bg-error text-white' : 'bg-on-tertiary-container text-white'} px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest shrink-0">
+Risk: ${card.severity}
+</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-3 font-bold text-primary">${card.title}</h3>
+<blockquote class="font-body-lg text-body-lg text-on-surface mb-4 leading-relaxed italic">
+"${card.text}"
+</blockquote>
+<div class="mb-4 text-xs font-mono-data text-on-tertiary-container bg-tertiary-fixed/30 p-2 rounded">
+DistilBERT Tag: ${card.distilbert_tag}
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/10 pt-4">
+<div class="flex flex-wrap gap-6">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline font-bold uppercase">Publisher / Venue</span>
+<span class="text-label-md font-label-md text-on-surface font-semibold">${card.publisher || card.source}</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] text-outline font-bold uppercase">Attack Vector</span>
+<span class="text-label-md font-label-md text-on-surface">${card.attack_vector}</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] text-outline font-bold uppercase">Authors / Reviewer</span>
+<span class="text-label-md font-label-md text-on-surface">${card.authors} (${card.year})</span>
+</div>
+</div>
+<div class="flex space-x-3 ml-auto items-center">
+<button class="flex items-center space-x-1 text-secondary hover:text-[#dc790a] font-label-sm transition-colors" onclick="toggleSavePaper('${card.id}')" title="Save Article">
+<span class="material-symbols-outlined text-sm text-[#dc790a]" id="save-icon-${card.id}">${isPaperSaved(card.id) ? 'bookmark_added' : 'bookmark'}</span>
+<span id="save-text-${card.id}" class="text-xs font-semibold">${isPaperSaved(card.id) ? 'Saved' : 'Save'}</span>
+</button>
+<button class="flex items-center space-x-1 text-primary font-label-sm hover:underline ml-2" onclick="openDeepDive('${card.id}')">
+<span>Inspect Thread</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+<button class="flex items-center space-x-1 text-on-tertiary-container font-label-sm hover:underline" onclick="generateReportForQuery('${card.id}')">
+<span>Risk Report</span>
+</button>
+</div>
+</div>
+</article>
+`).join('');
+
+        // Update Dynamic Quick Debunk Bento Card based on top retrieved paper
+        updateDynamicQuickDebunk(data.results[0], query);
+    }
+
+    function updateDynamicQuickDebunk(topPaper, query) {
+      const titleEl = document.getElementById('quick-debunk-title');
+      const bodyEl = document.getElementById('quick-debunk-body');
+      const badgeEl = document.getElementById('quick-debunk-badge');
+      const refEl = document.getElementById('quick-debunk-ref');
+
+      if (!topPaper) {
+        titleEl.innerText = "No Unrelated Critiques";
+        bodyEl.innerText = `No unrelated critiques to display. All retrieved papers are strictly relevant to "${query}".`;
+        badgeEl.innerText = "VERIFIED";
+        refEl.innerText = "Semantic Cross-Encoder";
+        return;
+      }
+
+      titleEl.innerText = `Primary Vulnerability: ${topPaper.attack_vector}`;
+      bodyEl.innerText = `Top matching audit (${topPaper.source}:${topPaper.source_id}): "${topPaper.text.slice(0, 160)}..."`;
+      badgeEl.innerText = topPaper.severity.toUpperCase();
+      refEl.innerText = `${topPaper.source}:${topPaper.source_id}`;
+    }
+
+    async function generateReportForCurrentQuery() {
+      await generateReportForQuery();
+      switchView('reports');
+    }
+
+    async function generateReportForQuery(selectedId = null) {
+      try {
+        revealReportsTab();
+        switchView('reports');
+        document.getElementById('report-doc-id').innerText = 'Generating...';
+        document.getElementById('report-timestamp').innerText = '';
+        document.getElementById('report-query-subtitle').innerText = 'Synthesizing Academic Risk Report...';
+        document.getElementById('report-claim-text').innerHTML = '<span class="material-symbols-outlined animate-spin align-middle">autorenew</span> Synthesizing thesis claim...';
+        document.getElementById('report-severity-label').innerText = 'SEVERITY: EVALUATING...';
+        document.getElementById('report-severity-reasoning').innerText = 'Analyzing methodological flaws...';
+        document.getElementById('report-flaws-grid').innerHTML = '<div class="col-span-2 p-6 text-center text-secondary italic"><span class="material-symbols-outlined animate-spin align-middle text-2xl mb-2">autorenew</span><br/>Evaluating flaws...</div>';
+        document.getElementById('report-mitigations-list').innerHTML = '<li class="text-secondary italic">Generating mitigations...</li>';
+        document.getElementById('report-bibliography').innerHTML = '<p class="text-secondary italic">Compiling bibliography...</p>';
+
+        const bodyPayload = { query: currentQuery };
+        if (selectedId) bodyPayload.critique_ids = [selectedId];
+
+        const res = await fetch('/api/generate-report', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(bodyPayload)
+        });
+        const report = await res.json();
+        
+        try {
+          sessionStorage.setItem('learnix_report_data', JSON.stringify(report));
+        } catch(e) {}
+        
+        renderReportData(report);
+      } catch (e) {
+        console.error("Report generation error:", e);
+      }
+    }
+
+    function renderReportData(report) {
+        document.getElementById('report-doc-id').innerText = `Internal Document ID: ${report.document_id}`;
+        document.getElementById('report-timestamp').innerText = `Timestamp: ${report.timestamp}`;
+        document.getElementById('report-query-subtitle').innerText = `Final Synthesis: ${report.query}`;
+        document.getElementById('report-claim-text').innerText = `"${report.claim}"`;
+
+        document.getElementById('report-severity-label').innerText = `SEVERITY: ${report.severity.label}`;
+        document.getElementById('report-severity-badge').innerText = report.severity.badge;
+        document.getElementById('report-severity-reasoning').innerText = report.severity.reasoning;
+        document.getElementById('report-vulnerability-score').innerText = report.severity.vulnerability_score;
+
+        // Render Nuclear Vote Tally & Definition Trap Alert if available
+        let interrogationHTML = '';
+        if (report.vote_tally) {
+          interrogationHTML += `
+  <div class="mb-6 p-6 bg-surface-container-high border-l-4 border-on-tertiary-container paper-shadow">
+    <div class="flex justify-between items-center mb-3">
+      <span class="font-mono-data text-xs uppercase font-bold text-on-tertiary-container">NUCLEAR BINARY VOTE TALLY</span>
+      <span class="bg-on-tertiary-container text-white px-3 py-1 text-xs font-bold uppercase tracking-wider">${report.vote_tally.majority_verdict}</span>
+    </div>
+    <div class="flex space-x-6 text-sm font-label-md mb-4">
+      <span class="text-error font-bold">NO (Skeptical): ${report.vote_tally.no_votes}</span>
+      <span class="text-on-primary-fixed-variant font-bold">YES (Supportive): ${report.vote_tally.yes_votes}</span>
+      <span class="text-secondary font-bold">Consensus: ${report.vote_tally.consensus_percentage}</span>
+    </div>
+    <div class="space-y-1 font-mono-data text-xs text-secondary">
+      ${report.vote_tally.vote_breakdown.map(v => `<div>• [${v.publisher}] ${v.title} → <strong>${v.vote}</strong> (${v.rationale})</div>`).join('')}
+    </div>
+  </div>
+  `;
+        }
+
+        if (report.definition_trap && report.definition_trap.has_definition_trap) {
+          interrogationHTML += `
+  <div class="mb-6 p-4 bg-error-container text-on-error-container border-l-4 border-error text-xs font-mono-data">
+    <strong class="block text-sm font-bold mb-1">⚠️ DEFINITION TRAP DETECTED:</strong>
+    <div>${report.definition_trap.verdict_line}</div>
+    <p class="mt-1">${report.definition_trap.explanation}</p>
+  </div>
+  `;
+        }
+
+        if (report.forced_contradiction) {
+          interrogationHTML += `
+  <div class="mb-6 p-4 bg-tertiary-fixed/40 border border-on-tertiary-container/30 text-xs font-body-md">
+    <strong class="block text-sm font-bold text-tertiary mb-1">⚡ FORCED CONTRADICTION PARSER (${report.forced_contradiction.conflict_type}):</strong>
+    <p class="mb-2 italic text-secondary">${report.forced_contradiction.conflict_explanation}</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+      <div class="p-2 bg-white border border-outline-variant/20">
+        <strong class="block font-mono-data text-[10px] text-outline">${report.forced_contradiction.source_a.title}</strong>
+        <p class="italic text-on-surface mt-1">${report.forced_contradiction.source_a.quote}</p>
+      </div>
+      <div class="p-2 bg-white border border-outline-variant/20">
+        <strong class="block font-mono-data text-[10px] text-outline">${report.forced_contradiction.source_b.title}</strong>
+        <p class="italic text-on-surface mt-1">${report.forced_contradiction.source_b.quote}</p>
+      </div>
+    </div>
+  </div>
+  `;
+        }
+
+        // Render Flaws
+        const flawsGrid = document.getElementById('report-flaws-grid');
+        if (report.exposed_flaws.length === 0) {
+          flawsGrid.innerHTML = interrogationHTML + `<div class="col-span-2 p-6 bg-surface border border-outline/20 text-center text-secondary">No exposed flaws for this query. Methodology/Fact is verified clean.</div>`;
+        } else {
+          flawsGrid.innerHTML = interrogationHTML + report.exposed_flaws.map(flaw => `
+<div class="risk-amber-border bg-white p-6 paper-shadow border border-outline-variant/10">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-on-tertiary-container">error</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant">Ref: ${flaw.ref_id}</span>
+</div>
+<h4 class="font-label-md text-label-md font-bold mb-1">${flaw.attack_vector}</h4>
+<p class="font-label-sm text-xs text-outline mb-2">${flaw.target}</p>
+<p class="font-body-md text-body-md text-secondary mb-4 italic">"${flaw.quote}"</p>
+<a class="text-primary font-label-sm text-label-sm border-b border-primary pb-0.5 hover:opacity-70 transition-opacity" href="${flaw.url}" target="_blank">View Citation Source →</a>
+</div>
+`).join('');
+        }
+
+        // Render Bibliography
+        const bibContainer = document.getElementById('report-bibliography');
+        bibContainer.innerHTML = report.bibliography.map(bib => `
+<p class="hanging-indent font-mono-data text-mono-data text-secondary">${bib}</p>
+`).join('');
+
+        // Render Mitigations
+        const mitList = document.getElementById('report-mitigations-list');
+        mitList.innerHTML = report.suggested_mitigations.map(mit => `
+<li class="flex gap-4">
+<span class="material-symbols-outlined text-on-primary-fixed-variant">verified</span>
+<div>
+<strong class="block font-label-md text-label-md mb-1">${mit.title}</strong>
+<p class="font-body-md text-body-md">${mit.detail}</p>
+</div>
+</li>
+`).join('');
+
+        switchView('reports');
+    }
+
+    function downloadPDFDigest() {
+      const btn = document.getElementById('btn-download-pdf');
+      if (btn) {
+        btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-sm">autorenew</span> Preparing PDF...`;
+        btn.disabled = true;
+      }
+      setTimeout(() => {
+        window.print();
+        if (btn) {
+          btn.innerHTML = `<span class="material-symbols-outlined text-sm">download</span><span>Download PDF Digest</span>`;
+          btn.disabled = false;
+        }
+      }, 400);
+    }
+
+    async function openDeepDive(critiqueId, pushHistory = true) {
+      try {
+        switchView('deepdive', false);
+        if (pushHistory) {
+          const targetHash = `#deepdive-${critiqueId}`;
+          if (window.location.hash !== targetHash) {
+            history.pushState({ view: 'deepdive', critiqueId: critiqueId }, '', targetHash);
+          }
+        }
+        document.getElementById('deepdive-thread-id').innerText = `Deep-Dive: Thread #${critiqueId}`;
+        document.getElementById('deepdive-title').innerHTML = '<span class="material-symbols-outlined animate-spin align-middle text-3xl">autorenew</span> Loading...';
+        document.getElementById('deepdive-author').innerText = 'Loading...';
+        document.getElementById('deepdive-source').innerText = 'Loading...';
+        document.getElementById('deepdive-text-content').innerHTML = '<div class="p-6 text-center text-secondary italic">Fetching thread details...</div>';
+
+        const res = await fetch(`/api/deep-dive/${critiqueId}`);
+        const data = await res.json();
+        
+        try {
+          sessionStorage.setItem('learnix_deepdive_data', JSON.stringify(data));
+          sessionStorage.setItem('learnix_deepdive_id', critiqueId);
+        } catch(e) {}
+        
+        renderDeepDiveData(data, critiqueId);
+      } catch (e) {
+        console.error("Error opening deep dive:", e);
+      }
+    }
+
+    function renderDeepDiveData(data, critiqueId) {
+        window.currentDeepDiveCard = data;
+
+        document.getElementById('deepdive-thread-id').innerText = `Deep-Dive: Thread #${data.source_id}`;
+        document.getElementById('deepdive-title').innerText = data.title;
+        document.getElementById('deepdive-author').innerText = `${data.authors} (${data.year})`;
+        document.getElementById('deepdive-source').innerText = `${data.source} • ${data.section}`;
+        document.getElementById('deepdive-url-btn').href = data.url;
+
+        const textContainer = document.getElementById('deepdive-text-content');
+        textContainer.innerHTML = `
+<p class="font-body-lg leading-relaxed">
+Paper Title: <strong>${data.title}</strong> (${data.year}) by ${data.authors}. Target Architecture: <em>${data.target}</em>.
+</p>
+<div class="p-4 bg-tertiary-fixed/30 border-l-4 border-on-tertiary-container my-4">
+<span class="font-mono-data text-xs uppercase font-bold text-on-tertiary-container block mb-1">DistilBERT Paragraph Classifier Label</span>
+<span class="highlight-adversarial" title="${data.distilbert_tag}">
+${data.text}
+</span>
+</div>
+<div class="my-6 p-6 bg-surface-container border-l-4 border-primary italic font-body-md text-secondary">
+"Adversarial Retrieval vectors confirmed this critique paragraph directly contradicts supportive claims regarding ${data.attack_vector}."
+</div>
+`;
+        if (data.chat_history && data.chat_history.length > 0) {
+            document.getElementById('deepdive-chat-container').innerHTML = data.chat_history.map(msg => `<div>${msg}</div>`).join('');
+        } else {
+            document.getElementById('deepdive-chat-container').innerHTML = `<div class="p-4 text-center text-secondary italic border border-outline-variant/20 bg-surface-container-low rounded"><span class="material-symbols-outlined text-3xl mb-2 opacity-50 block">history</span>No historical interactions found for this thread.</div>`;
+        }
+
+        switchView('deepdive', false);
+    }
+
+    function closeAllModals() {
+      const modalIds = [
+        'saved-papers-modal', 'resources-modal', 'ingest-modal',
+        'preview-modal', 'interrogate-modal', 'legal-modal-overlay'
+      ];
+      modalIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+    }
+
+    function handleRouteFromHashOrState(state) {
+      closeAllModals();
+      const hash = window.location.hash;
+      if (hash.startsWith('#deepdive-')) {
+        const critiqueId = hash.replace('#deepdive-', '');
+        if (critiqueId) {
+          openDeepDive(critiqueId, false);
+          return;
+        }
+      }
+      if (hash.startsWith('#')) {
+        const viewName = hash.replace('#', '');
+        if (['lab', 'feed', 'reports', 'deepdive'].includes(viewName)) {
+          switchView(viewName, false);
+          return;
+        }
+      }
+      if (state && state.view) {
+        if (state.view === 'deepdive' && state.critiqueId) {
+          openDeepDive(state.critiqueId, false);
+        } else if (['lab', 'feed', 'reports', 'deepdive'].includes(state.view)) {
+          switchView(state.view, false);
+        }
+        return;
+      }
+      switchView('lab', false);
+    }
+
+    window.addEventListener('popstate', (e) => {
+      handleRouteFromHashOrState(e.state);
+    });
+
+    function openIngestModal() {
+      document.getElementById('ingest-modal').classList.remove('hidden');
+      document.getElementById('ingest-result').classList.add('hidden');
+    }
+
+    function closeIngestModal() {
+      document.getElementById('ingest-modal').classList.add('hidden');
+    }
+
+    async function submitPaperIngestion() {
+      const title = document.getElementById('ingest-title').value.trim();
+      const source = document.getElementById('ingest-source').value.trim();
+      const rawText = document.getElementById('ingest-text').value.trim();
+
+      if (!title || !rawText) {
+        alert("Please provide both Paper Title and Manuscript Text.");
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/ingest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title: title, source: source || "ArXiv", raw_text: rawText })
+        });
+        const data = await res.json();
+
+        const resDiv = document.getElementById('ingest-result');
+        resDiv.innerHTML = `
+<div class="text-primary font-bold mb-2">Ingestion &amp; Classification Complete!</div>
+<div>Evaluated Paragraphs: <strong>${data.total_paragraphs_evaluated}</strong></div>
+<div>Limitation / Critique Chunks Stored: <strong class="text-on-tertiary-container">${data.limitation_chunks_stored}</strong></div>
+<div>Marketing / Claim Fluff Dropped: <strong class="text-error">${data.marketing_chunks_dropped}</strong></div>
+`;
+        resDiv.classList.remove('hidden');
+      } catch (e) {
+        console.error("Ingest error:", e);
+      }
+    }
+
+    // --- AUTHENTICATION MODULE ---
+    let currentUser = null;
+    let isOtpVerified = false;
+    let isResetOtpVerified = false;
+    let currentRegStep = 1;
+
+    function switchAuthView(view) {
+      document.getElementById('view-login').classList.add('hidden');
+      document.getElementById('view-reg-step-1').classList.add('hidden');
+      document.getElementById('view-reg-step-2').classList.add('hidden');
+      document.getElementById('view-reg-step-3').classList.add('hidden');
+      document.getElementById('view-forgot').classList.add('hidden');
+      hideAuthAlert();
+
+      if (view === 'login') {
+        document.getElementById('view-login').classList.remove('hidden');
+      } else if (view === 'register') {
+        goToRegStep(1);
+      } else if (view === 'forgot') {
+        document.getElementById('view-forgot').classList.remove('hidden');
+      }
+    }
+
+    function goToRegStep(step) {
+      document.getElementById('view-login').classList.add('hidden');
+      document.getElementById('view-reg-step-1').classList.add('hidden');
+      document.getElementById('view-reg-step-2').classList.add('hidden');
+      document.getElementById('view-reg-step-3').classList.add('hidden');
+      document.getElementById('view-forgot').classList.add('hidden');
+      hideAuthAlert();
+
+      currentRegStep = step;
+      if (step === 1) {
+        document.getElementById('view-reg-step-1').classList.remove('hidden');
+      } else if (step === 2) {
+        document.getElementById('view-reg-step-2').classList.remove('hidden');
+        const emailVal = document.getElementById('reg-email').value.trim();
+        const displayEl = document.getElementById('display-reg-email');
+        if (displayEl) displayEl.innerText = emailVal || "your email";
+      } else if (step === 3) {
+        document.getElementById('view-reg-step-3').classList.remove('hidden');
+      }
+    }
+
+    async function handleStep1Next() {
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+
+      if (!name) {
+        showAuthAlert("Please enter your full name.", "error");
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        showAuthAlert("Please enter a valid email address.", "error");
+        return;
+      }
+
+      const btn = document.getElementById('btn-next-step-1');
+      btn.innerHTML = `<span>Sending OTP...</span><span class="material-symbols-outlined animate-spin text-sm">autorenew</span>`;
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/auth/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, purpose: 'registration' })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showAuthAlert("Verification code sent to your email!", "success");
+          goToRegStep(2);
+        } else {
+          showAuthAlert(data.detail || "Failed to send OTP", "error");
+        }
+      } catch (e) {
+        showAuthAlert("Network error sending OTP", "error");
+      } finally {
+        btn.innerHTML = `<span>Next</span><span class="material-symbols-outlined text-sm">arrow_forward</span>`;
+        btn.disabled = false;
+      }
+    }
+
+    async function handleStep2Next() {
+      const email = document.getElementById('reg-email').value.trim();
+      const otp = document.getElementById('reg-otp').value.trim();
+
+      if (!otp || otp.length < 6) {
+        showAuthAlert("Please enter the 6-digit OTP code.", "error");
+        return;
+      }
+
+      const btn = document.getElementById('btn-next-step-2');
+      btn.innerHTML = `<span>Verifying...</span><span class="material-symbols-outlined animate-spin text-sm">autorenew</span>`;
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/auth/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, otp: otp, purpose: 'registration' })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          isOtpVerified = true;
+          showAuthAlert("OTP verified successfully!", "success");
+          goToRegStep(3);
+        } else {
+          showAuthAlert(data.detail || "Invalid OTP code", "error");
+        }
+      } catch (e) {
+        showAuthAlert("Network error verifying OTP", "error");
+      } finally {
+        btn.innerHTML = `<span>Verify &amp; Next</span><span class="material-symbols-outlined text-sm">arrow_forward</span>`;
+        btn.disabled = false;
+      }
+    }
+
+    function showAuthAlert(msg, type = "error") {
+      const alertBox = document.getElementById('auth-alert');
+      alertBox.classList.remove('hidden', 'bg-[#ffdad6]', 'text-[#ba1a1a]', 'border-[#ba1a1a]/30', 'bg-[#d0e9d4]', 'text-[#061b0e]', 'border-[#061b0e]/30');
+
+      if (type === "error") {
+        alertBox.classList.add('bg-[#ffdad6]', 'text-[#ba1a1a]', 'border', 'border-[#ba1a1a]/30');
+        alertBox.innerHTML = `<span class="material-symbols-outlined text-base">error</span><span>${msg}</span>`;
+      } else {
+        alertBox.classList.add('bg-[#d0e9d4]', 'text-[#061b0e]', 'border', 'border-[#061b0e]/30');
+        alertBox.innerHTML = `<span class="material-symbols-outlined text-base">check_circle</span><span>${msg}</span>`;
+      }
+    }
+
+    function hideAuthAlert() {
+      const alertBox = document.getElementById('auth-alert');
+      alertBox.classList.add('hidden');
+    }
+
+    function togglePasswordVisibility(fieldId, btnEl) {
+      const input = document.getElementById(fieldId);
+      const icon = btnEl.querySelector('span');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.innerText = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.innerText = 'visibility';
+      }
+    }
+
+    function validatePasswordRequirements(pw, confirmPw) {
+      return {
+        length: pw.length >= 8,
+        upper: /[A-Z]/.test(pw),
+        lower: /[a-z]/.test(pw),
+        number: /[0-9]/.test(pw),
+        special: /[^A-Za-z0-9]/.test(pw),
+        match: pw.length > 0 && pw === confirmPw
+      };
+    }
+
+    function updateRequirementIndicator(elementId, isValid) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      const icon = el.querySelector('span:first-child');
+      const text = el.querySelector('span:last-child');
+      if (isValid) {
+        icon.innerText = 'check_circle';
+        icon.className = 'material-symbols-outlined text-sm text-[#061b0e]';
+        text.className = 'text-[#061b0e] font-semibold';
+      } else {
+        icon.innerText = 'cancel';
+        icon.className = 'material-symbols-outlined text-sm text-[#ba1a1a]';
+        text.className = 'text-[#5e5f5c]';
+      }
+    }
+
+    function updatePasswordStrengthMeter() {
+      const pw = document.getElementById('reg-password').value;
+      const confirmPw = document.getElementById('reg-confirm-password').value;
+      const reqs = validatePasswordRequirements(pw, confirmPw);
+
+      updateRequirementIndicator('req-length', reqs.length);
+      updateRequirementIndicator('req-upper', reqs.upper);
+      updateRequirementIndicator('req-lower', reqs.lower);
+      updateRequirementIndicator('req-number', reqs.number);
+      updateRequirementIndicator('req-special', reqs.special);
+      updateRequirementIndicator('req-match', reqs.match);
+
+      const allValid = Object.values(reqs).every(Boolean) && isOtpVerified;
+      const btnSubmit = document.getElementById('btn-reg-submit');
+      if (allValid) {
+        btnSubmit.removeAttribute('disabled');
+        btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        btnSubmit.setAttribute('disabled', 'true');
+        btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    function updateResetPasswordMeter() {
+      const pw = document.getElementById('reset-password').value;
+      const confirmPw = document.getElementById('reset-confirm-password').value;
+      const reqs = validatePasswordRequirements(pw, confirmPw);
+
+      updateRequirementIndicator('reset-req-length', reqs.length);
+      updateRequirementIndicator('reset-req-upper', reqs.upper);
+      updateRequirementIndicator('reset-req-lower', reqs.lower);
+      updateRequirementIndicator('reset-req-number', reqs.number);
+      updateRequirementIndicator('reset-req-special', reqs.special);
+      updateRequirementIndicator('reset-req-match', reqs.match);
+
+      const allValid = Object.values(reqs).every(Boolean);
+      const btnSubmit = document.getElementById('btn-reset-submit');
+      if (allValid) {
+        btnSubmit.removeAttribute('disabled');
+        btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        btnSubmit.setAttribute('disabled', 'true');
+        btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    async function handleSendOTP(purpose) {
+      const emailId = purpose === 'registration' ? 'reg-email' : 'reset-email';
+      const btnId = purpose === 'registration' ? 'btn-send-reg-otp' : 'btn-send-reset-otp';
+      const email = document.getElementById(emailId).value.trim();
+
+      if (!email || !email.includes('@')) {
+        showAuthAlert("Please enter a valid email address first.", "error");
+        return;
+      }
+
+      const btn = document.getElementById(btnId);
+      btn.innerText = "Sending...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/auth/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, purpose: purpose })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showAuthAlert(data.message, "success");
+        } else {
+          showAuthAlert(data.detail || "Failed to send OTP", "error");
+        }
+      } catch (e) {
+        showAuthAlert("Network error sending OTP code", "error");
+      } finally {
+        btn.innerText = "Resend Code";
+        btn.disabled = false;
+      }
+    }
+
+    async function handleVerifyOTP(purpose) {
+      const emailId = purpose === 'registration' ? 'reg-email' : 'reset-email';
+      const otpId = purpose === 'registration' ? 'reg-otp' : 'reset-otp';
+      const email = document.getElementById(emailId).value.trim();
+      const otp = document.getElementById(otpId).value.trim();
+
+      if (!email || !otp) {
+        showAuthAlert("Please enter both email and 6-digit OTP code.", "error");
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, otp: otp, purpose: purpose })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showAuthAlert("OTP verified successfully!", "success");
+          if (purpose === 'registration') {
+            isOtpVerified = true;
+            updatePasswordStrengthMeter();
+          } else {
+            isResetOtpVerified = true;
+          }
+        } else {
+          showAuthAlert(data.detail || "Invalid OTP code", "error");
+        }
+      } catch (e) {
+        showAuthAlert("Network error verifying OTP", "error");
+      }
+    }
+
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const otp = document.getElementById('reg-otp').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+      if (!isOtpVerified) {
+        showAuthAlert("Please verify your email OTP before registering.", "error");
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            otp: otp,
+            password: password,
+            confirm_password: confirmPassword
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showAuthAlert("Account created successfully! Please sign in with your email and password.", "success");
+          document.getElementById('login-email').value = email;
+          setTimeout(() => {
+            switchAuthView('login');
+          }, 1500);
+        } else {
+          showAuthAlert(data.detail || "Registration failed", "error");
+        }
+      } catch (err) {
+        showAuthAlert("Network error during registration", "error");
+      }
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, password: password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          clearAllClientUserState();
+          localStorage.setItem('auth_token', data.token);
+          localStorage.setItem('session_last_active', Date.now().toString());
+          try {
+            sessionStorage.setItem('learnix_tab_active', 'true');
+            sessionStorage.setItem('learnix_active_view', 'lab');
+          } catch(e) {}
+          setAuthenticatedUser(data.user);
+          hideAuthScreen();
+          switchView('lab', false);
+          history.replaceState({ view: 'lab' }, '', '#lab');
+        } else {
+          showAuthAlert(data.detail || "Invalid email or password", "error");
+        }
+      } catch (err) {
+        showAuthAlert("Network error during login", "error");
+      }
+    }
+
+    async function handleResetSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('reset-email').value.trim();
+      const otp = document.getElementById('reset-otp').value.trim();
+      const newPassword = document.getElementById('reset-password').value;
+      const confirmPassword = document.getElementById('reset-confirm-password').value;
+
+      try {
+        const res = await fetch('/api/auth/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: email,
+            otp: otp,
+            new_password: newPassword,
+            confirm_password: confirmPassword
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showAuthAlert("Password reset successfully! Please sign in with your new password.", "success");
+          setTimeout(() => switchAuthView('login'), 1500);
+        } else {
+          showAuthAlert(data.detail || "Password reset failed", "error");
+        }
+      } catch (err) {
+        showAuthAlert("Network error resetting password", "error");
+      }
+    }
+
+    let currentProfileAvatarBase64 = null;
+
+    function updateAvatarUI(user) {
+      if (!user) return;
+      const initial = (user.name || "User").charAt(0).toUpperCase();
+      const avatarUrl = user.avatar || localStorage.getItem('learnix_user_avatar');
+
+      // Header Button Avatar
+      const headerInitial = document.getElementById('user-avatar-initial');
+      const headerImg = document.getElementById('user-avatar-img');
+      if (avatarUrl) {
+        if (headerImg) { headerImg.src = avatarUrl; headerImg.classList.remove('hidden'); }
+        if (headerInitial) headerInitial.classList.add('hidden');
+      } else {
+        if (headerInitial) { headerInitial.innerText = initial; headerInitial.classList.remove('hidden'); }
+        if (headerImg) headerImg.classList.add('hidden');
+      }
+
+      // Dropdown Avatar
+      const dropName = document.getElementById('dropdown-user-name');
+      const dropEmail = document.getElementById('dropdown-user-email');
+      const dropInitial = document.getElementById('dropdown-avatar-initial');
+      const dropImg = document.getElementById('dropdown-avatar-img');
+      if (dropName) dropName.innerText = user.name || "User";
+      if (dropEmail) dropEmail.innerText = user.email || "";
+      if (avatarUrl) {
+        if (dropImg) { dropImg.src = avatarUrl; dropImg.classList.remove('hidden'); }
+        if (dropInitial) dropInitial.classList.add('hidden');
+      } else {
+        if (dropInitial) { dropInitial.innerText = initial; dropInitial.classList.remove('hidden'); }
+        if (dropImg) dropImg.classList.add('hidden');
+      }
+
+      // Modal Avatar Preview
+      const modalInitial = document.getElementById('modal-avatar-initial');
+      const modalImg = document.getElementById('modal-avatar-img');
+      if (avatarUrl) {
+        if (modalImg) { modalImg.src = avatarUrl; modalImg.classList.remove('hidden'); }
+        if (modalInitial) modalInitial.classList.add('hidden');
+      } else {
+        if (modalInitial) { modalInitial.innerText = initial; modalInitial.classList.remove('hidden'); }
+        if (modalImg) modalImg.classList.add('hidden');
+      }
+    }
+
+    function toggleProfileDropdown(e) {
+      if (e) e.stopPropagation();
+      const dropdown = document.getElementById('profile-dropdown');
+      if (dropdown) dropdown.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', (e) => {
+      const badge = document.getElementById('user-header-badge');
+      const dropdown = document.getElementById('profile-dropdown');
+      if (dropdown && !dropdown.classList.contains('hidden') && badge && !badge.contains(e.target)) {
+        dropdown.classList.add('hidden');
+      }
+    });
+
+    function checkEmailChanged() {
+      const user = JSON.parse(localStorage.getItem('learnix_user') || '{}');
+      const newEmail = document.getElementById('profile-email-input').value.trim().toLowerCase();
+      const oldEmail = (user.email || '').trim().toLowerCase();
+      const sendBtn = document.getElementById('btn-send-email-otp');
+      const otpContainer = document.getElementById('email-change-otp-container');
+      if (newEmail && newEmail !== oldEmail) {
+        if (sendBtn) sendBtn.classList.remove('hidden');
+        if (otpContainer) otpContainer.classList.remove('hidden');
+      } else {
+        if (sendBtn) sendBtn.classList.add('hidden');
+        if (otpContainer) otpContainer.classList.add('hidden');
+      }
+    }
+
+    async function sendNewEmailOTP() {
+      const newEmail = document.getElementById('profile-email-input').value.trim();
+      const statusEl = document.getElementById('profile-info-status');
+      const btn = document.getElementById('btn-send-email-otp');
+
+      if (!newEmail || !newEmail.includes('@')) {
+        statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-red-100 text-red-700";
+        statusEl.innerText = "Please enter a valid new email address.";
+        statusEl.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Sending Code...";
+
+      try {
+        const res = await fetch('/api/auth/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: newEmail, purpose: "email_change" })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-green-100 text-green-800";
+          statusEl.innerText = `6-digit verification code sent to ${newEmail}! Check your inbox.`;
+          statusEl.classList.remove('hidden');
+        } else {
+          statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-red-100 text-red-700";
+          statusEl.innerText = data.detail || "Failed to send code.";
+          statusEl.classList.remove('hidden');
+        }
+      } catch (e) {
+        statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-red-100 text-red-700";
+        statusEl.innerText = "Network error sending code.";
+        statusEl.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Send Verification Code";
+      }
+    }
+
+    function switchProfileTab(tab) {
+      const btnInfo = document.getElementById('profile-tab-btn-info');
+      const btnSecurity = document.getElementById('profile-tab-btn-security');
+      const viewInfo = document.getElementById('profile-tab-view-info');
+      const viewSecurity = document.getElementById('profile-tab-view-security');
+
+      const activeClass = "flex-1 py-2 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-2 bg-[#061b0e] text-white shadow-sm";
+      const inactiveClass = "flex-1 py-2 px-4 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-2 bg-[#f6f3f2] text-[#5e5f5c] hover:bg-[#e0e0dc] hover:text-[#061b0e]";
+
+      if (tab === 'security') {
+        if (btnInfo) btnInfo.className = inactiveClass;
+        if (btnSecurity) btnSecurity.className = activeClass;
+        if (viewInfo) viewInfo.classList.add('hidden');
+        if (viewSecurity) viewSecurity.classList.remove('hidden');
+      } else {
+        if (btnInfo) btnInfo.className = activeClass;
+        if (btnSecurity) btnSecurity.className = inactiveClass;
+        if (viewInfo) viewInfo.classList.remove('hidden');
+        if (viewSecurity) viewSecurity.classList.add('hidden');
+      }
+    }
+
+    function openUserProfileModal(initialTab = 'info') {
+      const dropdown = document.getElementById('profile-dropdown');
+      if (dropdown) dropdown.classList.add('hidden');
+
+      const user = JSON.parse(localStorage.getItem('learnix_user') || '{}');
+      document.getElementById('profile-name-input').value = user.name || '';
+      document.getElementById('profile-email-input').value = user.email || '';
+      document.getElementById('profile-email-otp-input').value = '';
+      document.getElementById('profile-info-status').classList.add('hidden');
+      document.getElementById('profile-pass-status').classList.add('hidden');
+
+      switchProfileTab(initialTab);
+      checkEmailChanged();
+      updateAvatarUI(user);
+      document.getElementById('user-profile-modal').classList.remove('hidden');
+    }
+
+    function closeUserProfileModal() {
+      document.getElementById('user-profile-modal').classList.add('hidden');
+    }
+
+    function handleAvatarFileSelect(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        alert("Please select a valid image file.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function (evt) {
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.createElement('canvas');
+          const maxDim = 300;
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            }
+          } else {
+            if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          currentProfileAvatarBase64 = canvas.toDataURL('image/jpeg', 0.85);
+          let user = JSON.parse(localStorage.getItem('learnix_user') || '{}');
+          user.avatar = currentProfileAvatarBase64;
+          updateAvatarUI(user);
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeAvatarPhoto() {
+      currentProfileAvatarBase64 = "";
+      let user = JSON.parse(localStorage.getItem('learnix_user') || '{}');
+      user.avatar = "";
+      localStorage.removeItem('learnix_user_avatar');
+      updateAvatarUI(user);
+    }
+
+    async function submitProfileInfoUpdate() {
+      const name = document.getElementById('profile-name-input').value.trim();
+      const email = document.getElementById('profile-email-input').value.trim();
+      const emailOtp = document.getElementById('profile-email-otp-input').value.trim();
+      const statusEl = document.getElementById('profile-info-status');
+      const token = localStorage.getItem('auth_token');
+      const user = JSON.parse(localStorage.getItem('learnix_user') || '{}');
+
+      if (!name || !email) {
+        statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-red-100 text-red-700";
+        statusEl.innerText = "Name and email cannot be empty.";
+        statusEl.classList.remove('hidden');
+        return;
+      }
+
+      if (email.toLowerCase() !== (user.email || '').toLowerCase() && !emailOtp) {
+        statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-red-100 text-red-700";
+        statusEl.innerText = "Verification code is required to change your email address. Please click 'Send Verification Code'.";
+        statusEl.classList.remove('hidden');
+        return;
+      }
+
+      const avatarToSend = currentProfileAvatarBase64 !== null ? currentProfileAvatarBase64 : (user.avatar || '');
+
+      try {
+        const res = await fetch('/api/auth/update-profile', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ name: name, email: email, avatar: avatarToSend, otp: emailOtp })
+        });
+        const data = await res.json();
+        if (res.ok && data.status === "success") {
+          statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-green-100 text-green-800";
+          statusEl.innerText = data.message || "Profile updated successfully!";
+          statusEl.classList.remove('hidden');
+
+          localStorage.setItem('learnix_user', JSON.stringify(data.user));
+          if (data.user.avatar) {
+            localStorage.setItem('learnix_user_avatar', data.user.avatar);
+          } else {
+            localStorage.removeItem('learnix_user_avatar');
+          }
+          setAuthenticatedUser(data.user);
+          document.getElementById('email-change-otp-container').classList.add('hidden');
+          document.getElementById('btn-send-email-otp').classList.add('hidden');
+        } else {
+          statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-red-100 text-red-700";
+          statusEl.innerText = data.detail || "Failed to update profile.";
+          statusEl.classList.remove('hidden');
+        }
+      } catch (e) {
+        console.error("Update profile error:", e);
+        statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-red-100 text-red-700";
+        statusEl.innerText = "Network error updating profile.";
+        statusEl.classList.remove('hidden');
+      }
+    }
+
+    async function sendProfilePasswordOTP() {
+      const user = JSON.parse(localStorage.getItem('learnix_user') || '{}');
+      const email = user.email || document.getElementById('profile-email-input').value.trim();
+      const btn = document.getElementById('btn-profile-send-otp');
+      const statusEl = document.getElementById('profile-pass-status');
+
+      if (!email) {
+        alert("No authenticated email found.");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Sending Code...";
+
+      try {
+        const res = await fetch('/api/auth/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, purpose: "reset" })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-green-100 text-green-800";
+          statusEl.innerText = `6-digit verification code sent to ${email}! Check your inbox.`;
+          statusEl.classList.remove('hidden');
+        } else {
+          statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-red-100 text-red-700";
+          statusEl.innerText = data.detail || "Failed to send code.";
+          statusEl.classList.remove('hidden');
+        }
+      } catch (e) {
+        statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-red-100 text-red-700";
+        statusEl.innerText = "Error sending verification code.";
+        statusEl.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Resend Code";
+      }
+    }
+
+    async function submitPasswordResetWithOTP() {
+      const user = JSON.parse(localStorage.getItem('learnix_user') || '{}');
+      const email = user.email || document.getElementById('profile-email-input').value.trim();
+      const otp = document.getElementById('profile-otp-input').value.trim();
+      const newPass = document.getElementById('profile-new-pass-input').value;
+      const confirmPass = document.getElementById('profile-confirm-pass-input').value;
+      const statusEl = document.getElementById('profile-pass-status');
+
+      if (!otp || !newPass || !confirmPass) {
+        statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-red-100 text-red-700";
+        statusEl.innerText = "Please enter the 6-digit code and your new password.";
+        statusEl.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: email,
+            otp: otp,
+            new_password: newPass,
+            confirm_password: confirmPass
+          })
+        });
+        const data = await res.json();
+        if (res.ok && data.status === "success") {
+          statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-green-100 text-green-800";
+          statusEl.innerText = "Password updated successfully in cloud database!";
+          statusEl.classList.remove('hidden');
+          document.getElementById('profile-otp-input').value = "";
+          document.getElementById('profile-new-pass-input').value = "";
+          document.getElementById('profile-confirm-pass-input').value = "";
+        } else {
+          statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-red-100 text-red-700";
+          statusEl.innerText = data.detail || "Invalid code or password complexity requirement failed.";
+          statusEl.classList.remove('hidden');
+        }
+      } catch (e) {
+        statusEl.className = "p-3 rounded-xl text-xs font-semibold text-center bg-red-100 text-red-700";
+        statusEl.innerText = "Error updating password.";
+        statusEl.classList.remove('hidden');
+      }
+    }
+
+    function sanitizeSearchInput() {
+      const input = document.getElementById('methodology-input');
+      if (input) {
+        const val = (input.value || '').trim();
+        if (val.includes('@') && val.includes('.')) {
+          input.value = '';
+        }
+      }
+    }
+
+    function clearAllClientUserState() {
+      // 1. Wipe all local & session storage completely
+      try {
+        localStorage.clear();
+        sessionStorage.clear();
+      } catch (e) {}
+
+      // 2. Reset in-memory global state
+      currentUser = null;
+      currentQuery = "";
+      currentSearchData = null;
+      activeSourceFilter = "All";
+      activeVectorFilter = "All";
+
+      // 3. Clear DOM Containers
+      const historyList = document.getElementById('search-history-list');
+      if (historyList) historyList.innerHTML = `<div class="p-3 text-center text-[11px] text-[#5e5f5c] italic sidebar-text">No recent queries yet</div>`;
+
+      const savedPapersList = document.getElementById('saved-papers-list');
+      if (savedPapersList) savedPapersList.innerHTML = `<div class="p-8 text-center text-[#5e5f5c] text-sm"><span class="material-symbols-outlined text-3xl mb-2 opacity-50 block">bookmark_border</span>No saved papers yet.</div>`;
+
+      const chatMessages = document.getElementById('chat-messages');
+      if (chatMessages) chatMessages.innerHTML = '';
+
+      const deepdiveChat = document.getElementById('deepdive-chat-container');
+      if (deepdiveChat) deepdiveChat.innerHTML = '';
+
+      const feedContainer = document.getElementById('results-feed');
+      if (feedContainer) feedContainer.innerHTML = '';
+
+      const reportView = document.getElementById('report-view');
+      if (reportView) reportView.innerHTML = '';
+
+      const deepdiveContainer = document.getElementById('deepdive-container');
+      if (deepdiveContainer) deepdiveContainer.innerHTML = '';
+
+      const searchInput = document.getElementById('methodology-input');
+      if (searchInput) searchInput.value = '';
+
+      const dropName = document.getElementById('dropdown-user-name');
+      if (dropName) dropName.innerText = '';
+
+      const dropEmail = document.getElementById('dropdown-user-email');
+      if (dropEmail) dropEmail.innerText = '';
+
+      const profileNameInput = document.getElementById('profile-name-input');
+      if (profileNameInput) profileNameInput.value = '';
+
+      const profileEmailInput = document.getElementById('profile-email-input');
+      if (profileEmailInput) profileEmailInput.value = '';
+
+      const loginEmail = document.getElementById('login-email');
+      if (loginEmail) loginEmail.value = '';
+
+      const loginPass = document.getElementById('login-password');
+      if (loginPass) loginPass.value = '';
+
+      const authAlert = document.getElementById('auth-alert');
+      if (authAlert) { authAlert.innerText = ''; authAlert.classList.add('hidden'); }
+    }
+
+    function setAuthenticatedUser(user) {
+      if (currentUser && currentUser.email && currentUser.email !== user.email) {
+        clearAllClientUserState();
+      }
+      currentUser = user;
+      localStorage.setItem('learnix_user', JSON.stringify(user));
+      if (user.avatar) {
+        localStorage.setItem('learnix_user_avatar', user.avatar);
+      } else {
+        localStorage.removeItem('learnix_user_avatar');
+      }
+      updateAvatarUI(user);
+      document.getElementById('user-header-badge').classList.remove('hidden');
+      syncUserDataFromDB();
+      setTimeout(sanitizeSearchInput, 100);
+      setTimeout(sanitizeSearchInput, 500);
+    }
+
+    function hideAuthScreen() {
+      document.getElementById('auth-screen').classList.add('hidden');
+      setTimeout(sanitizeSearchInput, 100);
+    }
+
+    function showAuthScreen() {
+      document.getElementById('auth-screen').classList.remove('hidden');
+      document.getElementById('user-header-badge').classList.add('hidden');
+    }
+
+    async function handleLogout() {
+      const token = localStorage.getItem('auth_token');
+      if (token) {
+        try {
+          await fetch('/api/auth/logout', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token }
+          });
+        } catch (e) { }
+      }
+      clearAllClientUserState();
+      showAuthScreen();
+      switchAuthView('login');
+    }
+
+    function openLegalModal(type) {
+      document.getElementById('legal-content-help').classList.add('hidden');
+      document.getElementById('legal-content-privacy').classList.add('hidden');
+      document.getElementById('legal-content-terms').classList.add('hidden');
+
+      if (type === 'help') document.getElementById('legal-content-help').classList.remove('hidden');
+      if (type === 'privacy') document.getElementById('legal-content-privacy').classList.remove('hidden');
+      if (type === 'terms') document.getElementById('legal-content-terms').classList.remove('hidden');
+
+      document.getElementById('legal-modal-overlay').classList.remove('hidden');
+    }
+
+    function closeLegalModal() {
+      document.getElementById('legal-modal-overlay').classList.add('hidden');
+    }
+
+    async function checkAuthSession() {
+      const token = localStorage.getItem('auth_token');
+      const lastActive = localStorage.getItem('session_last_active');
+      const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+
+      // 1. Check if token missing or inactive for more than 7 days
+      if (!token || !lastActive || (Date.now() - parseInt(lastActive, 10)) > SEVEN_DAYS_MS) {
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('session_last_active');
+        localStorage.removeItem('learnix_user');
+        localStorage.removeItem('learnix_user_avatar');
+        showAuthScreen();
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setAuthenticatedUser(data.user);
+          // Refresh 7-day inactivity timer on active usage
+          localStorage.setItem('session_last_active', Date.now().toString());
+          hideAuthScreen();
+
+          // 2. Check tab closure vs page reload
+          let isTabActive = false;
+          try { isTabActive = sessionStorage.getItem('learnix_tab_active'); } catch(e) {}
+
+          if (!isTabActive) {
+            // BRAND NEW TAB / WINDOW OPEN: Open Laboratory (Search) Page by default!
+            try {
+              sessionStorage.setItem('learnix_tab_active', 'true');
+              sessionStorage.setItem('learnix_active_view', 'lab');
+            } catch(e) {}
+            switchView('lab', false);
+            history.replaceState({ view: 'lab' }, '', '#lab');
+          } else {
+            // RELOAD IN EXISTING TAB (F5): Keep user in exact same view!
+            let savedView = 'lab';
+            try { savedView = sessionStorage.getItem('learnix_active_view') || 'lab'; } catch(e) {}
+            
+            try {
+               if (savedView === 'feed') {
+                   const sData = sessionStorage.getItem('learnix_search_data');
+                   const sQuery = sessionStorage.getItem('learnix_current_query');
+                   const sSource = sessionStorage.getItem('learnix_source_filter') || 'All';
+                   if (sData && sQuery) {
+                       currentQuery = sQuery;
+                       activeSourceFilter = sSource;
+                       activeVectorFilter = sessionStorage.getItem('learnix_vector_filter') || 'All';
+                       updateSidebarUI(activeSourceFilter);
+                       // We must call it dynamically because it might not be fully parsed initially
+                       setTimeout(() => {
+                           if (typeof renderFeedData === 'function') renderFeedData(JSON.parse(sData), sQuery, sSource);
+                           const reportBtn = document.getElementById('generate-risk-report-btn');
+                           if (reportBtn) reportBtn.disabled = false;
+                       }, 100);
+                   }
+               } else if (savedView === 'reports') {
+                   const rData = sessionStorage.getItem('learnix_report_data');
+                   if (rData) {
+                       revealReportsTab();
+                       setTimeout(() => {
+                           if (typeof renderReportData === 'function') renderReportData(JSON.parse(rData));
+                       }, 100);
+                   }
+               } else if (savedView === 'deepdive') {
+                   const dData = sessionStorage.getItem('learnix_deepdive_data');
+                   const dId = sessionStorage.getItem('learnix_deepdive_id');
+                   if (dData && dId) {
+                       setTimeout(() => {
+                           if (typeof renderDeepDiveData === 'function') renderDeepDiveData(JSON.parse(dData), dId);
+                       }, 100);
+                   }
+               }
+            } catch(e) { console.error('Error rehydrating view', e); }
+            
+            switchView(savedView, false);
+            history.replaceState({ view: savedView }, '', `#${savedView}`);
+          }
+        } else {
+          localStorage.removeItem('auth_token');
+          localStorage.removeItem('session_last_active');
+          showAuthScreen();
+        }
+      } catch (e) {
+        // Fallback for offline/network issues if within 7 days
+        const savedUser = JSON.parse(localStorage.getItem('learnix_user') || 'null');
+        if (savedUser) {
+          setAuthenticatedUser(savedUser);
+          hideAuthScreen();
+        } else {
+          showAuthScreen();
+        }
+      } finally {
+        setTimeout(sanitizeSearchInput, 200);
+      }
+    }
+
+    // Run session check and router init on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      checkAuthSession();
+      setTimeout(sanitizeSearchInput, 100);
+      setTimeout(sanitizeSearchInput, 500);
+    });
+  </script>
+</body>
+
+</html>
