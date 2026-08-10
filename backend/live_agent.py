@@ -12,8 +12,8 @@ import os
 import re
 import random
 from typing import List, Dict, Any, Tuple, Optional
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+import math
+from collections import Counter
 from dotenv import load_dotenv
 import warnings
 warnings.filterwarnings("ignore")
@@ -606,12 +606,34 @@ def rerank_results_cross_encoder(query: str, papers: List[Dict[str, Any]], top_k
     documents = [query] + [(p.get("title", "") + " " + p.get("text", "")[:300]) for p in papers]
     
     try:
-        vectorizer = TfidfVectorizer().fit_transform(documents)
-        vectors = vectorizer.toarray()
-        query_vector = vectors[0].reshape(1, -1)
-        doc_vectors = vectors[1:]
+        # Pure Python lightweight TF-IDF and Cosine Similarity
+        all_docs = documents
+        tokenized_docs = [doc.lower().split() for doc in all_docs]
         
-        scores = cosine_similarity(query_vector, doc_vectors)[0]
+        df = Counter()
+        for tokens in tokenized_docs:
+            df.update(set(tokens))
+            
+        N = len(all_docs)
+        vectors = []
+        for tokens in tokenized_docs:
+            tf = Counter(tokens)
+            vec = {}
+            for term, count in tf.items():
+                vec[term] = count * math.log((N + 1) / (df[term] + 1))
+            vectors.append(vec)
+            
+        query_vec = vectors[0]
+        doc_vecs = vectors[1:]
+        
+        def cosine_sim(v1, v2):
+            dot_product = sum(v1.get(t, 0) * v2.get(t, 0) for t in set(v1) & set(v2))
+            mag1 = math.sqrt(sum(val**2 for val in v1.values()))
+            mag2 = math.sqrt(sum(val**2 for val in v2.values()))
+            if mag1 == 0 or mag2 == 0: return 0.0
+            return dot_product / (mag1 * mag2)
+            
+        scores = [cosine_sim(query_vec, dv) for dv in doc_vecs]
         
         for idx, paper in enumerate(papers):
             paper["relevance_score"] = round(float(scores[idx]), 2)
