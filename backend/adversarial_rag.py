@@ -119,7 +119,7 @@ def run_adversarial_search(
     raw_agent_results = agent_res.get("results", [])
     relevant_results = [
         r for r in raw_agent_results 
-        if r.get("relevance_score", 0.0) >= 0.05 or r.get("keyword_overlap", 0) >= 1 or r.get("exact_id_fetch", False)
+        if r.get("relevance_score", 0.0) >= 0.20 or r.get("keyword_overlap", 0) >= 1 or r.get("exact_id_fetch", False)
     ]
     if not relevant_results and raw_agent_results:
         relevant_results = raw_agent_results
