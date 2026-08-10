@@ -1230,10 +1230,12 @@ def fetch_openalex_realtime(query: str, max_results: int = 5) -> List[Dict[str, 
                 else:
                     abstract_text = title
 
-                authorships = w.get('authorships', [])
-                authors = [a.get('author', {}).get('display_name', '') for a in authorships[:3] if a.get('author', {}).get('display_name')] or ["OpenAlex Researcher"]
+                authorships = w.get('authorships') or []
+                authors = [(a.get('author') or {}).get('display_name', '') for a in authorships[:3] if (a.get('author') or {}).get('display_name')] or ["OpenAlex Researcher"]
 
-                host_venue = w.get('primary_location', {}).get('source', {}).get('display_name') or "OpenAlex Scholarly Graph"
+                primary_loc = w.get('primary_location') or {}
+                source_obj = primary_loc.get('source') or {}
+                host_venue = source_obj.get('display_name') or "OpenAlex Scholarly Graph"
                 vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(title, abstract_text)
 
                 results.append({
