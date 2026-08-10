@@ -1,6 +1,5 @@
 # Learnix Research
 
-🎉 Official Public Release: Learnix Research is now officially released!
 
 An AI-powered Adversarial Retrieval-Augmented Generation (RAG) platform designed for researchers, academics, and peer-reviewers. It stress-tests research queries and thesis claims by retrieving real-time academic literature, identifying methodology flaws, evaluation data leakage, and baseline omissions, and generating dynamic, evidence-backed risk reports and mitigations.
 
