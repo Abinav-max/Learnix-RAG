@@ -1012,20 +1012,7 @@
         </div>
       </div> <!-- End Feed Column -->
 
-      <!-- Right Sidebar for Reference Papers -->
-      <aside id="contextual-sidebar" class="hidden xl:block w-80 shrink-0 h-full overflow-y-auto border-l border-outline-variant/20 pl-6 pr-2 py-2 space-y-6 custom-scrollbar">
-        <div class="border-b border-outline-variant/30 pb-2 mb-4">
-          <h3 class="font-headline-sm text-headline-sm text-primary flex items-center space-x-2">
-            <span class="material-symbols-outlined text-[20px]">library_books</span>
-            <span>Contextual Literature</span>
-          </h3>
-          <p class="font-label-sm text-label-sm text-secondary mt-1">Foundational papers retrieved for this query</p>
-        </div>
-        <div id="reference-papers-container" class="space-y-4">
-          <!-- Dynamic reference papers -->
-          <div class="text-sm text-secondary italic">Searching literature...</div>
-        </div>
-      </aside>
+      </div> <!-- End Feed Column -->
     </main>
 
     <!-- VIEW 3: ACADEMIC RISK REPORT -->
@@ -2298,7 +2285,9 @@ ${c.exact_id_fetch ? '<span class="font-mono-data text-[10px] bg-primary text-on
         `;
 
         const refContainer = document.getElementById('reference-papers-container');
-        refContainer.innerHTML = '<div class="text-sm text-secondary italic p-4 text-center"><span class="material-symbols-outlined animate-spin align-middle mb-2">autorenew</span><br/>Fetching literature...</div>';
+        if (refContainer) {
+          refContainer.innerHTML = '<div class="text-sm text-secondary italic p-4 text-center"><span class="material-symbols-outlined animate-spin align-middle mb-2">autorenew</span><br/>Fetching literature...</div>';
+        }
 
         showSystemThinkingIndicator("Auditing Claims &amp; Fetching Pre-prints...");
 
@@ -2343,27 +2332,33 @@ ${c.exact_id_fetch ? '<span class="font-mono-data text-[10px] bg-primary text-on
         const refContainer = document.getElementById('reference-papers-container');
         const container = document.getElementById('critique-cards-container');
 
-        document.getElementById('feed-query-text').innerText = `"${data.user_query}"`;
-        document.getElementById('feed-transformed-text').innerText = data.transformed_query;
-        document.getElementById('feed-match-count').innerText = `${data.total_matches} Match${data.total_matches === 1 ? '' : 'es'} Found (Cross-Encoder Re-Ranked)`;
+        const queryText = document.getElementById('feed-query-text');
+        if (queryText) queryText.innerText = `"${data.user_query}"`;
+        const transformedText = document.getElementById('feed-transformed-text');
+        if (transformedText) transformedText.innerText = data.transformed_query;
+        const matchCount = document.getElementById('feed-match-count');
+        if (matchCount) matchCount.innerText = `${data.total_matches} Match${data.total_matches === 1 ? '' : 'es'} Found (Cross-Encoder Re-Ranked)`;
 
-        if (data.references && data.references.length > 0) {
-          refContainer.innerHTML = data.references.map(ref => `
-              <a href="${ref.url}" target="_blank" class="block p-4 border border-outline-variant/30 bg-surface hover:bg-surface-container-low hover:border-outline-variant transition-colors group">
-                <div class="font-label-md text-primary group-hover:underline line-clamp-2 leading-tight">${ref.title}</div>
-                <div class="text-xs text-secondary mt-2 flex items-center justify-between">
-                  <span>${ref.source}</span>
-                  <span class="font-mono-data opacity-70">${ref.year}</span>
-                </div>
-              </a>
-            `).join('');
-        } else {
-          refContainer.innerHTML = `<div class="text-sm text-secondary italic p-4 bg-surface-container-lowest border border-outline-variant/20">No direct reference literature found for this query.</div>`;
+        if (refContainer) {
+          if (data.references && data.references.length > 0) {
+            refContainer.innerHTML = data.references.map(ref => `
+                <a href="${ref.url}" target="_blank" class="block p-4 border border-outline-variant/30 bg-surface hover:bg-surface-container-low hover:border-outline-variant transition-colors group">
+                  <div class="font-label-md text-primary group-hover:underline line-clamp-2 leading-tight">${ref.title}</div>
+                  <div class="text-xs text-secondary mt-2 flex items-center justify-between">
+                    <span>${ref.source}</span>
+                    <span class="font-mono-data opacity-70">${ref.year}</span>
+                  </div>
+                </a>
+              `).join('');
+          } else {
+            refContainer.innerHTML = `<div class="text-sm text-secondary italic p-4 bg-surface-container-lowest border border-outline-variant/20">No direct reference literature found for this query.</div>`;
+          }
         }
 
         if (data.is_fact) {
-          statusBanner.className = "mb-6 p-6 bg-primary-container text-on-primary-container text-sm font-body-md border-l-4 border-primary rounded paper-shadow";
-          statusBanner.innerHTML = `
+          if (statusBanner) {
+            statusBanner.className = "mb-6 p-6 bg-primary-container text-on-primary-container text-sm font-body-md border-l-4 border-primary rounded paper-shadow";
+            statusBanner.innerHTML = `
 <div class="flex items-center space-x-3">
 <span class="material-symbols-outlined text-2xl text-on-primary-fixed-variant">check_circle</span>
 <div>
