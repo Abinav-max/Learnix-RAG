@@ -643,13 +643,19 @@ def run_gemini_devils_advocate(
 
     # 4. Sentiment filter: discard supportive/marketing papers
     critical_hits = [h for h in keyword_filtered if not is_supportive_marketing_fluff(h.get("title", ""), h.get("raw_text", h.get("text", "")))]
+    if not critical_hits and keyword_filtered:
+        critical_hits = keyword_filtered
+    if not critical_hits and all_hits:
+        critical_hits = all_hits
 
     # 5. Semantic Re-Ranker (TF-IDF Cosine Similarity against query)
     from backend.live_agent import rerank_results_cross_encoder
     ranked_hits = rerank_results_cross_encoder(user_query, critical_hits)
     
-    # Strict relevance threshold limitation: drop anything below 0.20
-    relevant_hits = [h for h in ranked_hits if h.get("relevance_score", 0) >= 0.20]
+    # Relevance threshold limitation: retain top hits, fallback if empty
+    relevant_hits = [h for h in ranked_hits if h.get("relevance_score", 0) >= 0.05]
+    if not relevant_hits and ranked_hits:
+        relevant_hits = ranked_hits
 
     # 6. Build results from filtered hits (return up to 6 when All, up to 4 when specific)
     limit = 6 if src_lower == "all" else 4

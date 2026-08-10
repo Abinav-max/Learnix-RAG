@@ -504,6 +504,11 @@ def keyword_overlap_filter(query: str, papers: List[Dict[str, Any]], min_overlap
         if overlap_count >= min_overlap:
             filtered.append(paper)
     
+    if not filtered and papers:
+        filtered = [p for p in papers if p.get("keyword_overlap", 0) >= 1]
+    if not filtered and papers:
+        filtered = papers
+
     return filtered
 
 def build_adversarial_query(query: str) -> str:
