@@ -182,10 +182,26 @@
         color: #000000 !important;
       }
     }
+
+    /* Sleek Custom Scrollbars for Independent Column Navigation */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(195, 200, 193, 0.5);
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(6, 27, 14, 0.4);
+    }
   </style>
 </head>
 
-<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+<body class="bg-background text-on-background h-screen overflow-hidden flex flex-col font-body-md">
   <div class="grain-overlay"></div>
 
   <!-- Authentication Screen Overlay (Learnix Web App Theme) -->
@@ -679,7 +695,7 @@
   </div>
 
   <!-- TopAppBar -->
-  <header class="bg-background border-b border-outline-variant/20 sticky top-0 z-50 transition-all">
+  <header class="bg-background border-b border-outline-variant/20 h-16 shrink-0 z-50 transition-all">
     <div class="flex justify-between items-center w-full px-6 h-16">
       <!-- Logo + Wordmark -->
       <div class="flex items-center gap-2.5 cursor-pointer select-none group" onclick="switchView('lab')" title="Learnix Research — Home">
@@ -770,11 +786,11 @@
   </header>
 
   <!-- Main Container -->
-  <div class="flex-1 flex w-full">
+  <div class="flex-1 flex w-full h-[calc(100vh-4rem)] overflow-hidden min-h-0">
 
     <!-- Left History & Navigation Sidebar -->
     <aside id="history-sidebar"
-      class="w-64 shrink-0 min-h-[calc(100vh-64px)] bg-[#f6f3f2] border-r border-[#c3c8c1]/40 flex flex-col p-4 transition-all duration-300 select-none">
+      class="w-64 shrink-0 h-full overflow-y-auto bg-[#f6f3f2] border-r border-[#c3c8c1]/40 flex flex-col p-4 transition-all duration-300 select-none custom-scrollbar">
       
       <!-- Brand Logo in Sidebar -->
       <div class="flex justify-center mb-6 mt-2">
@@ -842,7 +858,7 @@
     </aside>
 
     <!-- VIEW 1: LABORATORY CANVAS -->
-    <main id="view-lab" class="flex-1 px-8 py-12 w-full max-w-full">
+    <main id="view-lab" class="flex-1 h-full overflow-y-auto px-8 py-12 w-full max-w-full custom-scrollbar">
       <!-- Hero Section -->
       <section class="mb-16 text-center">
         <div
@@ -919,10 +935,10 @@
     </main>
 
     <!-- VIEW 2: ADVERSARIAL FEED / SEARCH RESULTS -->
-    <main id="view-feed" class="hidden flex-1 px-8 py-10 w-full max-w-full flex flex-col xl:flex-row gap-8 items-start">
+    <main id="view-feed" class="hidden flex-1 h-full overflow-hidden w-full max-w-full flex flex-col xl:flex-row gap-8 items-start">
 
       <!-- Feed Column -->
-      <div class="flex-1 w-full">
+      <div id="feed-column" class="flex-1 w-full h-full overflow-y-auto pr-4 py-2 custom-scrollbar">
         <header class="mb-12">
           <h1 class="font-display-lg text-display-lg text-primary mb-2">The Adversarial Feed</h1>
           <p class="font-body-lg text-body-lg text-secondary italic border-l-2 border-outline-variant pl-4">
@@ -967,21 +983,21 @@
         <!-- Dynamic Quick Debunk & Verified Skepticism Bento Box -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
           <article id="quick-debunk-card"
-            class="bg-surface-container-high/50 border border-outline-variant/20 p-6 flex flex-col justify-between">
-            <div>
-              <div class="flex justify-between mb-4">
-                <span class="text-label-sm font-mono-data text-outline uppercase tracking-tighter">Quick Debunk</span>
-                <span class="material-symbols-outlined text-on-tertiary-container">warning</span>
+            class="bg-surface-container-high/50 border border-outline-variant/20 p-6 flex flex-col justify-between overflow-hidden rounded-xl">
+            <div class="overflow-hidden">
+              <div class="flex justify-between items-center mb-4">
+                <span class="text-label-sm font-mono-data text-outline uppercase tracking-tighter shrink-0">Quick Debunk</span>
+                <span class="material-symbols-outlined text-on-tertiary-container shrink-0">warning</span>
               </div>
-              <h3 id="quick-debunk-title" class="font-headline-sm text-headline-sm text-primary mb-3">Relevance Filter
+              <h3 id="quick-debunk-title" class="font-headline-sm text-headline-sm text-primary mb-3 leading-snug break-words">Relevance Filter
                 Active</h3>
-              <p id="quick-debunk-body" class="font-body-md text-body-md text-on-surface-variant">No unrelated critiques
+              <p id="quick-debunk-body" class="font-body-md text-body-md text-on-surface-variant break-words leading-relaxed">No unrelated critiques
                 to display. All retrieved papers are semantically relevant to your thesis query.</p>
             </div>
-            <div class="mt-6 flex items-center justify-between">
+            <div class="mt-6 flex items-center justify-between gap-3 border-t border-outline-variant/15 pt-4 overflow-hidden min-w-0">
               <span id="quick-debunk-badge"
-                class="text-label-sm font-bold bg-primary-container text-on-primary-container px-2 py-0.5">FILTERED</span>
-              <span id="quick-debunk-ref" class="text-label-sm text-outline">Semantic Cross-Encoder</span>
+                class="text-label-sm font-bold bg-primary-container text-on-primary-container px-2.5 py-1 rounded uppercase shrink-0">FILTERED</span>
+              <span id="quick-debunk-ref" class="text-label-sm text-outline font-mono-data truncate max-w-[200px] shrink inline-block text-right ml-auto" title="Semantic Cross-Encoder">Semantic Cross-Encoder</span>
             </div>
           </article>
           <article class="bg-primary text-on-primary p-6 flex flex-col justify-center items-center text-center">
@@ -997,7 +1013,7 @@
       </div> <!-- End Feed Column -->
 
       <!-- Right Sidebar for Reference Papers -->
-      <aside class="hidden xl:block w-80 shrink-0 sticky top-24 space-y-6">
+      <aside id="contextual-sidebar" class="hidden xl:block w-80 shrink-0 h-full overflow-y-auto border-l border-outline-variant/20 pl-6 pr-2 py-2 space-y-6 custom-scrollbar">
         <div class="border-b border-outline-variant/30 pb-2 mb-4">
           <h3 class="font-headline-sm text-headline-sm text-primary flex items-center space-x-2">
             <span class="material-symbols-outlined text-[20px]">library_books</span>
@@ -1013,7 +1029,7 @@
     </main>
 
     <!-- VIEW 3: ACADEMIC RISK REPORT -->
-    <main id="view-reports" class="hidden flex-1 px-8 py-10 w-full max-w-full">
+    <main id="view-reports" class="hidden flex-1 h-full overflow-y-auto px-8 py-10 w-full max-w-full custom-scrollbar">
       <!-- Report Header -->
       <div class="mb-12 border-b-4 border-primary pb-8">
         <div class="flex justify-between items-end mb-4">
@@ -1111,8 +1127,8 @@
       </section>
     </main>
 
-    <!-- VIEW 4: PEER REVIEW DEEP-DIVE -->
-    <main id="view-deepdive" class="hidden flex-1 px-8 py-10 w-full max-w-full">
+    <!-- VIEW 4: DEEP DIVE VIEW -->
+    <main id="view-deepdive" class="hidden flex-1 h-full overflow-y-auto px-8 py-10 w-full max-w-full custom-scrollbar">
       <section class="mb-8">
         <div
           class="flex items-center space-x-2 text-on-tertiary-container font-label-sm mb-4 uppercase tracking-widest">
@@ -2449,13 +2465,20 @@ DistilBERT Tag: ${card.distilbert_tag}
         bodyEl.innerText = `No unrelated critiques to display. All retrieved papers are strictly relevant to "${query}".`;
         badgeEl.innerText = "VERIFIED";
         refEl.innerText = "Semantic Cross-Encoder";
+        refEl.title = "Semantic Cross-Encoder";
         return;
       }
 
-      titleEl.innerText = `Primary Vulnerability: ${topPaper.attack_vector}`;
-      bodyEl.innerText = `Top matching audit (${topPaper.source}:${topPaper.source_id}): "${topPaper.text.slice(0, 160)}..."`;
-      badgeEl.innerText = topPaper.severity.toUpperCase();
-      refEl.innerText = `${topPaper.source}:${topPaper.source_id}`;
+      const srcName = topPaper.source || 'Academic Audit';
+      const rawId = topPaper.source_id || topPaper.id || '';
+      const displayId = rawId.length > 22 ? rawId.slice(0, 20) + '…' : rawId;
+      const fullRef = rawId ? `${srcName}:${rawId}` : srcName;
+
+      titleEl.innerText = `Primary Vulnerability: ${topPaper.attack_vector || 'Methodological Flaw & Over-Reach'}`;
+      bodyEl.innerText = `Top matching audit (${srcName}:${displayId}): "${(topPaper.text || topPaper.raw_text || '').slice(0, 140)}..."`;
+      badgeEl.innerText = (topPaper.severity || 'MODERATE').toUpperCase();
+      refEl.innerText = `${srcName}:${displayId}`;
+      refEl.title = fullRef;
     }
 
     async function generateReportForCurrentQuery() {
