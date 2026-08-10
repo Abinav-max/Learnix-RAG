@@ -1,115 +1,99 @@
-# Learnix Research — Peer-Review Devil's Advocate RAG Engine
+# Learnix Research
 
-[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Gemini 2.0](https://img.shields.io/badge/Google_Gemini_2.0_Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
-[![Python](https://img.shields.io/badge/Python_3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+🎉 Official Public Release: Learnix Research is now officially released!
 
-**Learnix Research** is an AI-powered Adversarial Retrieval-Augmented Generation (RAG) platform designed for researchers, academics, and peer-reviewers. It stress-tests research queries and thesis claims by retrieving real-time academic literature, identifying methodology flaws, evaluation data leakage, and baseline omissions, and generating dynamic, evidence-backed risk reports and mitigations.
+An AI-powered Adversarial Retrieval-Augmented Generation (RAG) platform designed for researchers, academics, and peer-reviewers. It stress-tests research queries and thesis claims by retrieving real-time academic literature, identifying methodology flaws, evaluation data leakage, and baseline omissions, and generating dynamic, evidence-backed risk reports and mitigations.
 
----
+## Component Overview
 
-## 🌟 Key Features
-
-- **Adversarial RAG Pipeline**: Evaluates user thesis claims against live academic literature fetched from ArXiv, Zenodo, PubPeer, CrossRef, OpenAlex, and Semantic Scholar.
-- **Gemini 2.0 Flash Synthesis**: Multi-source research synthesis, relevance gate filtering, and topic-aware hypothesis analysis using Google Gemini.
-- **Real-Time Dynamic Mitigations**: Generates 3 query-bound, literature-linked recommendations per search, identifying unaddressed edge cases and missing evaluation baselines.
-- **100% Pure Supabase Cloud DB**: High-performance PostgreSQL database with Row Level Security (RLS) ensuring strict per-user data isolation.
-- **Multi-User Security & Isolation**: Separate chat history, saved papers, recent searches, and profile settings for every user account.
-- **Gmail SMTP OTP Verification**: 6-digit email verification for account registration, email address updates, and password recovery.
-- **Interactive Laboratory SPA**: Single Page Application built with dark/light themes, grain overlays, saved paper management, and deep-dive paper critique modals.
-
----
-
-## 🏗️ Tech Stack
-
-| Layer | Technology |
+| Component | What it is |
 | :--- | :--- |
-| **Backend Framework** | Python 3.10+, FastAPI, Uvicorn |
-| **Database** | Supabase Cloud PostgreSQL (7 Tables) |
-| **AI Engine** | Google Gemini 2.0 Flash (`google-generativeai`) |
-| **Search APIs** | Live REST integration with ArXiv, Zenodo, PubPeer, CrossRef, OpenAlex, Semantic Scholar |
-| **Authentication** | Bearer Token Sessions, Gmail SMTP TLS OTP, PBKDF2 HMAC SHA-256 Hashing |
-| **Frontend UI** | HTML5, Vanilla JavaScript, Vanilla CSS, TailwindCSS (CDN), Material Symbols, Google Fonts |
+| **Backend Server** (`uvicorn app:app --reload`) | A FastAPI server that handles LLM synthesis, literature retrieval, and secure DB connections. |
+| **Interactive Laboratory** | A Single Page Application (SPA) where users input thesis claims, explore literature, and view dynamic risk reports. |
 
----
+## How it works
 
-## 📊 Database Schema
+```text
+User Query ──► Adversarial RAG Pipeline
+                    │
+                    ▼
+             LLM (Gemini 2.0 Flash)  ◄──────► Search APIs (ArXiv, Zenodo, PubPeer, etc.)
+                    │                              ├─ methodology_flaws
+                    ▼                              ├─ evaluation_data_leakage
+             Dynamic Risk Report                   └─ baseline_omissions
+                    │
+                    ▼
+             Interactive Laboratory SPA
+```
 
-The system operates on 7 PostgreSQL tables in Supabase:
+The frontend connects to the backend API which handles authentication, literature retrieval, and Gemini synthesis via Supabase for secure data isolation.
 
-- **`users`**: Manages user accounts, names, emails, hashed passwords, salts, and avatar images.
-- **`sessions`**: Bearer token session authentication with 7-day inactivity expiration.
-- **`otps`**: One-Time Passwords for registration, email changes, and password resets.
-- **`chat_history`**: Isolated per-user query history and message logs.
-- **`saved_papers`**: Per-user bookmarked academic papers.
-- **`critiques`**: Cached paper abstracts, flaw classifications, and attack vectors.
-- **`hotspots_cache`**: Real-time research trends and topic cache.
+## Project structure
+```text
+Learnix-RAG/
+├── app.py              # Starts the FastAPI server and handles routing
+├── requirements.txt
+├── backend/            # Backend API and RAG logic
+│   ├── gemini_agent.py # Gemini 2.0 Flash integration and synthesis
+│   ├── database.py     # Supabase DB operations and RLS
+│   └── adversarial_rag.py # Main logic for literature retrieval and risk reporting
+│
+└── static/             # Frontend Single Page Application
+    ├── index.html      # Main UI entrypoint
+    ├── style.css       # UI styling (Vanilla CSS + Tailwind)
+    └── favicon.svg     # Brand logo
+```
 
----
+## Quick start (For Developers)
 
-## 🚀 Quickstart Guide
+### 1. Prerequisites
+- Python ≥ 3.10
+- A Supabase Cloud project
+- A Google Gemini API Key
 
-### 1. Clone the Repository
+### 2. Clone & install
 ```bash
 git clone https://github.com/Abinav-max/Learnix-RAG.git
 cd Learnix-RAG
-```
-
-### 2. Install Dependencies
-```bash
 pip install -r requirements.txt
 ```
 
-### 3. Environment Setup
+### 3. Set up environment
 Create a `.env` file in the root directory:
-```env
-# Gemini API Key
-GEMINI_API_KEY=your_gemini_api_key_here
-
-# Supabase Cloud PostgreSQL
-SUPABASE_URL=https://your_project.supabase.co
-SUPABASE_KEY=your_supabase_anon_or_service_key_here
-
-# Gmail SMTP OTP Delivery
-SMTP_SERVER=smtp.gmail.com
-SMTP_PORT=587
-SENDER_EMAIL=your_email@gmail.com
-SENDER_APP_PASSWORD=your_gmail_app_password
+```bash
+touch .env
 ```
+(Open the newly created `.env` file and fill in your API keys using the reference below)
 
 ### 4. Database Setup
-Execute the DDL script in `backend/supabase_schema.sql` inside your Supabase SQL Editor to create all 7 required tables and RLS policies.
+Execute the DDL script in `backend/supabase_schema.sql` inside your Supabase SQL Editor to create all 7 required tables and Row Level Security (RLS) policies.
 
-### 5. Run Local Development Server
+### 5. Run — Local Server
+
 ```bash
 uvicorn app:app --reload --port 8000
 ```
+Starts the FastAPI backend server on `http://127.0.0.1:8000`. Navigate to this URL in your browser to interact with the Learnix Research SPA.
 
-Open your browser and navigate to:
-```
-http://127.0.0.1:8000
-```
+## Environment variables
+Create a `.env` file and fill in the values below.
 
----
+| Variable | Required | Where to get it |
+| :--- | :--- | :--- |
+| `GEMINI_API_KEY` | ✅ | [aistudio.google.com](https://aistudio.google.com/) |
+| `SUPABASE_URL` | ✅ | [supabase.com](https://supabase.com/) → API settings |
+| `SUPABASE_KEY` | ✅ | [supabase.com](https://supabase.com/) → API settings |
+| `SMTP_SERVER` | Optional | e.g., `smtp.gmail.com` |
+| `SMTP_PORT` | Optional | e.g., `587` |
+| `SENDER_EMAIL` | Optional | Your sending email address |
+| `SENDER_APP_PASSWORD`| Optional | Your email provider app password |
 
-## 🧪 Testing
+## Tech stack
+- **FastAPI** — Backend framework
+- **Google Gemini 2.0 Flash** — AI Engine for synthesis and mitigations
+- **Supabase Cloud PostgreSQL** — Database with RLS
+- **Live Search APIs** — ArXiv, Zenodo, PubPeer, CrossRef, OpenAlex, Semantic Scholar
+- **HTML5/JS/TailwindCSS** — Frontend SPA UI
 
-Run the automated backend test suite:
-```bash
-python -m unittest test_backend.py test_interrogation_engine.py test_interrogation_fast.py test_tag_blindness.py
-```
-
----
-
-## 🌐 Cloud Deployment
-
-Pre-configured for cloud hosting platforms:
-- **Render**: `render.yaml` included for one-click deployment.
-- **Vercel / Railway / Heroku**: Standard WSGI/ASGI entrypoint via `app:app`.
-
----
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
+## License
+MIT
