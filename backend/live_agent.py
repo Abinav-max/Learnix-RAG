@@ -608,7 +608,7 @@ def rerank_results_cross_encoder(query: str, papers: List[Dict[str, Any]], top_k
     try:
         # Pure Python lightweight TF-IDF and Cosine Similarity
         all_docs = documents
-        tokenized_docs = [doc.lower().split() for doc in all_docs]
+        tokenized_docs = [re.findall(r'\w+', doc.lower()) for doc in all_docs]
         
         df = Counter()
         for tokens in tokenized_docs:
