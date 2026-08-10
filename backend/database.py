@@ -4,6 +4,7 @@ Connects to live ArXiv API (domain filtered), OpenReview API, and PubMed API.
 Uses Adversarial Sentiment Gate & Cross-Encoder Re-Ranker to select Top 3-4 Actually Relevant Critiques.
 """
 
+import re
 from typing import List, Dict, Any, Optional
 from backend.live_agent import (
     fetch_arxiv_realtime, 
