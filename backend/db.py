@@ -20,11 +20,16 @@ def get_supabase() -> Client:
     global _supabase_client, _current_key
     load_dotenv(override=True)
     
-    url = os.environ.get("SUPABASE_URL", "").strip()
-    key = os.environ.get("SUPABASE_KEY", "").strip()
+    url = (os.environ.get("SUPABASE_URL", "") or os.environ.get("NEXT_PUBLIC_SUPABASE_URL", "")).strip()
+    key = (
+        os.environ.get("SUPABASE_KEY", "") or 
+        os.environ.get("SUPABASE_ANON_KEY", "") or 
+        os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "") or 
+        os.environ.get("SUPABASE_SERVICE_KEY", "")
+    ).strip()
     
     if not url or not key:
-        raise ValueError("[CRITICAL] SUPABASE_URL or SUPABASE_KEY is missing in .env! Please fill them in.")
+        raise ValueError("[CRITICAL] SUPABASE_URL or SUPABASE_KEY is missing in environment variables! Please configure them.")
     
     if _supabase_client is None or _current_key != key:
         _supabase_client = create_client(url, key)

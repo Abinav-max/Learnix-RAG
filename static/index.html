@@ -1639,6 +1639,15 @@
     let historySidebarCollapsed = false;
 
     document.addEventListener("DOMContentLoaded", () => {
+      // Global Keyboard Hotkey Handler: ESC key closes open modals & dropdowns
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" || e.keyCode === 27) {
+          closeAllModals();
+        }
+      });
+
+      bindKeyboardFormHandlers();
+
       loadHotspots();
       setInterval(loadHotspots, 60000); // Background refresh every 60 seconds
       renderSearchHistory();
@@ -1655,6 +1664,45 @@
         if (searchInput) searchInput.placeholder = placeholders[pIndex];
       }, 3500);
     });
+
+    function bindKeyboardFormHandlers() {
+      // Ingest Modal: Ctrl+Enter or Cmd+Enter in manuscript text submits ingestion
+      const ingestText = document.getElementById('ingest-text');
+      if (ingestText) {
+        ingestText.addEventListener('keydown', (e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            submitPaperIngestion();
+          }
+        });
+      }
+
+      // Profile Modal Info Tab: Enter key submits profile update
+      ['profile-name-input', 'profile-email-input', 'profile-email-otp-input'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              submitProfileInfoUpdate();
+            }
+          });
+        }
+      });
+
+      // Security Tab: Enter key submits password reset
+      ['profile-otp-input', 'profile-new-pass-input', 'profile-confirm-pass-input'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              submitPasswordResetWithOTP();
+            }
+          });
+        }
+      });
+    }
 
     function toggleHistorySidebar() {
       const sidebar = document.getElementById('history-sidebar');
@@ -2365,7 +2413,8 @@ ${c.exact_id_fetch ? '<span class="font-mono-data text-[10px] bg-primary text-on
 </div>
 </div>
 `;
-          statusBanner.classList.remove('hidden');
+            statusBanner.classList.remove('hidden');
+          }
           document.getElementById('feed-severity-badge').className = "bg-primary-container text-on-primary-container px-3 py-1 text-label-sm font-label-sm border border-primary/20";
           document.getElementById('feed-severity-badge').innerText = "Severity: Clean (0 Flaws)";
           container.innerHTML = `<div class="p-8 text-center text-secondary italic bg-surface border border-outline-variant/20 rounded">No contradictory peer reviews or methodological flaws found for this query. Claim is verified physics/fact.</div>`;
@@ -2694,7 +2743,8 @@ ${data.text}
     function closeAllModals() {
       const modalIds = [
         'saved-papers-modal', 'resources-modal', 'ingest-modal',
-        'preview-modal', 'interrogate-modal', 'legal-modal-overlay'
+        'preview-modal', 'interrogate-modal', 'legal-modal-overlay',
+        'user-profile-modal', 'profile-dropdown'
       ];
       modalIds.forEach(id => {
         const el = document.getElementById(id);

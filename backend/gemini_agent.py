@@ -23,9 +23,23 @@ with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     import google.generativeai as genai
 
-load_dotenv()
+def get_gemini_api_key() -> str:
+    return (
+        os.environ.get("GEMINI_API_KEY", "") or 
+        os.environ.get("GOOGLE_API_KEY", "") or 
+        os.environ.get("GEMINI_KEY", "") or 
+        os.environ.get("GOOGLE_KEY", "")
+    ).strip()
 
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "") or os.environ.get("GOOGLE_API_KEY", "")
+GEMINI_API_KEY = get_gemini_api_key()
+
+def get_generative_model(primary_model: str = "gemini-1.5-flash-latest") -> genai.GenerativeModel:
+    for m_name in [primary_model, "gemini-1.5-flash-latest", "gemini-2.0-flash-exp", "gemini-1.5-pro-latest", "gemini-1.5-pro", "gemini-1.5-flash"]:
+        try:
+            return genai.GenerativeModel(m_name)
+        except Exception:
+            continue
+    return genai.GenerativeModel("gemini-1.5-flash-latest")
 
 # ---------------------------------------------------------
 # Step 2: Ambiguity Resolver Agent
@@ -177,8 +191,10 @@ def handle_factual(query: str) -> Dict[str, Any]:
 
     for attempt in range(3):
         try:
-            genai.configure(api_key=GEMINI_API_KEY)
-            model = genai.GenerativeModel("gemini-2.0-flash")
+            api_key = get_gemini_api_key()
+            if api_key:
+                genai.configure(api_key=api_key)
+                model = get_generative_model("gemini-1.5-flash")
             
             prompt = f"""
             You are a real-time factual knowledge assistant. 
@@ -229,11 +245,12 @@ def synthesize_gemini_realtime_report(user_query: str, critiques: List[Dict[str,
     Dynamically generates a real-time adversarial analysis and evidence audit 
     using the Gemini 2.0 Flash LLM based on live retrieved academic papers.
     """
-    if not GEMINI_API_KEY:
+    api_key = get_gemini_api_key()
+    if not api_key:
         return None
     try:
-        genai.configure(api_key=GEMINI_API_KEY)
-        model = genai.GenerativeModel("gemini-2.0-flash")
+        genai.configure(api_key=api_key)
+        model = get_generative_model("gemini-1.5-flash")
         
         context_str = "\n".join([
             f"- [{c.get('source', 'Academic')}] {c.get('title')}: {c.get('raw_text', c.get('text', ''))[:300]}"
@@ -277,10 +294,11 @@ def generate_dynamic_mitigations(user_query: str, critiques: Optional[List[Dict[
             attack_vec = c.get('attack_vector', 'Methodological Flaw')
             paper_evidence += f"- Paper {idx} [{c.get('source', 'Academic')}]: \"{title}\"\n  Attack Vector / Flaw: {attack_vec}\n  Key Finding: {flaw}\n\n"
 
-    if GEMINI_API_KEY:
+    api_key = get_gemini_api_key()
+    if api_key:
         try:
-            genai.configure(api_key=GEMINI_API_KEY)
-            model = genai.GenerativeModel("gemini-2.0-flash")
+            genai.configure(api_key=api_key)
+            model = get_generative_model("gemini-1.5-flash")
             
             prompt = f"""
 You are an expert scientific peer-reviewer and research methodology advisor.
@@ -357,8 +375,10 @@ def handle_ambiguous(query: str) -> Dict[str, Any]:
     """
     for attempt in range(3):
         try:
-            genai.configure(api_key=GEMINI_API_KEY)
-            model = genai.GenerativeModel("gemini-2.0-flash")
+            api_key = get_gemini_api_key()
+            if api_key:
+                genai.configure(api_key=api_key)
+                model = get_generative_model("gemini-1.5-flash")
             
             prompt = f"""
             The query "{query}" is ambiguous or an acronym with multiple meanings.

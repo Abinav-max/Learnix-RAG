@@ -21,9 +21,23 @@ with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     import google.generativeai as genai
 
-load_dotenv()
+def get_gemini_api_key() -> str:
+    return (
+        os.environ.get("GEMINI_API_KEY", "") or 
+        os.environ.get("GOOGLE_API_KEY", "") or 
+        os.environ.get("GEMINI_KEY", "") or 
+        os.environ.get("GOOGLE_KEY", "")
+    ).strip()
 
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "") or os.environ.get("GOOGLE_API_KEY", "")
+GEMINI_API_KEY = get_gemini_api_key()
+
+def get_generative_model(primary_model: str = "gemini-1.5-flash-latest") -> genai.GenerativeModel:
+    for m_name in [primary_model, "gemini-1.5-flash-latest", "gemini-2.0-flash-exp", "gemini-1.5-pro-latest", "gemini-1.5-pro", "gemini-1.5-flash"]:
+        try:
+            return genai.GenerativeModel(m_name)
+        except Exception:
+            continue
+    return genai.GenerativeModel("gemini-1.5-flash-latest")
 
 def detect_sentiment(title: str, text: str) -> str:
     """
@@ -548,7 +562,7 @@ def gemini_smart_relevance_gate(query: str, papers: List[Dict[str, Any]]) -> Lis
         
     try:
         genai.configure(api_key=gemini_key)
-        model = genai.GenerativeModel("gemini-2.0-flash")
+        model = get_generative_model("gemini-1.5-flash")
         
         candidates_text = ""
         for idx, p in enumerate(papers[:8]):

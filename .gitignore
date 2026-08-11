@@ -12,8 +12,20 @@ __pycache__/
 env/
 venv/
 ENV/
+*.pdf
 
 # Databases & local state files
 *.db
 sessions.json
 users.json
+
+# Temp & scratch scripts
+temp_*
+check*
+find_brace*
+extract.*
+parse.*
+indent_output.txt
+test.js
+{
+
