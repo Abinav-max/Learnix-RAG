@@ -1,9 +1,9 @@
-# Environment files
+# Environment secrets
 .env
 .env.local
 .env.*.local
 
-# Python cache & build outputs
+# Python cache & virtual environments
 __pycache__/
 *.py[cod]
 *$py.class
@@ -12,20 +12,13 @@ __pycache__/
 env/
 venv/
 ENV/
-*.pdf
 
-# Databases & local state files
+# Temporary data & pdf exports
+*.pdf
 *.db
+*.log
 sessions.json
 users.json
+powershell.cmd
 
-# Temp & scratch scripts
-temp_*
-check*
-find_brace*
-extract.*
-parse.*
-indent_output.txt
-test.js
-{
 
