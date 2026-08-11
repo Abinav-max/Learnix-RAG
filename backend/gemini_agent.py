@@ -1,12 +1,3 @@
-"""
-Three-Agent Routing System & Peer-Review Devil's Advocate:
-1. Ambiguity Resolver Agent (resolve_acronym): Expands context-dependent acronyms (e.g., 'CM' -> 'Chief Minister').
-2. Smart Router Agent (route_query): Classifies queries via Gemini reasoning into FACTUAL, RESEARCH_CLAIM, or AMBIGUOUS_ACRONYM.
-3. Three Specialized Handlers (handle_factual, handle_research, handle_ambiguous).
-4. Full Agentic Loop Orchestrator (run_agent).
-Zero static hardcoded keyword lists!
-"""
-
 import os
 import json
 import time
@@ -16,6 +7,7 @@ import urllib.parse
 import xml.etree.ElementTree as ET
 import re
 from typing import List, Dict, Any, Tuple, Optional
+import concurrent.futures
 from dotenv import load_dotenv
 import warnings
 warnings.filterwarnings("ignore")
@@ -605,42 +597,52 @@ def run_gemini_devils_advocate(
     target_domain = detect_query_domain(user_query)
     target_categories = get_domain_categories(target_domain)
 
-    # 2. Fetch papers based on source_filter and domain
+    # 2. Fetch papers based on source_filter and domain (Parallelized for maximum speed)
     all_hits = []
     src_lower = (source_filter or "all").lower()
 
-    if src_lower in ["all", "arxiv"]:
-        all_hits.extend(fetch_arxiv_realtime(user_query, max_results=5, categories=target_categories))
+    fetch_tasks = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=12) as executor:
+        if src_lower in ["all", "arxiv"]:
+            fetch_tasks.append(executor.submit(fetch_arxiv_realtime, user_query, 5, target_categories))
 
-    if src_lower == "biorxiv" or (src_lower == "all" and target_domain == "BIOLOGY/MEDICINE"):
-        all_hits.extend(fetch_biorxiv_realtime(user_query, max_results=4))
+        if src_lower == "biorxiv" or (src_lower == "all" and target_domain == "BIOLOGY/MEDICINE"):
+            fetch_tasks.append(executor.submit(fetch_biorxiv_realtime, user_query, 4))
 
-    if src_lower == "medrxiv" or (src_lower == "all" and target_domain == "BIOLOGY/MEDICINE"):
-        all_hits.extend(fetch_medrxiv_realtime(user_query, max_results=4))
+        if src_lower == "medrxiv" or (src_lower == "all" and target_domain == "BIOLOGY/MEDICINE"):
+            fetch_tasks.append(executor.submit(fetch_medrxiv_realtime, user_query, 4))
 
-    if src_lower in ["pmc", "pubmed"] or (src_lower == "all" and target_domain == "BIOLOGY/MEDICINE"):
-        all_hits.extend(fetch_pmc_realtime(user_query, max_results=4))
+        if src_lower in ["pmc", "pubmed"] or (src_lower == "all" and target_domain == "BIOLOGY/MEDICINE"):
+            fetch_tasks.append(executor.submit(fetch_pmc_realtime, user_query, 4))
 
-    if src_lower in ["all", "openalex"]:
-        all_hits.extend(fetch_openalex_realtime(user_query, max_results=5))
+        if src_lower in ["all", "openalex"]:
+            fetch_tasks.append(executor.submit(fetch_openalex_realtime, user_query, 5))
 
-    if src_lower in ["all", "semanticscholar", "semantic scholar", "s2"]:
-        all_hits.extend(fetch_semanticscholar_realtime(user_query, max_results=5))
+        if src_lower in ["all", "semanticscholar", "semantic scholar", "s2"]:
+            fetch_tasks.append(executor.submit(fetch_semanticscholar_realtime, user_query, 5))
 
-    if src_lower in ["all", "doaj"]:
-        all_hits.extend(fetch_doaj_realtime(user_query, max_results=4))
+        if src_lower in ["all", "doaj"]:
+            fetch_tasks.append(executor.submit(fetch_doaj_realtime, user_query, 4))
 
-    if src_lower in ["all", "zenodo"]:
-        all_hits.extend(fetch_zenodo_realtime(user_query, max_results=4))
+        if src_lower in ["all", "zenodo"]:
+            fetch_tasks.append(executor.submit(fetch_zenodo_realtime, user_query, 4))
 
-    if src_lower in ["all", "openaire"]:
-        all_hits.extend(fetch_openaire_realtime(user_query, max_results=4))
+        if src_lower in ["all", "openaire"]:
+            fetch_tasks.append(executor.submit(fetch_openaire_realtime, user_query, 4))
 
-    if src_lower in ["all", "openreview"]:
-        all_hits.extend(fetch_openreview_realtime(user_query, max_results=4))
+        if src_lower in ["all", "openreview"]:
+            fetch_tasks.append(executor.submit(fetch_openreview_realtime, user_query, 4))
 
-    if src_lower in ["all", "pubpeer"]:
-        all_hits.extend(fetch_pubpeer_realtime(user_query, max_results=4))
+        if src_lower in ["all", "pubpeer"]:
+            fetch_tasks.append(executor.submit(fetch_pubpeer_realtime, user_query, 4))
+
+        for future in concurrent.futures.as_completed(fetch_tasks):
+            try:
+                hits = future.result(timeout=3.5)
+                if hits:
+                    all_hits.extend(hits)
+            except Exception:
+                pass
 
     # 3. Post-fetch domain filter safety net
     domain_filtered = filter_by_domain(all_hits, target_domain)

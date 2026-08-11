@@ -482,12 +482,21 @@ def generate_academic_risk_report(
             "suggested_mitigations": []
         }
 
-    search_res = run_adversarial_search(user_query)
-    critiques = search_res.get("results", [])
+    critiques = []
+    if selected_critique_ids:
+        from backend.db import get_critique_by_id_db
+        for cid in selected_critique_ids:
+            item = get_critique_by_id_db(cid)
+            if item:
+                critiques.append(item)
+
+    if not critiques:
+        search_res = run_adversarial_search(user_query)
+        critiques = search_res.get("results", [])
     
     # Filter by selected critique IDs if specified
     if selected_critique_ids:
-        critiques = [c for c in critiques if c["id"] in selected_critique_ids] or critiques
+        critiques = [c for c in critiques if c.get("id") in selected_critique_ids or c.get("source_id") in selected_critique_ids] or critiques
 
     # Filter out excluded critique IDs if specified (Weak Link Exclusion)
     if exclude_ids:
