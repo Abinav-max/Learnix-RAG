@@ -77,7 +77,7 @@ class TestEmbeddingService(unittest.TestCase):
         from backend.embedding_service import normalize_scores
         normed = normalize_scores([0.5, 0.5, 0.5])
         self.assertTrue(all(v == 0.5 for v in normed))
-        print("[OK] normalize_scores equal values → 0.5 fallback")
+        print("[OK] normalize_scores equal values -> 0.5 fallback")
 
     # ─── 6. TF-IDF ranking ───────────────────────────────────────────────────
     def test_tfidf_ranking(self):
