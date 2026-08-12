@@ -927,10 +927,19 @@
         </div>
         <div id="hotspots-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
           <!-- Loaded dynamically -->
+      <!-- Footer (Appears at bottom of scrollable content) -->
+      <footer class="mt-16 pt-8 border-t border-[#c3c8c1]/40 pb-8">
+        <div class="w-full flex flex-col md:flex-row justify-between items-center max-w-max-content-width mx-auto px-2">
+          <div class="mb-4 md:mb-0">
+            <span class="font-label-md text-label-md font-bold text-primary">Learnix Research</span>
+            <p class="font-label-sm text-label-sm text-secondary mt-1">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
+          </div>
+          <div class="flex space-x-6">
+            <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors underline" onclick="switchView('lab')">Laboratory</button>
+            <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="switchView('feed')">Adversarial Feed</button>
+          </div>
         </div>
-      </section>
-
-
+      </footer>
     </main>
 
     <!-- VIEW 2: ADVERSARIAL FEED / SEARCH RESULTS -->
@@ -1009,6 +1018,20 @@
               onclick="switchView('reports')">Inspect Full Report</button>
           </article>
         </div>
+
+        <!-- Footer (Appears at bottom of feed scroll) -->
+        <footer class="mt-16 pt-8 border-t border-[#c3c8c1]/40 pb-8">
+          <div class="w-full flex flex-col md:flex-row justify-between items-center max-w-max-content-width mx-auto px-2">
+            <div class="mb-4 md:mb-0">
+              <span class="font-label-md text-label-md font-bold text-primary">Learnix Research</span>
+              <p class="font-label-sm text-label-sm text-secondary mt-1">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
+            </div>
+            <div class="flex space-x-6">
+              <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="switchView('lab')">Laboratory</button>
+              <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors underline" onclick="switchView('feed')">Adversarial Feed</button>
+            </div>
+          </div>
+        </footer>
       </div> <!-- End Feed Column -->
     </main>
 
@@ -1109,6 +1132,20 @@
           </div>
         </div>
       </section>
+
+      <!-- Footer (Appears at bottom of reports scroll) -->
+      <footer class="mt-16 pt-8 border-t border-[#c3c8c1]/40 pb-8">
+        <div class="w-full flex flex-col md:flex-row justify-between items-center max-w-max-content-width mx-auto px-2">
+          <div class="mb-4 md:mb-0">
+            <span class="font-label-md text-label-md font-bold text-primary">Learnix Research</span>
+            <p class="font-label-sm text-label-sm text-secondary mt-1">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
+          </div>
+          <div class="flex space-x-6">
+            <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="switchView('lab')">Laboratory</button>
+            <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="switchView('feed')">Adversarial Feed</button>
+          </div>
+        </div>
+      </footer>
     </main>
 
     <!-- VIEW 4: DEEP DIVE VIEW -->
@@ -1175,6 +1212,20 @@
             onclick="switchView('reports')">Generate Full Risk Report →</button>
         </div>
       </section>
+
+      <!-- Footer (Appears at bottom of deepdive scroll) -->
+      <footer class="mt-16 pt-8 border-t border-[#c3c8c1]/40 pb-8">
+        <div class="w-full flex flex-col md:flex-row justify-between items-center max-w-max-content-width mx-auto px-2">
+          <div class="mb-4 md:mb-0">
+            <span class="font-label-md text-label-md font-bold text-primary">Learnix Research</span>
+            <p class="font-label-sm text-label-sm text-secondary mt-1">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
+          </div>
+          <div class="flex space-x-6">
+            <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="switchView('lab')">Laboratory</button>
+            <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="switchView('feed')">Adversarial Feed</button>
+          </div>
+        </div>
+      </footer>
     </main>
 
     <!-- Right Research Sidebar -->
@@ -1610,26 +1661,6 @@
     </div>
   </div>
 
-  <!-- Footer (Appears on scroll) -->
-  <footer id="app-footer" class="fixed bottom-0 left-0 right-0 z-40 bg-[#fcf9f8]/95 backdrop-blur-md border-t border-[#c3c8c1]/40 opacity-0 translate-y-full pointer-events-none transition-all duration-300 shadow-xl">
-    <div
-      class="w-full py-4 px-6 flex flex-col md:flex-row justify-between items-center max-w-max-content-width mx-auto">
-      <div class="mb-2 md:mb-0 text-center md:text-left">
-        <span class="font-label-md text-label-md font-bold text-primary">Learnix Research</span>
-        <p class="font-label-sm text-label-sm text-secondary mt-0.5">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
-      </div>
-      <div class="flex space-x-6">
-        <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors underline"
-          onclick="switchView('lab')">Laboratory</button>
-        <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors"
-          onclick="switchView('feed')">Adversarial Feed</button>
-        <button id="footer-reports"
-          class="font-label-sm text-on-surface-variant hover:text-primary transition-colors hidden"
-          onclick="switchView('reports')">Risk Reports</button>
-      </div>
-    </div>
-  </footer>
-
   <script>
     let currentQuery = "Are Large Language Models capable of true logical reasoning?";
     let activeSourceFilter = "All";
@@ -1637,34 +1668,7 @@
     let previewModeEnabled = true;
     let historySidebarCollapsed = false;
 
-    function initFooterScrollListener() {
-      const footer = document.getElementById("app-footer");
-      if (!footer) return;
-
-      const checkScroll = () => {
-        let isScrolled = window.scrollY > 40;
-        const scrollContainers = document.querySelectorAll("main, #feed-column, .overflow-y-auto");
-        scrollContainers.forEach(el => {
-          if (el.scrollTop > 40) {
-            isScrolled = true;
-          }
-        });
-
-        if (isScrolled) {
-          footer.classList.remove("opacity-0", "translate-y-full", "pointer-events-none");
-          footer.classList.add("opacity-100", "translate-y-0", "pointer-events-auto");
-        } else {
-          footer.classList.add("opacity-0", "translate-y-full", "pointer-events-none");
-          footer.classList.remove("opacity-100", "translate-y-0", "pointer-events-auto");
-        }
-      };
-
-      window.addEventListener("scroll", checkScroll, { passive: true });
-      document.addEventListener("scroll", checkScroll, { capture: true, passive: true });
-    }
-
     document.addEventListener("DOMContentLoaded", () => {
-      initFooterScrollListener();
       // Global Keyboard Hotkey Handler: ESC key closes open modals & dropdowns
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" || e.keyCode === 27) {
