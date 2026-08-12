@@ -2092,7 +2092,10 @@
 
       const activeEl = document.getElementById(`view-${viewName}`);
       const activeNav = document.getElementById(`nav-${viewName}`);
-      if (activeEl) activeEl.classList.remove('hidden');
+      if (activeEl) {
+        activeEl.classList.remove('hidden');
+        activeEl.scrollTop = 0;
+      }
       if (activeNav) {
         activeNav.classList.remove('text-secondary');
         activeNav.classList.add('text-primary', 'border-b-2', 'border-primary');
