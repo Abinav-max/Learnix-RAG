@@ -160,18 +160,26 @@
     @media print {
       @page {
         size: A4 portrait;
-        margin: 15mm 12mm 15mm 12mm;
+        margin: 12mm 12mm 12mm 12mm;
       }
 
       html,
-      body {
+      body,
+      div,
+      main,
+      article,
+      section {
         height: auto !important;
-        min-height: auto !important;
+        min-height: 0 !important;
         max-height: none !important;
         overflow: visible !important;
+      }
+
+      body {
         background: #ffffff !important;
         color: #000000 !important;
         position: static !important;
+        display: block !important;
       }
 
       header,
@@ -183,36 +191,39 @@
       #auth-screen,
       #legal-modal-overlay,
       #preview-modal,
+      #user-dropdown,
       #system-thinking-indicator,
       .sidebar-text {
         display: none !important;
       }
 
-      main,
-      #view-lab,
-      #view-feed,
-      #view-reports,
-      #view-deepdive,
-      .custom-scrollbar,
-      .overflow-y-auto {
-        height: auto !important;
-        max-height: none !important;
-        overflow: visible !important;
-        position: static !important;
+      /* Preserve view isolation during print */
+      .hidden {
+        display: none !important;
+      }
+
+      .flex-1 {
+        flex: none !important;
+        display: block !important;
+        width: 100% !important;
+      }
+
+      main {
         display: block !important;
         width: 100% !important;
         max-width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
+        position: static !important;
       }
 
       .bg-surface,
       .bg-surface-container,
       .bg-primary-container,
       .bg-tertiary-fixed\/30 {
-        background-color: #f8f9fa !important;
-        color: #111111 !important;
-        border: 1px solid #d0d7de !important;
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 1px solid #e0e0e0 !important;
         box-shadow: none !important;
       }
 
@@ -220,7 +231,7 @@
       .text-secondary,
       .text-on-surface,
       .text-on-primary-container {
-        color: #111111 !important;
+        color: #000000 !important;
       }
 
       section,
