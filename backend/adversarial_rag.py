@@ -1,10 +1,3 @@
-"""
-Adversarial RAG Pipeline & Academic Risk Report Generator:
-Integrated with the Three-Agent Routing System (Ambiguity Resolver Agent, 
-Smart Router Agent, 3 Domain Handlers, and Agentic Loop Orchestrator).
-Zero static hardcoded keyword lists!
-"""
-
 from typing import List, Dict, Any, Tuple, Optional
 import os
 import random
@@ -22,7 +15,7 @@ from backend.gemini_agent import (
 
 def classify_paragraph(paragraph: str) -> Tuple[str, float, str]:
     """
-    DistilBERT Paragraph Classifier (Adversarial Fluff Filter):
+    Adversarial Keyword Paragraph Classifier (Adversarial Fluff Filter):
     Classifies paragraph into 'Limitation/Critique', 'Result/Claim', or 'Background/Context'.
     Uses True Sentiment Detection to discard supportive marketing fluff.
     """

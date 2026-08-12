@@ -57,7 +57,7 @@ class TestAdversarialAcademicDirect(unittest.TestCase):
             self.assertEqual(data["id"], target_id)
             self.assertIn("url", data)
             clean_title = str(data['title']).encode('ascii', 'ignore').decode('ascii')
-            clean_tag = str(data['distilbert_tag']).encode('ascii', 'ignore').decode('ascii')
+            clean_tag = str(data.get('adversarial_tag', data.get('distilbert_tag', ''))).encode('ascii', 'ignore').decode('ascii')
             print(f"[OK] Deep Dive fetched live paper: {clean_title} (Tag: {clean_tag})")
         else:
             print("[OK] Deep dive test completed gracefully.")
@@ -102,7 +102,7 @@ class TestAdversarialAcademicDirect(unittest.TestCase):
             sb.table("critiques").delete().eq("title", "SuperFastNet").execute()
         except Exception:
             pass
-        print("[OK] Ingestion DistilBERT Classifier: Stored 1 critique chunk, dropped 1 marketing claim!")
+        print("[OK] Ingestion Adversarial Classifier: Stored 1 critique chunk, dropped 1 marketing claim!")
 
     def test_sentiment_gate_filters_supportive_survey(self):
         from backend.live_agent import detect_sentiment, is_supportive_marketing_fluff

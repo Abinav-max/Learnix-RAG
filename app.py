@@ -126,7 +126,7 @@ def status_endpoint():
     return {
         "status": "online",
         "system": "Learnix Research Realtime Agent",
-        "classifier": "DistilBERT Adversarial Gate Active"
+        "classifier": "Adversarial Keyword Gate Active"
     }
 
 @app.get("/api/deep-dive/{critique_id}")
@@ -166,7 +166,7 @@ def deep_dive_endpoint(critique_id: str):
                     "risk_level": live_paper.get("risk_level", "Major"),
                     "skepticism_score": float(live_paper.get("skepticism_score", 88.0)),
                     "replication_prob": float(live_paper.get("replication_prob", 20.0)),
-                    "distilbert_tag": live_paper.get("distilbert_tag", f"Methodological Limitation — {src} Audit"),
+                    "adversarial_tag": live_paper.get("adversarial_tag", live_paper.get("distilbert_tag", f"Methodological Limitation — {src} Audit")),
                     "text": raw_text[:500] if raw_text else "No text abstract available."
                 }
                 save_critique_chunk_db(chunk)
@@ -188,7 +188,7 @@ def deep_dive_endpoint(critique_id: str):
                 "risk_level": "Major",
                 "skepticism_score": 88.0,
                 "replication_prob": 20.0,
-                "distilbert_tag": f"Methodological Limitation — {src} Audit",
+                "adversarial_tag": f"Methodological Limitation — {src} Audit",
                 "text": f"Live audit record retrieved from {src} ({clean_id}). Subject to peer review oversight."
             }
             save_critique_chunk_db(chunk)
@@ -210,7 +210,7 @@ def deep_dive_endpoint(critique_id: str):
         "risk_level": chunk.get("risk_level", "Major"),
         "skepticism_score": skep,
         "replication_prob": repl,
-        "distilbert_tag": chunk.get("distilbert_tag", "Methodological Limitation"),
+        "adversarial_tag": chunk.get("adversarial_tag", chunk.get("distilbert_tag", "Methodological Limitation")),
         "text": chunk.get("text", chunk.get("raw_text", "No text abstract available.")),
         "rebuttal_odds": round(max(5.0, 100.0 - skep), 1)
     }
@@ -240,7 +240,7 @@ def ingest_endpoint(req: IngestRequest):
                 "skepticism_score": 85.0,
                 "replication_prob": 25.0,
                 "paragraph_type": p_type,
-                "distilbert_tag": tag,
+                "adversarial_tag": tag,
                 "text": p,
                 "query_keywords": [w.lower() for w in p.split() if len(w) > 4][:10],
                 "severity": "Major",
@@ -337,7 +337,7 @@ def hotspots_endpoint(refresh: bool = False):
                     "skepticism_score": paper.get("skepticism_score", 88.0),
                     "replication_prob": paper.get("replication_prob", 12.0),
                     "paragraph_type": "Limitation/Critique",
-                    "distilbert_tag": paper.get("distilbert_tag", "Methodological Limitation"),
+                    "adversarial_tag": paper.get("adversarial_tag", paper.get("distilbert_tag", "Methodological Limitation")),
                     "text": paper.get("raw_text", paper.get("text", "")),
                     "severity": paper.get("risk_level", "Major"),
                     "mitigation_suggestion": "Conduct independent post-pub replication audit."

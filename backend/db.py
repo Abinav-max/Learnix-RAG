@@ -314,14 +314,22 @@ def save_critique_chunk_db(chunk: Dict[str, Any]) -> bool:
             "skepticism_score": float(chunk.get("skepticism_score", 0.0)),
             "replication_prob": float(chunk.get("replication_prob", 0.0)),
             "paragraph_type": chunk.get("paragraph_type", ""),
-            "distilbert_tag": chunk.get("distilbert_tag", ""),
+            "adversarial_tag": chunk.get("adversarial_tag", chunk.get("distilbert_tag", "")),
             "text": chunk.get("text", ""),
             "raw_text": chunk.get("raw_text", chunk.get("text", "")),
             "severity": chunk.get("severity", ""),
             "mitigation_suggestion": chunk.get("mitigation_suggestion", ""),
             "updated_at": time.time()
         }
-        get_supabase().table("critiques").upsert(data).execute()
+        try:
+            get_supabase().table("critiques").upsert(data).execute()
+        except Exception as err:
+            if "adversarial_tag" in str(err) or "PGRST204" in str(err):
+                # Fallback for Supabase databases that have not executed the schema migration yet
+                data["distilbert_tag"] = data.pop("adversarial_tag", "")
+                get_supabase().table("critiques").upsert(data).execute()
+            else:
+                raise err
         return True
     except Exception as e:
         print(f"[Supabase Warning] save_critique_chunk_db: {e}")

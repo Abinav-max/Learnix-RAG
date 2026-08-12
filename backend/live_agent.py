@@ -249,7 +249,7 @@ def fetch_by_doi(doi: str) -> Dict[str, Any]:
             
             created = item.get('created', {}).get('date-parts', [[2024]])[0][0]
             
-            vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(title, abstract)
+            vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(title, abstract)
             
             return {
                 "id": f"doi-{doi.replace('/', '-')}",
@@ -267,7 +267,7 @@ def fetch_by_doi(doi: str) -> Dict[str, Any]:
                 "skepticism_score": skep_score,
                 "replication_prob": round(100.0 - skep_score, 1),
                 "paragraph_type": "Limitation/Critique",
-                "distilbert_tag": distilbert_tag,
+                "adversarial_tag": adversarial_tag,
                 "text": abstract[:400],
                 "raw_text": abstract,
                 "exact_id_fetch": True
@@ -338,7 +338,7 @@ def fetch_openreview_by_forum_id(forum_id: str) -> Dict[str, Any]:
             if not authors:
                 authors = ["Anonymous Reviewer (OpenReview)"]
             
-            vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(title, body_text)
+            vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(title, body_text)
             
             return {
                 "id": f"openreview-{forum_id}",
@@ -356,7 +356,7 @@ def fetch_openreview_by_forum_id(forum_id: str) -> Dict[str, Any]:
                 "skepticism_score": skep_score,
                 "replication_prob": round(100.0 - skep_score, 1),
                 "paragraph_type": "Limitation/Critique",
-                "distilbert_tag": distilbert_tag,
+                "adversarial_tag": adversarial_tag,
                 "text": body_text[:400],
                 "raw_text": body_text,
                 "exact_id_fetch": True
@@ -395,7 +395,7 @@ def fetch_arxiv_by_id(arxiv_id: str) -> Dict[str, Any]:
             published = entry.find('atom:published', ns)
             year = int(published.text[:4]) if published is not None else 2024
             
-            vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(title, summary)
+            vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(title, summary)
             
             return {
                 "id": f"arxiv-{clean_id}",
@@ -413,7 +413,7 @@ def fetch_arxiv_by_id(arxiv_id: str) -> Dict[str, Any]:
                 "skepticism_score": skep_score,
                 "replication_prob": round(100.0 - skep_score, 1),
                 "paragraph_type": "Limitation/Critique",
-                "distilbert_tag": distilbert_tag,
+                "adversarial_tag": adversarial_tag,
                 "text": summary[:400],
                 "raw_text": summary,
                 "exact_id_fetch": True
@@ -760,7 +760,7 @@ def fetch_arxiv_realtime(query: str, max_results: int = 5, categories: List[str]
                     continue
 
             arxiv_id = paper.get_short_id()
-            vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(paper.title, paper.summary)
+            vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(paper.title, paper.summary)
             results.append({
                 "id": f"arxiv-{arxiv_id}",
                 "source_id": arxiv_id,
@@ -777,7 +777,7 @@ def fetch_arxiv_realtime(query: str, max_results: int = 5, categories: List[str]
                 "skepticism_score": skep_score,
                 "replication_prob": round(100.0 - skep_score, 1),
                 "paragraph_type": "Limitation/Critique",
-                "distilbert_tag": distilbert_tag,
+                "adversarial_tag": adversarial_tag,
                 "text": paper.summary[:400],
                 "raw_text": paper.summary
             })
@@ -828,7 +828,7 @@ def fetch_arxiv_realtime(query: str, max_results: int = 5, categories: List[str]
                         if n_el is not None and n_el.text:
                             author_names.append(n_el.text.strip())
 
-                    vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(t, summary)
+                    vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(t, summary)
                     results.append({
                         "id": f"arxiv-{arxiv_id}",
                         "source_id": arxiv_id,
@@ -845,7 +845,7 @@ def fetch_arxiv_realtime(query: str, max_results: int = 5, categories: List[str]
                         "skepticism_score": skep_score,
                         "replication_prob": round(100.0 - skep_score, 1),
                         "paragraph_type": "Limitation/Critique",
-                        "distilbert_tag": distilbert_tag,
+                        "adversarial_tag": adversarial_tag,
                         "text": summary[:400],
                         "raw_text": summary
                     })
@@ -941,7 +941,7 @@ def fetch_openreview_realtime(query: str, max_results: int = 3) -> List[Dict[str
                     if p_domain != q_domain:
                         continue
 
-                    vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(t, review_body)
+                    vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(t, review_body)
                     
                     # Dynamic author & reviewer signature extraction
                     sigs = n.get('signatures', [])
@@ -1007,7 +1007,7 @@ def fetch_openreview_realtime(query: str, max_results: int = 3) -> List[Dict[str
                         "skepticism_score": skep_score,
                         "replication_prob": round(100.0 - skep_score, 1),
                         "paragraph_type": "Limitation/Critique",
-                        "distilbert_tag": distilbert_tag,
+                        "adversarial_tag": adversarial_tag,
                         "text": display_text[:400],
                         "raw_text": review_body
                     })
@@ -1079,7 +1079,7 @@ def fetch_pubpeer_realtime(query: str, max_results: int = 3, sort_by_latest: boo
                 
                 created = item.get('created', {}).get('date-parts', [[2024]])[0][0]
 
-                vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(t, ab)
+                vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(t, ab)
 
                 reviews.append({
                     "id": f"pubpeer-{doi.replace('/', '-')}",
@@ -1097,7 +1097,7 @@ def fetch_pubpeer_realtime(query: str, max_results: int = 3, sort_by_latest: boo
                     "skepticism_score": skep_score,
                     "replication_prob": round(100.0 - skep_score, 1),
                     "paragraph_type": "Limitation/Critique",
-                    "distilbert_tag": f"PubPeer Post-Publication Audit — {vector}",
+                    "adversarial_tag": f"PubPeer Post-Publication Audit — {vector}",
                     "text": ab[:400] if len(ab) > 20 else f"Independent post-publication peer review audit for '{t}': Evaluated methodology, dataset integrity, and baseline reproducibility.",
                     "raw_text": ab
                 })
@@ -1135,7 +1135,7 @@ def fetch_biorxiv_realtime(query: str, max_results: int = 5) -> List[Dict[str, A
                 author_objs = item.get('author', [])
                 authors = [f"{a.get('given', '')} {a.get('family', '')}".strip() for a in author_objs[:3] if a.get('family')] or ["bioRxiv Researchers"]
                 created = item.get('created', {}).get('date-parts', [[2024]])[0][0]
-                vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(t, clean_ab)
+                vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(t, clean_ab)
 
                 results.append({
                     "id": f"biorxiv-{doi.replace('/', '-')}",
@@ -1153,7 +1153,7 @@ def fetch_biorxiv_realtime(query: str, max_results: int = 5) -> List[Dict[str, A
                     "skepticism_score": skep_score,
                     "replication_prob": round(100.0 - skep_score, 1),
                     "paragraph_type": "Limitation/Critique",
-                    "distilbert_tag": distilbert_tag,
+                    "adversarial_tag": adversarial_tag,
                     "text": clean_ab[:400],
                     "raw_text": clean_ab
                 })
@@ -1190,7 +1190,7 @@ def fetch_medrxiv_realtime(query: str, max_results: int = 5) -> List[Dict[str, A
                 author_objs = item.get('author', [])
                 authors = [f"{a.get('given', '')} {a.get('family', '')}".strip() for a in author_objs[:3] if a.get('family')] or ["medRxiv Researchers"]
                 created = item.get('created', {}).get('date-parts', [[2024]])[0][0]
-                vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(t, clean_ab)
+                vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(t, clean_ab)
 
                 results.append({
                     "id": f"medrxiv-{doi.replace('/', '-')}",
@@ -1208,7 +1208,7 @@ def fetch_medrxiv_realtime(query: str, max_results: int = 5) -> List[Dict[str, A
                     "skepticism_score": skep_score,
                     "replication_prob": round(100.0 - skep_score, 1),
                     "paragraph_type": "Limitation/Critique",
-                    "distilbert_tag": distilbert_tag,
+                    "adversarial_tag": adversarial_tag,
                     "text": clean_ab[:400],
                     "raw_text": clean_ab
                 })
@@ -1255,7 +1255,7 @@ def fetch_openalex_realtime(query: str, max_results: int = 5) -> List[Dict[str, 
                 primary_loc = w.get('primary_location') or {}
                 source_obj = primary_loc.get('source') or {}
                 host_venue = source_obj.get('display_name') or "OpenAlex Scholarly Graph"
-                vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(title, abstract_text)
+                vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(title, abstract_text)
 
                 results.append({
                     "id": f"openalex-{openalex_id}",
@@ -1273,7 +1273,7 @@ def fetch_openalex_realtime(query: str, max_results: int = 5) -> List[Dict[str, 
                     "skepticism_score": skep_score,
                     "replication_prob": round(100.0 - skep_score, 1),
                     "paragraph_type": "Limitation/Critique",
-                    "distilbert_tag": distilbert_tag,
+                    "adversarial_tag": adversarial_tag,
                     "text": abstract_text[:400],
                     "raw_text": abstract_text
                 })
@@ -1307,7 +1307,7 @@ def fetch_semanticscholar_realtime(query: str, max_results: int = 5) -> List[Dic
                 venue = p.get('venue') or "Semantic Scholar Forum"
                 authors_data = p.get('authors', [])
                 authors = [a.get('name', '') for a in authors_data[:3] if a.get('name')] or ["S2 Researcher"]
-                vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(title, ab)
+                vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(title, ab)
 
                 results.append({
                     "id": f"s2-{pid[:12]}",
@@ -1325,7 +1325,7 @@ def fetch_semanticscholar_realtime(query: str, max_results: int = 5) -> List[Dic
                     "skepticism_score": skep_score,
                     "replication_prob": round(100.0 - skep_score, 1),
                     "paragraph_type": "Limitation/Critique",
-                    "distilbert_tag": distilbert_tag,
+                    "adversarial_tag": adversarial_tag,
                     "text": ab[:400],
                     "raw_text": ab
                 })
@@ -1365,7 +1365,7 @@ def fetch_pmc_realtime(query: str, max_results: int = 5) -> List[Dict[str, Any]]
                     pub_date = p_info.get('pubdate', '2024')
                     year = int(pub_date.split()[0]) if pub_date.split()[0].isdigit() else 2024
                     source_journal = p_info.get('source') or "PubMed Central"
-                    vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(clean_title, clean_title)
+                    vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(clean_title, clean_title)
 
                     results.append({
                         "id": f"pmc-PMC{pmc_id}",
@@ -1383,7 +1383,7 @@ def fetch_pmc_realtime(query: str, max_results: int = 5) -> List[Dict[str, Any]]
                         "skepticism_score": skep_score,
                         "replication_prob": round(100.0 - skep_score, 1),
                         "paragraph_type": "Limitation/Critique",
-                        "distilbert_tag": distilbert_tag,
+                        "adversarial_tag": adversarial_tag,
                         "text": f"PMC Article: {clean_title}",
                         "raw_text": clean_title
                     })
@@ -1416,7 +1416,7 @@ def fetch_doaj_realtime(query: str, max_results: int = 5) -> List[Dict[str, Any]
                 author_objs = bibjson.get('author', [])
                 authors = [a.get('name', '') for a in author_objs[:3] if a.get('name')] or ["DOAJ Author"]
                 doaj_id = hit.get('id', '')
-                vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(title, ab)
+                vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(title, ab)
 
                 results.append({
                     "id": f"doaj-{doaj_id[:12]}",
@@ -1434,7 +1434,7 @@ def fetch_doaj_realtime(query: str, max_results: int = 5) -> List[Dict[str, Any]
                     "skepticism_score": skep_score,
                     "replication_prob": round(100.0 - skep_score, 1),
                     "paragraph_type": "Limitation/Critique",
-                    "distilbert_tag": distilbert_tag,
+                    "adversarial_tag": adversarial_tag,
                     "text": ab[:400],
                     "raw_text": ab
                 })
@@ -1467,7 +1467,7 @@ def fetch_zenodo_realtime(query: str, max_results: int = 5) -> List[Dict[str, An
                 year = int(pub_date.split('-')[0]) if pub_date.split('-')[0].isdigit() else 2024
                 record_id = hit.get('id', '')
                 record_url = hit.get('links', {}).get('html') or f"https://zenodo.org/record/{record_id}"
-                vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(title, clean_desc)
+                vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(title, clean_desc)
 
                 results.append({
                     "id": f"zenodo-{record_id}",
@@ -1485,7 +1485,7 @@ def fetch_zenodo_realtime(query: str, max_results: int = 5) -> List[Dict[str, An
                     "skepticism_score": skep_score,
                     "replication_prob": round(100.0 - skep_score, 1),
                     "paragraph_type": "Limitation/Critique",
-                    "distilbert_tag": distilbert_tag,
+                    "adversarial_tag": adversarial_tag,
                     "text": clean_desc[:400],
                     "raw_text": clean_desc
                 })
@@ -1535,7 +1535,7 @@ def fetch_openaire_realtime(query: str, max_results: int = 5) -> List[Dict[str, 
                             paper_url = f"https://doi.org/{pid.get('$', '')}"
                             break
 
-                vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(title, clean_desc)
+                vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(title, clean_desc)
 
                 results.append({
                     "id": f"openaire-{random.randint(1000,9999)}",
@@ -1553,7 +1553,7 @@ def fetch_openaire_realtime(query: str, max_results: int = 5) -> List[Dict[str, 
                     "skepticism_score": skep_score,
                     "replication_prob": round(100.0 - skep_score, 1),
                     "paragraph_type": "Limitation/Critique",
-                    "distilbert_tag": distilbert_tag,
+                    "adversarial_tag": adversarial_tag,
                     "text": clean_desc[:400],
                     "raw_text": clean_desc
                 })

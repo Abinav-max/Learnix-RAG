@@ -66,7 +66,7 @@ def search_critiques_db(query: str, attack_vector: Optional[str] = None, source:
         for item in exact_results:
             raw_text = item.get("raw_text", "")
             title = item.get("title", "")
-            vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(title, raw_text)
+            vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(title, raw_text)
             
             raw_authors = item.get("authors", ["Academic Researchers"])
             authors_str = ", ".join(raw_authors[:3]) if isinstance(raw_authors, list) else str(raw_authors)
@@ -88,7 +88,7 @@ def search_critiques_db(query: str, attack_vector: Optional[str] = None, source:
                 "skepticism_score": skep_score,
                 "replication_prob": round(100.0 - skep_score, 1),
                 "paragraph_type": "Limitation/Critique",
-                "distilbert_tag": distilbert_tag,
+                "adversarial_tag": adversarial_tag,
                 "text": raw_text[:380] + ("..." if len(raw_text) > 380 else ""),
                 "raw_text": raw_text,
                 "query_keywords": [w.lower() for w in clean_query.split() if len(w) > 2],
@@ -118,7 +118,7 @@ def search_critiques_db(query: str, attack_vector: Optional[str] = None, source:
                 "skepticism_score": 0,
                 "replication_prob": 0,
                 "paragraph_type": "Error",
-                "distilbert_tag": f"UNAVAILABLE: {uid}",
+                "adversarial_tag": f"UNAVAILABLE: {uid}",
                 "text": f"Source {uid} is inaccessible. No data returned.",
                 "raw_text": f"UNAVAILABLE: {uid}",
                 "severity": "N/A",
@@ -201,7 +201,7 @@ def search_critiques_db(query: str, attack_vector: Optional[str] = None, source:
         if is_supportive_marketing_fluff(title, raw_text):
             continue
 
-        vector, severity, distilbert_tag, skep_score = detect_fine_grained_attack_vector(title, raw_text)
+        vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(title, raw_text)
         
         # Check attack vector filter if provided
         if attack_vector and attack_vector.lower() != "all" and attack_vector.lower() not in vector.lower():
@@ -231,7 +231,7 @@ def search_critiques_db(query: str, attack_vector: Optional[str] = None, source:
             "skepticism_score": skep_score,
             "replication_prob": round(100.0 - skep_score, 1),
             "paragraph_type": "Limitation/Critique",
-            "distilbert_tag": distilbert_tag,
+            "adversarial_tag": adversarial_tag,
             "text": raw_text[:380] + ("..." if len(raw_text) > 380 else ""),
             "query_keywords": [w.lower() for w in clean_query.split() if len(w) > 2],
             "severity": severity,

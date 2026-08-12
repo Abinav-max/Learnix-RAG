@@ -1002,7 +1002,7 @@
           <article class="bg-primary text-on-primary p-6 flex flex-col justify-center items-center text-center">
             <span class="material-symbols-outlined text-4xl mb-4">verified_user</span>
             <h3 class="font-headline-sm text-headline-sm mb-2">Verified Scepticism</h3>
-            <p class="font-label-md text-label-md opacity-80 mb-6 px-4">DistilBERT paragraph classifier &amp; Semantic
+            <p class="font-label-md text-label-md opacity-80 mb-6 px-4">Adversarial Keyword Classifier &amp; Semantic
               Re-Ranker filtered out 82% of supportive paper marketing fluff and off-topic spillover.</p>
             <button
               class="bg-on-primary text-primary px-6 py-2 font-label-md text-label-md font-bold uppercase tracking-wider"
@@ -1137,13 +1137,13 @@
         </div>
       </section>
 
-      <!-- DistilBERT Highlighting Interface -->
+      <!-- Adversarial Highlighting Interface -->
       <section
         class="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-8 shadow-sm relative overflow-hidden">
         <div class="absolute top-0 right-0 p-4">
           <div class="flex items-center space-x-2 bg-secondary-container/50 px-3 py-1 rounded-full">
             <span class="w-2 h-2 rounded-full bg-on-tertiary-container animate-pulse"></span>
-            <span class="font-mono-data text-mono-data text-secondary uppercase">DistilBERT Active</span>
+            <span class="font-mono-data text-mono-data text-secondary uppercase">Adversarial Classifier Active</span>
           </div>
         </div>
 
@@ -1303,7 +1303,7 @@
         <span class="material-symbols-outlined">close</span>
       </button>
       <h3 class="font-headline-sm text-headline-sm text-primary mb-2">Ingest New Paper Manuscript</h3>
-      <p class="font-body-md text-secondary mb-6 text-sm">Paste paper text below. The DistilBERT Paragraph Classifier
+      <p class="font-body-md text-secondary mb-6 text-sm">Paste paper text below. The Adversarial Keyword Classifier
         will evaluate every paragraph, filter out positive marketing fluff, and store only Limitation &amp; Critique
         chunks in the Adversarial Vector Store.</p>
 
@@ -1329,7 +1329,7 @@
         <button
           type="submit"
           class="w-full bg-primary text-on-primary py-3 font-label-md text-label-md hover:opacity-90 transition-opacity">
-          RUN DISTILBERT CLASSIFIER &amp; INGEST CRITIQUES
+          RUN ADVERSARIAL CLASSIFIER &amp; INGEST CRITIQUES
         </button>
       </form>
       <div id="ingest-result"
@@ -2247,7 +2247,7 @@ ${c.exact_id_fetch ? '<span class="font-mono-data text-[10px] bg-primary text-on
               <span class="material-symbols-outlined text-2xl text-[#d0e9d4] animate-spin">sync</span>
               <div>
                 <h3 class="font-headline-sm font-bold text-base text-white">${title}</h3>
-                <p class="text-xs text-[#819986]" id="thinking-step-label">Fetching arXiv pre-prints &amp; querying DistilBERT semantic cross-encoders...</p>
+                <p class="text-xs text-[#819986]" id="thinking-step-label">Fetching arXiv pre-prints &amp; querying heuristic flaw classifiers...</p>
               </div>
             </div>
             <span class="bg-[#1b3022] text-[#d0e9d4] px-3 py-1 text-[11px] font-bold font-mono-data rounded-full border border-[#819986]/30">PROCESSING</span>
@@ -2349,7 +2349,7 @@ ${c.exact_id_fetch ? '<span class="font-mono-data text-[10px] bg-primary text-on
           <div class="p-8 text-center bg-surface border border-outline-variant/30 rounded-2xl shadow-sm space-y-3">
             <span class="material-symbols-outlined animate-spin align-middle text-4xl text-primary">autorenew</span>
             <div class="font-headline-sm font-bold text-base text-primary">Fetching Literature &amp; Auditing Claims...</div>
-            <p class="text-xs text-secondary">Cross-Encoder Re-Ranking &bull; DistilBERT Severity Tagging</p>
+            <p class="text-xs text-secondary">Cross-Encoder Re-Ranking &bull; Adversarial Flaw Tagging</p>
           </div>
         `;
 
@@ -2481,7 +2481,7 @@ Risk: ${card.severity}
 "${card.text}"
 </blockquote>
 <div class="mb-4 text-xs font-mono-data text-on-tertiary-container bg-tertiary-fixed/30 p-2 rounded">
-DistilBERT Tag: ${card.distilbert_tag}
+Adversarial Tag: ${card.adversarial_tag || card.distilbert_tag || ''}
 </div>
 <div class="flex items-center justify-between border-t border-outline-variant/10 pt-4">
 <div class="flex flex-wrap gap-6">
@@ -2745,8 +2745,8 @@ DistilBERT Tag: ${card.distilbert_tag}
 Paper Title: <strong>${data.title}</strong> (${data.year}) by ${data.authors}. Target Architecture: <em>${data.target}</em>.
 </p>
 <div class="p-4 bg-tertiary-fixed/30 border-l-4 border-on-tertiary-container my-4">
-<span class="font-mono-data text-xs uppercase font-bold text-on-tertiary-container block mb-1">DistilBERT Paragraph Classifier Label</span>
-<span class="highlight-adversarial" title="${data.distilbert_tag}">
+<span class="font-mono-data text-xs uppercase font-bold text-on-tertiary-container block mb-1">Adversarial Keyword Classifier Label</span>
+<span class="highlight-adversarial" title="${data.adversarial_tag || data.distilbert_tag || ''}">
 ${data.text}
 </span>
 </div>

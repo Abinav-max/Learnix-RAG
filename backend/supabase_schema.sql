@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS public.critiques (
     skepticism_score DOUBLE PRECISION,
     replication_prob DOUBLE PRECISION,
     paragraph_type TEXT,
-    distilbert_tag TEXT,
+    adversarial_tag TEXT,
     text TEXT,
     raw_text TEXT,
     severity TEXT,
