@@ -26,7 +26,7 @@ def get_gemini_api_key() -> str:
 GEMINI_API_KEY = get_gemini_api_key()
 
 def get_generative_model(primary_model: str = "gemini-2.0-flash") -> genai.GenerativeModel:
-    for m_name in [primary_model, "gemini-2.0-flash", "gemini-1.5-flash-latest", "gemini-1.5-pro-latest", "gemini-2.0-flash-exp", "gemini-1.5-flash"]:
+    for m_name in [primary_model, "gemini-2.0-flash", "gemini-1.5-flash-latest", "gemini-1.5-pro-latest", "gemini-2.0-flash-exp"]:
         try:
             return genai.GenerativeModel(m_name)
         except Exception:
@@ -70,11 +70,13 @@ def route_query(query: str) -> Tuple[str, str]:
     if (len(words) <= 2 and q_raw.isupper() and 2 <= len(q_raw) <= 5) or q_clean in ["cm", "cot", "gnn", "rag", "pca", "svm"]:
         return "AMBIGUOUS_ACRONYM", "Bare acronym query without context."
 
-    # 2. Check for explicit scientific hypothesis/comparison verbs or patterns
+    # 2. Check for explicit scientific hypothesis/comparison/evaluation verbs or terms
     claim_indicators = [
         "outperforms", "outperform", "beats", "beat", "overfit", "overfits", "leakage",
         "should i use", "vs", "versus", "better than", "worse than", "is faster than",
-        "improves", "degrades", "limitations of", "flaw in", "fail on", "fails on"
+        "improves", "degrades", "limitations of", "flaw in", "fail on", "fails on",
+        "zero-shot", "fine-tuning", "inference", "generalization", "capable of", "reasoning",
+        "evaluate", "evaluation", "benchmark", "tradeoff", "trade-off"
     ]
     is_explicit_claim = any(ind in q_clean for ind in claim_indicators)
 
@@ -82,26 +84,23 @@ def route_query(query: str) -> Tuple[str, str]:
     factual_starters = [
         "what is", "what are", "who is", "who was", "when was", "where is", "where was",
         "define ", "definition of", "meaning of", "explain ", "tell me about",
-        "how does ", "why does ", "what does ", "how many", "is the ", "is it "
+        "how many", "capital of", "chief minister", "prime minister", "president of", "is the sky"
     ]
-    is_factual_query = any(q_clean.startswith(starter) or f" {starter}" in q_clean for starter in factual_starters) or any(term in q_clean for term in ["capital of", "chief minister", "prime minister", "president of", "is the sky"])
-
-    if is_factual_query and not is_explicit_claim:
-        return "FACTUAL", "Factual or definitional query with no active academic debate."
+    is_factual_query = any(q_clean.startswith(starter) or f" {starter} " in f" {q_clean} " for starter in factual_starters)
 
     if is_explicit_claim:
-        return "RESEARCH_CLAIM", "Explicit scientific hypothesis or model comparison."
+        return "RESEARCH_CLAIM", "Explicit scientific hypothesis or model evaluation."
+
+    if is_factual_query:
+        return "FACTUAL", "Factual or definitional query with no active academic debate."
 
     academic_terms = [
         "model", "transformer", "neural", "graph", "forecast", "quantum", "algorithm", 
         "dataset", "learning", "method", "accuracy", "baseline", "reasoning", 
-        "chain-of-thought", "llm", "gnn", "capable of"
+        "chain-of-thought", "llm", "gnn"
     ]
     if any(term in q_clean for term in academic_terms) and len(words) > 3:
         return "RESEARCH_CLAIM", "Academic concept or scientific model evaluation."
-
-    if is_factual_query:
-        return "FACTUAL", "Factual or conversational query."
 
     return "RESEARCH_CLAIM", "Default research claim evaluation."
 
@@ -211,7 +210,7 @@ def handle_factual(query: str) -> Dict[str, Any]:
             api_key = get_gemini_api_key()
             if api_key:
                 genai.configure(api_key=api_key)
-                model = get_generative_model("gemini-1.5-flash")
+                model = get_generative_model("gemini-2.0-flash")
             
             prompt = f"""
             You are a real-time factual knowledge assistant. 
@@ -267,7 +266,7 @@ def synthesize_gemini_realtime_report(user_query: str, critiques: List[Dict[str,
         return None
     try:
         genai.configure(api_key=api_key)
-        model = get_generative_model("gemini-1.5-flash")
+        model = get_generative_model("gemini-2.0-flash")
         
         context_str = "\n".join([
             f"- [{c.get('source', 'Academic')}] {c.get('title')}: {c.get('raw_text', c.get('text', ''))[:300]}"
@@ -315,7 +314,7 @@ def generate_dynamic_mitigations(user_query: str, critiques: Optional[List[Dict[
     if api_key:
         try:
             genai.configure(api_key=api_key)
-            model = get_generative_model("gemini-1.5-flash")
+            model = get_generative_model("gemini-2.0-flash")
             
             prompt = f"""
 You are an expert scientific peer-reviewer and research methodology advisor.
@@ -395,7 +394,7 @@ def handle_ambiguous(query: str) -> Dict[str, Any]:
             api_key = get_gemini_api_key()
             if api_key:
                 genai.configure(api_key=api_key)
-                model = get_generative_model("gemini-1.5-flash")
+                model = get_generative_model("gemini-2.0-flash")
             
             prompt = f"""
             The query "{query}" is ambiguous or an acronym with multiple meanings.
