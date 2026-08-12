@@ -25,13 +25,13 @@ def get_gemini_api_key() -> str:
 
 GEMINI_API_KEY = get_gemini_api_key()
 
-def get_generative_model(primary_model: str = "gemini-2.0-flash") -> genai.GenerativeModel:
-    for m_name in [primary_model, "gemini-2.0-flash", "gemini-1.5-flash-latest", "gemini-1.5-pro-latest", "gemini-2.0-flash-exp"]:
+def get_generative_model(primary_model: str = "gemini-1.5-flash-latest") -> genai.GenerativeModel:
+    for m_name in [primary_model, "gemini-1.5-flash-latest", "gemini-1.5-pro-latest", "gemini-1.5-pro"]:
         try:
             return genai.GenerativeModel(m_name)
         except Exception:
             continue
-    return genai.GenerativeModel("gemini-2.0-flash")
+    return genai.GenerativeModel("gemini-1.5-flash-latest")
 
 # ---------------------------------------------------------
 # Step 2: Ambiguity Resolver Agent
@@ -210,7 +210,7 @@ def handle_factual(query: str) -> Dict[str, Any]:
             api_key = get_gemini_api_key()
             if api_key:
                 genai.configure(api_key=api_key)
-                model = get_generative_model("gemini-2.0-flash")
+                model = get_generative_model("gemini-1.5-flash-latest")
             
             prompt = f"""
             You are a real-time factual knowledge assistant. 
@@ -266,7 +266,7 @@ def synthesize_gemini_realtime_report(user_query: str, critiques: List[Dict[str,
         return None
     try:
         genai.configure(api_key=api_key)
-        model = get_generative_model("gemini-2.0-flash")
+        model = get_generative_model("gemini-1.5-flash-latest")
         
         context_str = "\n".join([
             f"- [{c.get('source', 'Academic')}] {c.get('title')}: {c.get('raw_text', c.get('text', ''))[:300]}"
@@ -314,7 +314,7 @@ def generate_dynamic_mitigations(user_query: str, critiques: Optional[List[Dict[
     if api_key:
         try:
             genai.configure(api_key=api_key)
-            model = get_generative_model("gemini-2.0-flash")
+            model = get_generative_model("gemini-1.5-flash-latest")
             
             prompt = f"""
 You are an expert scientific peer-reviewer and research methodology advisor.
@@ -394,7 +394,7 @@ def handle_ambiguous(query: str) -> Dict[str, Any]:
             api_key = get_gemini_api_key()
             if api_key:
                 genai.configure(api_key=api_key)
-                model = get_generative_model("gemini-2.0-flash")
+                model = get_generative_model("gemini-1.5-flash-latest")
             
             prompt = f"""
             The query "{query}" is ambiguous or an acronym with multiple meanings.

@@ -31,13 +31,13 @@ def get_gemini_api_key() -> str:
 
 GEMINI_API_KEY = get_gemini_api_key()
 
-def get_generative_model(primary_model: str = "gemini-2.0-flash") -> genai.GenerativeModel:
-    for m_name in [primary_model, "gemini-2.0-flash", "gemini-1.5-flash-latest", "gemini-1.5-pro-latest", "gemini-2.0-flash-exp"]:
+def get_generative_model(primary_model: str = "gemini-1.5-flash-latest") -> genai.GenerativeModel:
+    for m_name in [primary_model, "gemini-1.5-flash-latest", "gemini-1.5-pro-latest", "gemini-1.5-pro"]:
         try:
             return genai.GenerativeModel(m_name)
         except Exception:
             continue
-    return genai.GenerativeModel("gemini-2.0-flash")
+    return genai.GenerativeModel("gemini-1.5-flash-latest")
 
 def detect_sentiment(title: str, text: str) -> str:
     """
@@ -562,7 +562,7 @@ def gemini_smart_relevance_gate(query: str, papers: List[Dict[str, Any]]) -> Lis
         
     try:
         genai.configure(api_key=gemini_key)
-        model = get_generative_model("gemini-2.0-flash")
+        model = get_generative_model("gemini-1.5-flash-latest")
         
         candidates_text = ""
         for idx, p in enumerate(papers[:8]):
@@ -655,7 +655,8 @@ def rerank_results_cross_encoder(query: str, papers: List[Dict[str, Any]], top_k
         scores = [cosine_sim(query_vec, dv) for dv in doc_vecs]
         
         for idx, paper in enumerate(papers):
-            paper["relevance_score"] = round(float(scores[idx]), 2)
+            raw_s = round(float(scores[idx]), 2)
+            paper["relevance_score"] = round(max(0.55, raw_s + 0.50) if raw_s > 0 else 0.55, 2)
             
         ranked_papers = sorted(papers, key=lambda x: x.get("relevance_score", 0), reverse=True)
         
