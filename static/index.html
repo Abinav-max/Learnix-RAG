@@ -160,24 +160,19 @@
     @media print {
       @page {
         size: A4 portrait;
-        margin: 12mm 12mm 12mm 12mm;
+        margin: 12mm;
       }
 
       html,
-      body,
-      div,
-      main,
-      article,
-      section {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
         height: auto !important;
         min-height: 0 !important;
         max-height: none !important;
         overflow: visible !important;
-      }
-
-      body {
-        background: #ffffff !important;
-        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
         position: static !important;
         display: block !important;
       }
@@ -197,19 +192,29 @@
         display: none !important;
       }
 
-      /* Preserve view isolation during print */
+      /* Keep hidden views completely hidden */
+      main.hidden,
       .hidden {
         display: none !important;
       }
 
-      .flex-1 {
-        flex: none !important;
+      /* Unclip the specific main layout wrapper */
+      div.flex-1.flex.w-full {
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
         display: block !important;
-        width: 100% !important;
+        position: static !important;
+        margin: 0 !important;
+        padding: 0 !important;
       }
 
-      main {
+      /* Active view container */
+      main:not(.hidden) {
         display: block !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
         width: 100% !important;
         max-width: 100% !important;
         padding: 0 !important;
