@@ -2623,9 +2623,26 @@ Adversarial Tag: ${card.adversarial_tag || card.distilbert_tag || 'Methodologica
       }
     }
 
+    function formatISTTimestamp(tsStr) {
+      if (!tsStr) return '';
+      if (tsStr.includes('IST')) return tsStr;
+      const parts = tsStr.split('.');
+      if (parts.length === 4) {
+        const [y, m, d, timePart] = parts;
+        const [h, min, sec] = timePart.split(':');
+        const utcDate = new Date(Date.UTC(parseInt(y), parseInt(m) - 1, parseInt(d), parseInt(h), parseInt(min), parseInt(sec || '0')));
+        const options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        const istParts = new Intl.DateTimeFormat('en-IN', options).formatToParts(utcDate);
+        const map = {};
+        istParts.forEach(p => map[p.type] = p.value);
+        return `${map.year}.${map.month}.${map.day}.${map.hour}:${map.minute}:${map.second} IST`;
+      }
+      return `${tsStr} IST`;
+    }
+
     function renderReportData(report) {
         document.getElementById('report-doc-id').innerText = `Internal Document ID: ${report.document_id}`;
-        document.getElementById('report-timestamp').innerText = `Timestamp: ${report.timestamp}`;
+        document.getElementById('report-timestamp').innerText = `Timestamp: ${formatISTTimestamp(report.timestamp)}`;
         document.getElementById('report-query-subtitle').innerText = `Final Synthesis: ${report.query}`;
         document.getElementById('report-claim-text').innerText = `"${report.claim}"`;
 
