@@ -24,6 +24,8 @@ def get_supabase() -> Client:
     key = (
         os.environ.get("SUPABASE_KEY", "") or 
         os.environ.get("SUPABASE_ANON_KEY", "") or 
+        os.environ.get("SUPABASE_PUBLISHABLE_KEY", "") or
+        os.environ.get("SUPABASE_SECRET_KEY", "") or
         os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "") or 
         os.environ.get("SUPABASE_SERVICE_KEY", "")
     ).strip()

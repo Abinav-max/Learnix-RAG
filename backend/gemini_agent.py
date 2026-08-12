@@ -25,13 +25,13 @@ def get_gemini_api_key() -> str:
 
 GEMINI_API_KEY = get_gemini_api_key()
 
-def get_generative_model(primary_model: str = "gemini-1.5-flash-latest") -> genai.GenerativeModel:
-    for m_name in [primary_model, "gemini-1.5-flash-latest", "gemini-1.5-pro-latest", "gemini-1.5-pro"]:
+def get_generative_model(primary_model: str = "gemini-1.5-flash") -> genai.GenerativeModel:
+    for m_name in [primary_model, "gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro", "gemini-1.5-flash-latest"]:
         try:
             return genai.GenerativeModel(m_name)
         except Exception:
             continue
-    return genai.GenerativeModel("gemini-1.5-flash-latest")
+    return genai.GenerativeModel("gemini-1.5-flash")
 
 # ---------------------------------------------------------
 # Step 2: Ambiguity Resolver Agent
