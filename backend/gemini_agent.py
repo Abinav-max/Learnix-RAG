@@ -203,7 +203,8 @@ def handle_factual(query: str) -> Dict[str, Any]:
     """
     web_context = fetch_realtime_web_search(query)
     clean_ans = extract_clean_factual_sentence(web_context, query)
-    current_date_str = datetime.date.today().strftime("%A, %B %d, %Y")
+    kolkata_tz = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
+    current_date_str = datetime.datetime.now(kolkata_tz).strftime("%A, %B %d, %Y")
 
     for attempt in range(3):
         try:

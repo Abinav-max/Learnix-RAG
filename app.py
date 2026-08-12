@@ -11,7 +11,7 @@ from typing import List, Optional, Dict, Any
 import os
 import random
 import time
-from datetime import datetime, date
+from datetime import datetime, date, timezone, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -261,8 +261,10 @@ def ingest_endpoint(req: IngestRequest):
 
 @app.get("/api/hotspots")
 def hotspots_endpoint(refresh: bool = False):
-    today_str = datetime.now().strftime("%Y-%m-%d")
-    date_display = datetime.now().strftime('%b %d, %Y')
+    kolkata_tz = timezone(timedelta(hours=5, minutes=30))
+    now_kolkata = datetime.now(kolkata_tz)
+    today_str = now_kolkata.strftime("%Y-%m-%d")
+    date_display = now_kolkata.strftime('%b %d, %Y')
 
     if not refresh:
         cached = get_hotspots_cache_db(today_str)

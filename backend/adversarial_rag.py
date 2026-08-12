@@ -2,6 +2,13 @@ from typing import List, Dict, Any, Tuple, Optional
 import os
 import random
 import datetime
+from datetime import timezone, timedelta
+
+# India Standard Time (Asia/Kolkata: UTC+5:30)
+KOLKATA_TZ = timezone(timedelta(hours=5, minutes=30))
+
+def get_kolkata_now() -> datetime.datetime:
+    return datetime.datetime.now(KOLKATA_TZ)
 from backend.database import search_critiques_db, CRITIQUE_DATABASE
 from backend.gemini_agent import (
     run_agent,
@@ -428,7 +435,7 @@ def generate_academic_risk_report(
         fact_answer = agent_res.get("factual_answer") or agent_res.get("status_message") or f"'{expanded_q}' is an established fact."
         return {
             "document_id": "AA-2026-FACT",
-            "timestamp": datetime.datetime.now().strftime("%Y.%m.%d.%H:%M:%S"),
+            "timestamp": get_kolkata_now().strftime("%Y.%m.%d.%H:%M:%S"),
             "query": user_query,
             "expanded_query": expanded_q,
             "claim": f"Evaluation of factual query: '{expanded_q}'",
@@ -455,7 +462,7 @@ def generate_academic_risk_report(
         clarify_msg = agent_res.get("status_message") or "Query requires domain clarification."
         return {
             "document_id": "AA-2026-AMBIGUOUS",
-            "timestamp": datetime.datetime.now().strftime("%Y.%m.%d.%H:%M:%S"),
+            "timestamp": get_kolkata_now().strftime("%Y.%m.%d.%H:%M:%S"),
             "query": user_query,
             "expanded_query": expanded_q,
             "claim": f"Ambiguous Query: '{user_query}'",
@@ -526,7 +533,7 @@ def generate_academic_risk_report(
         kw_str = ", ".join(list(target_trigrams)[:3]) or user_query
         return {
             "document_id": "AA-2026-ZERO-RELEVANT-SOURCES",
-            "timestamp": datetime.datetime.now().strftime("%Y.%m.%d.%H:%M:%S"),
+            "timestamp": get_kolkata_now().strftime("%Y.%m.%d.%H:%M:%S"),
             "query": user_query,
             "expanded_query": expanded_q,
             "status": "ZERO RELEVANT SOURCES",
@@ -610,7 +617,7 @@ def generate_academic_risk_report(
 
     return {
         "document_id": f"AA-2026-X{random.randint(100, 999)}",
-        "timestamp": datetime.datetime.now().strftime("%Y.%m.%d.%H:%M:%S"),
+        "timestamp": get_kolkata_now().strftime("%Y.%m.%d.%H:%M:%S"),
         "query": user_query,
         "expanded_query": expanded_q,
         "claim": f"Thesis Claim: '{expanded_q}'",
