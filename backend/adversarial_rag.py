@@ -112,19 +112,15 @@ def run_adversarial_search(
     raw_agent_results = agent_res.get("results", [])
     relevant_results = [
         r for r in raw_agent_results 
-        if r.get("relevance_score", 0.0) >= 0.20 or r.get("keyword_overlap", 0) >= 1 or r.get("exact_id_fetch", False)
+        if r.get("relevance_score", 0.0) >= 0.40 or r.get("keyword_overlap", 0) >= 1 or r.get("exact_id_fetch", False)
     ]
-    if not relevant_results and raw_agent_results:
-        relevant_results = raw_agent_results
         
     if not relevant_results:
         raw_results = search_critiques_db(expanded_q, attack_vector=attack_vector_filter, source=source_filter)
         relevant_results = [
             r for r in raw_results 
-            if r.get("relevance_score", 0.0) >= 0.05 or r.get("keyword_overlap", 0) >= 1
+            if r.get("relevance_score", 0.0) >= 0.40 or r.get("keyword_overlap", 0) >= 1
         ]
-        if not relevant_results and raw_results:
-            relevant_results = raw_results
     else:
         raw_results = raw_agent_results
 

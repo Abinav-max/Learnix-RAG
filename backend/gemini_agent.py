@@ -60,25 +60,50 @@ def resolve_acronym(query: str) -> str:
 def route_query(query: str) -> Tuple[str, str]:
     """
     Step 1: Smart Router Agent (Fast Heuristics First)
+    Routes query into FACTUAL, AMBIGUOUS_ACRONYM, or RESEARCH_CLAIM.
     """
-    q_clean = query.strip().lower()
-    
+    q_raw = query.strip()
+    q_clean = q_raw.lower()
+    words = q_clean.split()
+
+    # 1. Bare acronym check
+    if (len(words) <= 2 and q_raw.isupper() and 2 <= len(q_raw) <= 5) or q_clean in ["cm", "cot", "gnn", "rag", "pca", "svm"]:
+        return "AMBIGUOUS_ACRONYM", "Bare acronym query without context."
+
+    # 2. Check for explicit scientific hypothesis/comparison verbs or patterns
+    claim_indicators = [
+        "outperforms", "outperform", "beats", "beat", "overfit", "overfits", "leakage",
+        "should i use", "vs", "versus", "better than", "worse than", "is faster than",
+        "improves", "degrades", "limitations of", "flaw in", "fail on", "fails on"
+    ]
+    is_explicit_claim = any(ind in q_clean for ind in claim_indicators)
+
+    # 3. Factual & Definitional Triggers
+    factual_starters = [
+        "what is", "what are", "who is", "who was", "when was", "where is", "where was",
+        "define ", "definition of", "meaning of", "explain ", "tell me about",
+        "how does ", "why does ", "what does ", "how many", "is the ", "is it "
+    ]
+    is_factual_query = any(q_clean.startswith(starter) or f" {starter}" in q_clean for starter in factual_starters) or any(term in q_clean for term in ["capital of", "chief minister", "prime minister", "president of", "is the sky"])
+
+    if is_factual_query and not is_explicit_claim:
+        return "FACTUAL", "Factual or definitional query with no active academic debate."
+
+    if is_explicit_claim:
+        return "RESEARCH_CLAIM", "Explicit scientific hypothesis or model comparison."
+
     academic_terms = [
         "model", "transformer", "neural", "graph", "forecast", "quantum", "algorithm", 
         "dataset", "learning", "method", "accuracy", "baseline", "reasoning", 
-        "chain-of-thought", "cot", "llm", "gnn", "capable of", "should i use"
+        "chain-of-thought", "llm", "gnn", "capable of"
     ]
-    if any(term in q_clean for term in academic_terms):
-        return "RESEARCH_CLAIM", "Academic concept or scientific model comparison."
-        
-    factual_terms = ["who is", "what is the capital", "when was", "where is", "date of", "chief minister", "prime minister", "president of", "is the sky", "is the earth", "is the sun", "fact check:"]
-    if any(term in q_clean for term in factual_terms) or q_clean.startswith("is the ") or q_clean.startswith("is it "):
-        return "FACTUAL", "Factual or conversational query with no active academic debate."
+    if any(term in q_clean for term in academic_terms) and len(words) > 3:
+        return "RESEARCH_CLAIM", "Academic concept or scientific model evaluation."
 
-    if len(q_clean.split()) <= 2 and q_clean.isupper():
-        return "AMBIGUOUS_ACRONYM", "Bare acronym query without context."
-        
-    return "RESEARCH_CLAIM", "Default to research claim evaluation."
+    if is_factual_query:
+        return "FACTUAL", "Factual or conversational query."
+
+    return "RESEARCH_CLAIM", "Default research claim evaluation."
 
 # ---------------------------------------------------------
 # Step 3: Smart Handlers
