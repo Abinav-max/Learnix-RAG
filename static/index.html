@@ -158,28 +158,78 @@
     }
 
     @media print {
+      @page {
+        size: A4 portrait;
+        margin: 15mm 12mm 15mm 12mm;
+      }
+
+      html,
+      body {
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        position: static !important;
+      }
 
       header,
       footer,
+      nav,
+      aside,
+      button,
+      .grain-overlay,
       #auth-screen,
       #legal-modal-overlay,
       #preview-modal,
-      aside,
-      button,
-      .grain-overlay {
+      #system-thinking-indicator,
+      .sidebar-text {
         display: none !important;
       }
 
-      #view-reports {
+      main,
+      #view-lab,
+      #view-feed,
+      #view-reports,
+      #view-deepdive,
+      .custom-scrollbar,
+      .overflow-y-auto {
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        position: static !important;
         display: block !important;
+        width: 100% !important;
         max-width: 100% !important;
-        padding: 20px !important;
+        padding: 0 !important;
         margin: 0 !important;
       }
 
-      body {
-        background: #ffffff !important;
-        color: #000000 !important;
+      .bg-surface,
+      .bg-surface-container,
+      .bg-primary-container,
+      .bg-tertiary-fixed\/30 {
+        background-color: #f8f9fa !important;
+        color: #111111 !important;
+        border: 1px solid #d0d7de !important;
+        box-shadow: none !important;
+      }
+
+      .text-primary,
+      .text-secondary,
+      .text-on-surface,
+      .text-on-primary-container {
+        color: #111111 !important;
+      }
+
+      section,
+      .paper-shadow,
+      #report-flaws-container > div,
+      #report-mitigations-list > li,
+      .border-l-4 {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
     }
 
@@ -2747,13 +2797,19 @@ Adversarial Tag: ${card.adversarial_tag || card.distilbert_tag || 'Methodologica
         btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-sm">autorenew</span> Preparing PDF...`;
         btn.disabled = true;
       }
+
+      const reportView = document.getElementById('view-reports');
+      if (reportView && reportView.classList.contains('hidden')) {
+        switchView('reports');
+      }
+
       setTimeout(() => {
         window.print();
         if (btn) {
           btn.innerHTML = `<span class="material-symbols-outlined text-sm">download</span><span>Download PDF Digest</span>`;
           btn.disabled = false;
         }
-      }, 400);
+      }, 300);
     }
 
     async function openDeepDive(critiqueId, pushHistory = true) {
