@@ -927,108 +927,109 @@
         </div>
         <div id="hotspots-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
           <!-- Loaded dynamically -->
-      <!-- Footer (Appears at bottom of scrollable content) -->
-      <footer class="mt-16 pt-8 border-t border-[#c3c8c1]/40 pb-8">
-        <div class="w-full flex flex-col md:flex-row justify-between items-center max-w-max-content-width mx-auto px-2">
-          <div class="mb-4 md:mb-0">
-            <span class="font-label-md text-label-md font-bold text-primary">Learnix Research</span>
-            <p class="font-label-sm text-label-sm text-secondary mt-1">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
+      <!-- Static Footer (Visible only when scrolled to end of page) -->
+      <footer class="mt-20 pt-8 border-t border-[#c3c8c1]/30 pb-12 w-full">
+        <div class="flex flex-col md:flex-row justify-between items-center text-xs text-[#5e5f5c]">
+          <div>
+            <span class="font-bold text-[#061b0e] text-sm">Learnix Research</span>
+            <p class="mt-1">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
           </div>
-          <div class="flex space-x-6">
-            <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors underline" onclick="switchView('lab')">Laboratory</button>
-            <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="switchView('feed')">Adversarial Feed</button>
+          <div class="flex space-x-6 mt-4 md:mt-0">
+            <button onclick="switchView('lab')" class="hover:text-[#061b0e] transition-colors font-semibold">Laboratory</button>
+            <button onclick="switchView('feed')" class="hover:text-[#061b0e] transition-colors">Adversarial Feed</button>
           </div>
         </div>
       </footer>
     </main>
 
     <!-- VIEW 2: ADVERSARIAL FEED / SEARCH RESULTS -->
-    <main id="view-feed" class="hidden flex-1 h-full overflow-hidden w-full max-w-full flex flex-col xl:flex-row gap-8 items-start">
+    <main id="view-feed" class="hidden flex-1 h-full overflow-y-auto w-full max-w-full custom-scrollbar">
+      <div class="flex flex-col xl:flex-row gap-8 items-start px-8 py-10">
 
-      <!-- Feed Column -->
-      <div id="feed-column" class="flex-1 w-full h-full overflow-y-auto pr-4 py-2 custom-scrollbar">
-        <header class="mb-12">
-          <h1 class="font-display-lg text-display-lg text-primary mb-2">The Adversarial Feed</h1>
-          <p class="font-body-lg text-body-lg text-secondary italic border-l-2 border-outline-variant pl-4">
-            Scrutinizing: <span id="feed-query-text" class="font-bold text-on-surface">"Are Large Language Models
-              capable
-              of true logical reasoning?"</span>
-          </p>
-          <div id="feed-transformed-container"
-            class="mt-3 text-xs font-mono-data text-on-tertiary-container bg-tertiary-fixed/30 p-2 rounded border border-on-tertiary-container/20">
-            Adversarial Vector Transformation: <span id="feed-transformed-text">Query + [insufficient baseline
-              methodological flaw data leakage]</span>
+        <!-- Feed Column -->
+        <div id="feed-column" class="flex-1 w-full">
+          <header class="mb-12">
+            <h1 class="font-display-lg text-display-lg text-primary mb-2">The Adversarial Feed</h1>
+            <p class="font-body-lg text-body-lg text-secondary italic border-l-2 border-outline-variant pl-4">
+              Scrutinizing: <span id="feed-query-text" class="font-bold text-on-surface">"Are Large Language Models
+                capable
+                of true logical reasoning?"</span>
+            </p>
+            <div id="feed-transformed-container"
+              class="mt-3 text-xs font-mono-data text-on-tertiary-container bg-tertiary-fixed/30 p-2 rounded border border-on-tertiary-container/20">
+              Adversarial Vector Transformation: <span id="feed-transformed-text">Query + [insufficient baseline
+                methodological flaw data leakage]</span>
+            </div>
+            <div class="flex flex-wrap gap-4 mt-4 items-center">
+              <span id="feed-source-badge"
+                class="bg-primary-container text-on-primary-container px-3 py-1 text-label-sm font-label-sm border border-primary/20">Source:
+                All Active Attacks</span>
+              <span id="feed-match-count"
+                class="bg-surface-container-highest px-3 py-1 text-label-sm font-label-sm border border-outline-variant/40">11
+                Matches Found → Filtered to Top 3 Relevant</span>
+              <span id="feed-severity-badge"
+                class="bg-on-tertiary-container/10 text-on-tertiary-container px-3 py-1 text-label-sm font-label-sm border border-on-tertiary-container/20">Critical
+                Severity High</span>
+            </div>
+            <div class="flex justify-center mt-8 pb-4">
+              <button
+                id="generate-risk-report-btn"
+                class="bg-primary text-on-primary px-8 py-4 text-label-lg font-bold tracking-widest hover:bg-on-primary-fixed transition-colors shadow-md rounded uppercase border border-outline/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                onclick="generateReportForCurrentQuery()">
+                Generate Risk Report
+              </button>
+            </div>
+          </header>
+
+          <div id="status-banner" class="hidden mb-6 p-4 rounded text-sm font-body-md border-l-4">
+            <!-- Dynamic status banner for facts or zero matches -->
           </div>
-          <div class="flex flex-wrap gap-4 mt-4 items-center">
-            <span id="feed-source-badge"
-              class="bg-primary-container text-on-primary-container px-3 py-1 text-label-sm font-label-sm border border-primary/20">Source:
-              All Active Attacks</span>
-            <span id="feed-match-count"
-              class="bg-surface-container-highest px-3 py-1 text-label-sm font-label-sm border border-outline-variant/40">11
-              Matches Found → Filtered to Top 3 Relevant</span>
-            <span id="feed-severity-badge"
-              class="bg-on-tertiary-container/10 text-on-tertiary-container px-3 py-1 text-label-sm font-label-sm border border-on-tertiary-container/20">Critical
-              Severity High</span>
-          </div>
-          <div class="flex justify-center mt-8 pb-4">
-            <button
-              id="generate-risk-report-btn"
-              class="bg-primary text-on-primary px-8 py-4 text-label-lg font-bold tracking-widest hover:bg-on-primary-fixed transition-colors shadow-md rounded uppercase border border-outline/20 disabled:opacity-50 disabled:cursor-not-allowed"
-              onclick="generateReportForCurrentQuery()">
-              Generate Risk Report
-            </button>
-          </div>
-        </header>
 
-        <div id="status-banner" class="hidden mb-6 p-4 rounded text-sm font-body-md border-l-4">
-          <!-- Dynamic status banner for facts or zero matches -->
-        </div>
+          <section id="critique-cards-container" class="space-y-8">
+            <!-- Dynamic Critique Feed Cards -->
+          </section>
 
-        <section id="critique-cards-container" class="space-y-8">
-          <!-- Dynamic Critique Feed Cards -->
-        </section>
-
-        <!-- Dynamic Quick Debunk & Verified Skepticism Bento Box -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
-          <article id="quick-debunk-card"
-            class="bg-surface-container-high/50 border border-outline-variant/20 p-6 flex flex-col justify-between overflow-hidden rounded-xl">
-            <div class="overflow-hidden">
-              <div class="flex justify-between items-center mb-4">
-                <span class="text-label-sm font-mono-data text-outline uppercase tracking-tighter shrink-0">Quick Debunk</span>
-                <span class="material-symbols-outlined text-on-tertiary-container shrink-0">warning</span>
+          <!-- Dynamic Quick Debunk & Verified Skepticism Bento Box -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+            <article id="quick-debunk-card"
+              class="bg-surface-container-high/50 border border-outline-variant/20 p-6 flex flex-col justify-between overflow-hidden rounded-xl">
+              <div class="overflow-hidden">
+                <div class="flex justify-between items-center mb-4">
+                  <span class="text-label-sm font-mono-data text-outline uppercase tracking-tighter shrink-0">Quick Debunk</span>
+                  <span class="material-symbols-outlined text-on-tertiary-container shrink-0">warning</span>
+                </div>
+                <h3 id="quick-debunk-title" class="font-headline-sm text-headline-sm text-primary mb-3 leading-snug break-words">Relevance Filter
+                  Active</h3>
+                <p id="quick-debunk-body" class="font-body-md text-body-md text-on-surface-variant break-words leading-relaxed">No unrelated critiques
+                  to display. All retrieved papers are semantically relevant to your thesis query.</p>
               </div>
-              <h3 id="quick-debunk-title" class="font-headline-sm text-headline-sm text-primary mb-3 leading-snug break-words">Relevance Filter
-                Active</h3>
-              <p id="quick-debunk-body" class="font-body-md text-body-md text-on-surface-variant break-words leading-relaxed">No unrelated critiques
-                to display. All retrieved papers are semantically relevant to your thesis query.</p>
-            </div>
-            <div class="mt-6 flex items-center justify-between gap-3 border-t border-outline-variant/15 pt-4 overflow-hidden min-w-0">
-              <span id="quick-debunk-badge"
-                class="text-label-sm font-bold bg-primary-container text-on-primary-container px-2.5 py-1 rounded uppercase shrink-0">FILTERED</span>
-              <span id="quick-debunk-ref" class="text-label-sm text-outline font-mono-data truncate max-w-[200px] shrink inline-block text-right ml-auto" title="Semantic Cross-Encoder">Semantic Cross-Encoder</span>
-            </div>
-          </article>
-          <article class="bg-primary text-on-primary p-6 flex flex-col justify-center items-center text-center">
-            <span class="material-symbols-outlined text-4xl mb-4">verified_user</span>
-            <h3 class="font-headline-sm text-headline-sm mb-2">Verified Scepticism</h3>
-            <p class="font-label-md text-label-md opacity-80 mb-6 px-4">Adversarial Keyword Classifier &amp; Semantic
-              Re-Ranker filtered out 82% of supportive paper marketing fluff and off-topic spillover.</p>
-            <button
-              class="bg-on-primary text-primary px-6 py-2 font-label-md text-label-md font-bold uppercase tracking-wider"
-              onclick="switchView('reports')">Inspect Full Report</button>
-          </article>
-        </div>
+              <div class="mt-6 flex items-center justify-between gap-3 border-t border-outline-variant/15 pt-4 overflow-hidden min-w-0">
+                <span id="quick-debunk-badge"
+                  class="text-label-sm font-bold bg-primary-container text-on-primary-container px-2.5 py-1 rounded uppercase shrink-0">FILTERED</span>
+                <span id="quick-debunk-ref" class="text-label-sm text-outline font-mono-data truncate max-w-[200px] shrink inline-block text-right ml-auto" title="Semantic Cross-Encoder">Semantic Cross-Encoder</span>
+              </div>
+            </article>
+            <article class="bg-primary text-on-primary p-6 flex flex-col justify-center items-center text-center">
+              <span class="material-symbols-outlined text-4xl mb-4">verified_user</span>
+              <h3 class="font-headline-sm text-headline-sm mb-2">Verified Scepticism</h3>
+              <p class="font-label-md text-label-md opacity-80 mb-6 px-4">Adversarial Keyword Classifier &amp; Semantic
+                Re-Ranker filtered out 82% of supportive paper marketing fluff and off-topic spillover.</p>
+              <button
+                class="bg-on-primary text-primary px-6 py-2 font-label-md text-label-md font-bold uppercase tracking-wider"
+                onclick="switchView('reports')">Inspect Full Report</button>
+            </article>
+          </div>
 
-        <!-- Footer (Appears at bottom of feed scroll) -->
-        <footer class="mt-16 pt-8 border-t border-[#c3c8c1]/40 pb-8">
-          <div class="w-full flex flex-col md:flex-row justify-between items-center max-w-max-content-width mx-auto px-2">
-            <div class="mb-4 md:mb-0">
-              <span class="font-label-md text-label-md font-bold text-primary">Learnix Research</span>
-              <p class="font-label-sm text-label-sm text-secondary mt-1">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
+        <!-- Static Footer (Visible only when scrolled to end of feed) -->
+        <footer class="mt-20 pt-8 border-t border-[#c3c8c1]/30 pb-12 w-full">
+          <div class="flex flex-col md:flex-row justify-between items-center text-xs text-[#5e5f5c]">
+            <div>
+              <span class="font-bold text-[#061b0e] text-sm">Learnix Research</span>
+              <p class="mt-1">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
             </div>
-            <div class="flex space-x-6">
-              <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="switchView('lab')">Laboratory</button>
-              <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors underline" onclick="switchView('feed')">Adversarial Feed</button>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+              <button onclick="switchView('lab')" class="hover:text-[#061b0e] transition-colors">Laboratory</button>
+              <button onclick="switchView('feed')" class="hover:text-[#061b0e] transition-colors font-semibold">Adversarial Feed</button>
             </div>
           </div>
         </footer>
@@ -1133,16 +1134,16 @@
         </div>
       </section>
 
-      <!-- Footer (Appears at bottom of reports scroll) -->
-      <footer class="mt-16 pt-8 border-t border-[#c3c8c1]/40 pb-8">
-        <div class="w-full flex flex-col md:flex-row justify-between items-center max-w-max-content-width mx-auto px-2">
-          <div class="mb-4 md:mb-0">
-            <span class="font-label-md text-label-md font-bold text-primary">Learnix Research</span>
-            <p class="font-label-sm text-label-sm text-secondary mt-1">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
+      <!-- Static Footer (Visible only when scrolled to end of report) -->
+      <footer class="mt-20 pt-8 border-t border-[#c3c8c1]/30 pb-12 w-full">
+        <div class="flex flex-col md:flex-row justify-between items-center text-xs text-[#5e5f5c]">
+          <div>
+            <span class="font-bold text-[#061b0e] text-sm">Learnix Research</span>
+            <p class="mt-1">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
           </div>
-          <div class="flex space-x-6">
-            <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="switchView('lab')">Laboratory</button>
-            <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="switchView('feed')">Adversarial Feed</button>
+          <div class="flex space-x-6 mt-4 md:mt-0">
+            <button onclick="switchView('lab')" class="hover:text-[#061b0e] transition-colors">Laboratory</button>
+            <button onclick="switchView('feed')" class="hover:text-[#061b0e] transition-colors">Adversarial Feed</button>
           </div>
         </div>
       </footer>
@@ -1213,16 +1214,16 @@
         </div>
       </section>
 
-      <!-- Footer (Appears at bottom of deepdive scroll) -->
-      <footer class="mt-16 pt-8 border-t border-[#c3c8c1]/40 pb-8">
-        <div class="w-full flex flex-col md:flex-row justify-between items-center max-w-max-content-width mx-auto px-2">
-          <div class="mb-4 md:mb-0">
-            <span class="font-label-md text-label-md font-bold text-primary">Learnix Research</span>
-            <p class="font-label-sm text-label-sm text-secondary mt-1">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
+      <!-- Static Footer (Visible only when scrolled to end of deep-dive) -->
+      <footer class="mt-20 pt-8 border-t border-[#c3c8c1]/30 pb-12 w-full">
+        <div class="flex flex-col md:flex-row justify-between items-center text-xs text-[#5e5f5c]">
+          <div>
+            <span class="font-bold text-[#061b0e] text-sm">Learnix Research</span>
+            <p class="mt-1">© 2026 Learnix Research Peer-Review Devil's Advocate. Dev by Abinav</p>
           </div>
-          <div class="flex space-x-6">
-            <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="switchView('lab')">Laboratory</button>
-            <button class="font-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="switchView('feed')">Adversarial Feed</button>
+          <div class="flex space-x-6 mt-4 md:mt-0">
+            <button onclick="switchView('lab')" class="hover:text-[#061b0e] transition-colors">Laboratory</button>
+            <button onclick="switchView('feed')" class="hover:text-[#061b0e] transition-colors">Adversarial Feed</button>
           </div>
         </div>
       </footer>
