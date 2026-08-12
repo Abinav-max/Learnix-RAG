@@ -696,8 +696,8 @@ def run_gemini_devils_advocate(
         critical_hits = all_hits
 
     # 5. Semantic Re-Ranker (TF-IDF Cosine Similarity against query)
-    from backend.live_agent import rerank_results_cross_encoder
-    ranked_hits = rerank_results_cross_encoder(user_query, critical_hits)
+    from backend.live_agent import rerank_results_tfidf
+    ranked_hits = rerank_results_tfidf(user_query, critical_hits)
     
     # Relevance threshold limitation: retain top hits, fallback if empty
     relevant_hits = [h for h in ranked_hits if h.get("relevance_score", 0) >= 0.05]

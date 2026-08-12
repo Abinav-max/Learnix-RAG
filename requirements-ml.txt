@@ -1,0 +1,5 @@
+# Full ML dependencies for local development or paid hosting tiers (>=1 GB RAM)
+# Run: pip install -r requirements.txt -r requirements-ml.txt
+# When installed, sentence-transformers takes priority over fastembed automatically.
+sentence-transformers>=2.6.0
+torch>=2.0.0

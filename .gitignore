@@ -21,4 +21,10 @@ sessions.json
 users.json
 powershell.cmd
 
-
+# HuggingFace model cache — do NOT commit model weights
+.cache/
+huggingface/
+*.safetensors
+*.bin
+sentence_transformers/
+models/

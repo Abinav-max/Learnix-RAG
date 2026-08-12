@@ -1,17 +1,18 @@
 """
 Realtime Agentic Database & Search Dispatcher:
 Connects to live ArXiv API (domain filtered), OpenReview API, and PubMed API.
-Uses Adversarial Sentiment Gate & Cross-Encoder Re-Ranker to select Top 3-4 Actually Relevant Critiques.
+Uses Adversarial Sentiment Gate + Hybrid BGE/TF-IDF Retrieval + Cross-Encoder + Gemini Gate
+to select Top 3-5 Actually Relevant Critiques.
 """
 
 import re
 from typing import List, Dict, Any, Optional
 from backend.live_agent import (
-    fetch_arxiv_realtime, 
-    fetch_openreview_realtime, 
+    fetch_arxiv_realtime,
+    fetch_openreview_realtime,
     fetch_pubpeer_realtime,
     detect_fine_grained_attack_vector,
-    rerank_results_cross_encoder,
+    rerank_results_tfidf,
     is_supportive_marketing_fluff,
     detect_query_domain,
     get_paper_domain,
@@ -21,6 +22,11 @@ from backend.live_agent import (
     keyword_overlap_filter,
     has_explicit_ids,
     fetch_all_exact_ids
+)
+from backend.embedding_service import (
+    hybrid_rerank_results,
+    rerank_with_cross_encoder,
+    embedding_service,
 )
 
 from backend.db import save_critique_chunk_db, get_all_critiques_db
@@ -184,10 +190,33 @@ def search_critiques_db(query: str, attack_vector: Optional[str] = None, source:
         keyword_filtered = keyword_overlap_filter(clean_query, adv_domain_filtered, min_overlap=2)
         filtered_candidates = [c for c in keyword_filtered if not is_supportive_marketing_fluff(c["title"], c["raw_text"])]
 
-    # 5. Re-rank using TF-IDF Cosine Similarity Re-Ranker
-    top_ranked = rerank_results_cross_encoder(clean_query, filtered_candidates, top_k=6)
-    
-    # 5b. Strict relevance threshold limitation: drop anything below 0.20
+    print(f"[Retrieval] Candidates: {len(candidates)}")
+    print(f"[Keyword Filter] Remaining: {len(filtered_candidates)}")
+
+    # 5. Hybrid Retrieval: TF-IDF (30%) + BGE Embeddings (70%)
+    # Pre-compute query embedding once so it's shared through the pipeline
+    query_embedding = None
+    if embedding_service.available:
+        try:
+            query_embedding = embedding_service.encode_query(clean_query)
+        except Exception as _e:
+            print(f"[Embedding] Query encode failed: {_e}")
+
+    hybrid_candidates = hybrid_rerank_results(
+        clean_query, filtered_candidates, query_embedding=query_embedding, top_k=15
+    )
+    print(f"[Hybrid Retrieval] Remaining: {len(hybrid_candidates)}")
+
+    # 6. Cross-Encoder pairwise reranking (top 15 → top 8)
+    cross_ranked = rerank_with_cross_encoder(clean_query, hybrid_candidates, top_k=8)
+    print(f"[Cross Encoder] Remaining: {len(cross_ranked)}")
+
+    # 7. Gemini Smart Relevance Gate (top 8 → top 5)
+    from backend.live_agent import gemini_smart_relevance_gate
+    top_ranked = gemini_smart_relevance_gate(clean_query, cross_ranked)
+    print(f"[Gemini Gate] Remaining: {len(top_ranked)}")
+
+    # 7b. Strict relevance threshold: drop anything below 0.20
     top_ranked = [r for r in top_ranked if r.get("relevance_score", 0) >= 0.20]
     
     # 4. Process top ranked critiques
@@ -236,7 +265,11 @@ def search_critiques_db(query: str, attack_vector: Optional[str] = None, source:
             "query_keywords": [w.lower() for w in clean_query.split() if len(w) > 2],
             "severity": severity,
             "relevance_score": item.get("relevance_score", 0.8),
-            "mitigation_suggestion": f"Subject methodology to strict benchmark de-contamination, non-public human test suites, and scaffold splits."
+            "tfidf_score": item.get("tfidf_score"),
+            "embedding_score": item.get("embedding_score"),
+            "hybrid_score": item.get("hybrid_score"),
+            "cross_encoder_score": item.get("cross_encoder_score"),
+            "mitigation_suggestion": "Subject methodology to strict benchmark de-contamination, non-public human test suites, and scaffold splits."
         }
         processed_critiques.append(critique_chunk)
         save_critique_chunk_db(critique_chunk)

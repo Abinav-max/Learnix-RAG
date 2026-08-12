@@ -113,3 +113,13 @@ CREATE POLICY "Allow public read/write on critiques" ON public.critiques FOR ALL
 
 DROP POLICY IF EXISTS "Allow public read/write on hotspots_cache" ON public.hotspots_cache;
 CREATE POLICY "Allow public read/write on hotspots_cache" ON public.hotspots_cache FOR ALL USING (true) WITH CHECK (true);
+
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- OPTIONAL PHASE 2: Persistent BGE Embeddings (requires pgvector extension)
+-- Run these manually in Supabase SQL Editor ONLY if pgvector is enabled.
+-- The application works without this — embeddings are computed at runtime (Phase 1).
+-- ═══════════════════════════════════════════════════════════════════════════════
+-- CREATE EXTENSION IF NOT EXISTS vector;
+-- ALTER TABLE public.critiques ADD COLUMN IF NOT EXISTS embedding vector(384);
+-- CREATE INDEX IF NOT EXISTS critiques_embedding_idx
+--     ON public.critiques USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);

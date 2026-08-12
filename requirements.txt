@@ -7,3 +7,5 @@ python-dotenv
 passlib
 bcrypt
 python-multipart
+numpy>=1.24.0
+fastembed>=0.4.0

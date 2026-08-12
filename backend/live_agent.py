@@ -614,10 +614,13 @@ def gemini_smart_relevance_gate(query: str, papers: List[Dict[str, Any]]) -> Lis
         strict_fallback = [p for p in papers if p.get("relevance_score", 0.0) >= 0.10 or p.get("keyword_overlap", 0) >= 1]
         return strict_fallback if strict_fallback else papers[:5]
 
-def rerank_results_cross_encoder(query: str, papers: List[Dict[str, Any]], top_k: Optional[int] = None) -> List[Dict[str, Any]]:
+def rerank_results_tfidf(query: str, papers: List[Dict[str, Any]], top_k: Optional[int] = None) -> List[Dict[str, Any]]:
     """
-    Semantic Re-Ranker:
-    Uses TF-IDF Vectorizer + Gemini 2.0 Flash AI Smart Relevance Gate to re-rank papers against user query.
+    TF-IDF Semantic Re-Ranker:
+    Uses pure-Python TF-IDF Vectorizer + Cosine Similarity to re-rank papers against user query,
+    followed by the Gemini AI Smart Relevance Gate.
+    NOTE: This is TF-IDF, not a real cross-encoder. For actual cross-encoder, use rerank_with_cross_encoder()
+    from backend.embedding_service.
     """
     if not papers:
         return []
