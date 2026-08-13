@@ -55,14 +55,15 @@ Learnix-RAG/
 ├── backend/                   # Backend API and RAG logic
 │   ├── embedding_service.py   # BGE v1.5 embedding & Cross-Encoder reranking pipeline
 │   ├── gemini_agent.py        # Gemini 2.0 Flash integration & synthesis
-│   ├── database.py            # Supabase DB operations & RLS queries
+│   ├── database.py            # Real-time search dispatcher & critique aggregation pipeline
+│   ├── db.py                  # 100% Supabase Cloud PostgreSQL DB client & RLS queries
 │   ├── auth.py                # OTP email verification & password security
 │   ├── live_agent.py          # Real-time multi-publisher academic REST APIs
-│   └── adversarial_rag.py     # Risk scoring, flaw taxonomy, and mitigation engine
+│   ├── adversarial_rag.py     # Risk scoring, flaw taxonomy, and mitigation engine
+│   └── supabase_schema.sql    # Supabase DDL schema definition for 7 core tables
 │
 └── static/                    # Frontend Single Page Application
-    ├── index.html             # Main UI entrypoint
-    ├── style.css              # Glassmorphism UI styling (Vanilla CSS + Tailwind)
+    ├── index.html             # Main UI entrypoint with glassmorphism design
     └── favicon.svg            # Brand logo
 ```
 
