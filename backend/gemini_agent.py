@@ -60,17 +60,27 @@ def resolve_acronym(query: str) -> str:
 def route_query(query: str) -> Tuple[str, str]:
     """
     Step 1: Smart Router Agent (Fast Heuristics First)
-    Routes query into FACTUAL, AMBIGUOUS_ACRONYM, or RESEARCH_CLAIM.
+    Routes query into FACTUAL, AMBIGUOUS_ACRONYM, IRRELEVANT, or RESEARCH_CLAIM.
     """
     q_raw = query.strip()
     q_clean = q_raw.lower()
     words = q_clean.split()
 
-    # 1. Bare acronym check
+    # 1. Check for Irrelevant / Face Check / Personal Check queries
+    irrelevant_triggers = [
+        "face check", "check face", "check my face", "my face", "who am i", 
+        "what is my name", "check my", "face verification", "photo check", 
+        "who is my neighbor", "who is my neighbour", "am i handsome", "is my photo",
+        "random test", "hello", "hi there", "who are you"
+    ]
+    if any(trig in q_clean for trig in irrelevant_triggers):
+        return "IRRELEVANT", "Query is an irrelevant personal/face check or non-academic query."
+
+    # 2. Bare acronym check
     if (len(words) <= 2 and q_raw.isupper() and 2 <= len(q_raw) <= 5) or q_clean in ["cm", "cot", "gnn", "rag", "pca", "svm"]:
         return "AMBIGUOUS_ACRONYM", "Bare acronym query without context."
 
-    # 2. Check for explicit scientific hypothesis/comparison/evaluation verbs or terms
+    # 3. Check for explicit scientific hypothesis/comparison/evaluation verbs or terms
     claim_indicators = [
         "outperforms", "outperform", "beats", "beat", "overfit", "overfits", "leakage",
         "should i use", "vs", "versus", "better than", "worse than", "is faster than",
@@ -80,11 +90,12 @@ def route_query(query: str) -> Tuple[str, str]:
     ]
     is_explicit_claim = any(ind in q_clean for ind in claim_indicators)
 
-    # 3. Factual & Definitional Triggers
+    # 4. Factual & Definitional Triggers
     factual_starters = [
         "what is", "what are", "who is", "who was", "when was", "where is", "where was",
         "define ", "definition of", "meaning of", "explain ", "tell me about",
-        "how many", "capital of", "chief minister", "prime minister", "president of", "is the sky"
+        "how many", "capital of", "chief minister", "prime minister", "president of", "is the sky",
+        "cm of", "pm of", "governor of", "head of state"
     ]
     is_factual_query = any(q_clean.startswith(starter) or f" {starter} " in f" {q_clean} " for starter in factual_starters)
 
@@ -97,10 +108,15 @@ def route_query(query: str) -> Tuple[str, str]:
     academic_terms = [
         "model", "transformer", "neural", "graph", "forecast", "quantum", "algorithm", 
         "dataset", "learning", "method", "accuracy", "baseline", "reasoning", 
-        "chain-of-thought", "llm", "gnn"
+        "chain-of-thought", "llm", "gnn", "arxiv", "paper", "architecture",
+        "bert", "gpt", "resnet", "attention", "embedding", "loss function", "optimizer"
     ]
-    if any(term in q_clean for term in academic_terms) and len(words) > 3:
+    if any(term in q_clean for term in academic_terms):
         return "RESEARCH_CLAIM", "Academic concept or scientific model evaluation."
+
+    # Non-academic short queries without clear factual or academic intent
+    if len(words) <= 3 and not is_factual_query:
+        return "IRRELEVANT", "Query is irrelevant to academic research or verified factual search."
 
     return "RESEARCH_CLAIM", "Default research claim evaluation."
 
@@ -108,36 +124,54 @@ def route_query(query: str) -> Tuple[str, str]:
 # Step 3: Smart Handlers
 # ---------------------------------------------------------
 
+def handle_irrelevant(query: str) -> Dict[str, Any]:
+    """
+    Handler C: Irrelevant Query / Face Check / Personal Query
+    Returns a clean 'I don't know' response.
+    """
+    msg = "I don't know. This query is irrelevant to academic research, and I do not perform face checks or personal identity verification."
+    return {
+        "success": True,
+        "category": "IRRELEVANT",
+        "is_factual": False,
+        "is_irrelevant": True,
+        "status": "IRRELEVANT",
+        "status_message": msg,
+        "factual_answer": "I don't know.",
+        "matches": 0,
+        "total_matches": 0,
+        "results": []
+    }
+
 def fetch_realtime_web_search(query: str) -> str:
     """
-    Fetches live real-time web search snippets via DuckDuckGo HTML & Wikipedia APIs
-    to ground factual queries with current real-time data.
+    Fetches live real-time web search snippets via DuckDuckGo Instant Answer API,
+    DuckDuckGo HTML/Lite, and Wikipedia API to ground factual queries with current real-time data.
     """
     snippets = []
-    queries = [query]
-    if "current" not in query.lower():
-        queries.append(f"current {query}")
+    
+    clean_q = re.sub(r'^(who|what|where|when|how)\s+(is|was|are|were)\s+(the\s+)?', '', query, flags=re.IGNORECASE).strip()
+    if not clean_q:
+        clean_q = query
+        
+    search_queries = [clean_q, query]
+    if "current" not in query.lower() and "current" not in clean_q.lower():
+        search_queries.append(f"current {clean_q}")
 
-    for q in queries:
-        # 1. DuckDuckGo HTML Search
-        try:
-            url = f"https://html.duckduckgo.com/html/?q={urllib.parse.quote(q)}"
-            req = urllib.request.Request(url, headers={
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'Accept-Language': 'en-US,en;q=0.5'
-            })
-            with urllib.request.urlopen(req, timeout=5) as resp:
-                html = resp.read().decode('utf-8', errors='ignore')
-                raw_snippets = re.findall(r'<a class="result__snippet[^>]*>(.*?)</a>', html, re.DOTALL)
-                for s in raw_snippets[:4]:
-                    clean_s = re.sub(r'<[^>]+>', '', s).strip()
-                    clean_s = clean_s.replace('&#x27;', "'").replace('&quot;', '"').replace('&amp;', '&')
-                    if clean_s and clean_s not in snippets:
-                        snippets.append(clean_s)
-        except Exception as e:
-            pass
+    # 1. DuckDuckGo Instant Answer API (returns clean structured summaries)
+    try:
+        ddg_api = f"https://api.duckduckgo.com/?q={urllib.parse.quote(clean_q)}&format=json&no_html=1"
+        req = urllib.request.Request(ddg_api, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+        with urllib.request.urlopen(req, timeout=4) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+            abstract = data.get("AbstractText", "")
+            heading = data.get("Heading", "")
+            if abstract:
+                snippets.append(f"DuckDuckGo Abstract ({heading}): {abstract}")
+    except Exception:
+        pass
 
+    for q in search_queries:
         # 2. Wikipedia Search & Summary API
         try:
             encoded_query = urllib.parse.quote(q)
@@ -146,52 +180,77 @@ def fetch_realtime_web_search(query: str) -> str:
             with urllib.request.urlopen(req, timeout=4) as resp:
                 wdata = json.loads(resp.read().decode('utf-8'))
                 results = wdata.get("query", {}).get("search", [])
-                for r in results[:2]:
+                for r in results[:3]:
                     title = r.get("title", "")
                     sum_url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{urllib.parse.quote(title)}"
                     sum_req = urllib.request.Request(sum_url, headers={'User-Agent': 'Mozilla/5.0'})
-                    with urllib.request.urlopen(sum_req, timeout=4) as sum_resp:
-                        sdata = json.loads(sum_resp.read().decode('utf-8'))
-                        extract = sdata.get("extract", "")
-                        if extract and extract not in snippets:
-                            snippets.append(f"Wikipedia ({title}): {extract}")
-        except Exception as e:
+                    try:
+                        with urllib.request.urlopen(sum_req, timeout=4) as sum_resp:
+                            sdata = json.loads(sum_resp.read().decode('utf-8'))
+                            extract = sdata.get("extract", "")
+                            if extract and extract not in snippets:
+                                snippets.append(f"Wikipedia ({title}): {extract}")
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+
+        # 3. DuckDuckGo HTML Search
+        try:
+            url = f"https://html.duckduckgo.com/html/?q={urllib.parse.quote(q)}"
+            req = urllib.request.Request(url, headers={
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5'
+            })
+            with urllib.request.urlopen(req, timeout=4) as resp:
+                html = resp.read().decode('utf-8', errors='ignore')
+                raw_snippets = re.findall(r'<a class="result__snippet[^>]*>(.*?)</a>', html, re.DOTALL)
+                for s in raw_snippets[:4]:
+                    clean_s = re.sub(r'<[^>]+>', '', s).strip()
+                    clean_s = clean_s.replace('&#x27;', "'").replace('&quot;', '"').replace('&amp;', '&')
+                    if clean_s and clean_s not in snippets:
+                        snippets.append(clean_s)
+        except Exception:
             pass
 
     return "\n---\n".join(snippets)
 
 def extract_clean_factual_sentence(web_context: str, query: str) -> str:
     """
-    Extracts a clean, direct, real-time factual sentence from search snippets.
+    Extracts a clean, direct, real-time factual sentence from search snippets,
+    prioritizing present-tense current facts and ignoring past term range hallucinations.
     """
-    if not web_context:
+    if not web_context or len(web_context.strip()) < 10:
         return ""
         
     raw_snippets = web_context.split("\n---\n")
     snippets = []
     for s in raw_snippets:
-        clean_s = re.sub(r'^Wikipedia\s*\([^)]*\):\s*', '', s.strip())
+        clean_s = re.sub(r'^(Wikipedia|DuckDuckGo Abstract)\s*\([^)]*\):\s*', '', s.strip())
         if clean_s:
             snippets.append(clean_s)
     
-    # Priority 1: Snippet containing 'current', 'is the current', 'serving as', or 'incumbent'
+    # Priority 1: Present-tense current officeholder or current fact sentence
+    present_terms = ["is currently", "is the current", "serving as the current", "serving as 9th", "serving as ninth", "serving as chief minister", "incumbent", "since may", "since 2021", "since 2026"]
     for s in snippets:
-        s_lower = s.lower()
-        if any(term in s_lower for term in ["current chief minister", "is the current", "serving as", "has served as", "incumbent"]):
-            sentences = re.split(r'(?<=[.!?])\s+', s)
-            for sentence in sentences:
-                sen_lower = sentence.lower()
-                if any(t in sen_lower for t in ["current", "chief minister", "serving", "incumbent"]):
+        sentences = re.split(r'(?<=[.!?])\s+', s)
+        for sentence in sentences:
+            sen_lower = sentence.lower()
+            if any(pt in sen_lower for pt in present_terms):
+                if not re.search(r'served\s+from\s+\d{4}\s+to\s+\d{4}', sen_lower):
                     return sentence.strip()
-            return s
-            
-    # Priority 2: First non-generic informational sentence
-    for s in snippets:
-        if "is the head of government" not in s.lower() and len(s) > 20:
-            sentences = re.split(r'(?<=[.!?])\s+', s)
-            return sentences[0].strip() if sentences else s
 
-    # Priority 3: First sentence of first snippet
+    # Priority 2: Sentences mentioning chief minister / entity in current active context
+    for s in snippets:
+        sentences = re.split(r'(?<=[.!?])\s+', s)
+        for sentence in sentences:
+            sen_lower = sentence.lower()
+            if any(kw in sen_lower for kw in ["chief minister", "president", "prime minister", "capital", "head of government"]) and len(sentence) > 20:
+                if not re.search(r'served\s+from\s+\d{4}\s+to\s+\d{4}', sen_lower):
+                    return sentence.strip()
+
+    # Priority 3: First valid sentence
     first_snip = snippets[0] if snippets else ""
     sentences = re.split(r'(?<=[.!?])\s+', first_snip)
     return sentences[0].strip() if sentences else first_snip
@@ -200,11 +259,25 @@ def handle_factual(query: str) -> Dict[str, Any]:
     """
     Handler A: Factual Query (Politician, Date, Geography, History)
     Fetches real-time web search results and synthesizes a direct factual response.
+    Falls back to 'I don't know' if verified present live data is unavailable.
     """
     web_context = fetch_realtime_web_search(query)
     clean_ans = extract_clean_factual_sentence(web_context, query)
     kolkata_tz = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
     current_date_str = datetime.datetime.now(kolkata_tz).strftime("%A, %B %d, %Y")
+
+    if not web_context or len(web_context.strip()) < 15:
+        return {
+            "success": True,
+            "category": "FACTUAL",
+            "is_factual": True,
+            "factual_answer": "I don't know. I could not retrieve verified present live data for this query.",
+            "matches": 0,
+            "total_matches": 0,
+            "severity": "Clean (0 Flaws - Factual)",
+            "status_message": "I don't know. Verified present live data is unavailable for this query.",
+            "results": []
+        }
 
     for attempt in range(3):
         try:
@@ -218,16 +291,23 @@ def handle_factual(query: str) -> Dict[str, Any]:
             Current Date: {current_date_str}
 
             Live Realtime Web Search Context:
-            {web_context if web_context else 'No live search context available.'}
+            {web_context}
 
-            Answer the user's question directly, clearly, and concisely in ONE clean sentence stating the current answer as of today ({current_date_str}) based on the live search snippets.
-            Do NOT include meta phrases like "Based on live real-time web data:" or "According to search results:". State the fact directly.
+            Instructions:
+            1. Answer the user's question directly, clearly, and concisely in ONE clean sentence stating the PRESENT current answer as of today ({current_date_str}) based strictly on the live search snippets.
+            2. State the fact in PRESENT tense (e.g. "is currently serving as..."). Do NOT output past tense or past term ranges (e.g. "served from 2021 to 2026") unless the context confirms their term has already ended.
+            3. Do NOT include meta phrases like "Based on live real-time web data:" or "According to search results:".
+            4. If the live search context is insufficient, conflicting, or unverified, reply ONLY: "I don't know."
             
             Question: {query}
             """
             
             response = model.generate_content(prompt)
             answer_text = response.text.strip()
+            
+            if "i don't know" in answer_text.lower() or "don't know" in answer_text.lower():
+                answer_text = clean_ans or "I don't know. Verified present live data is unavailable for this query."
+
             return {
                 "success": True,
                 "category": "FACTUAL",
@@ -236,7 +316,7 @@ def handle_factual(query: str) -> Dict[str, Any]:
                 "matches": 0,
                 "total_matches": 0,
                 "severity": "Clean (0 Flaws - Factual)",
-                "status_message": f"No contradictory peer reviews or methodological limitations found for '{query}'. {answer_text} This is a factual query with standard empirical consensus.",
+                "status_message": answer_text,
                 "results": []
             }
         except Exception as e:
@@ -244,7 +324,7 @@ def handle_factual(query: str) -> Dict[str, Any]:
                 time.sleep(1.5)
                 continue
             
-            ans = clean_ans or f"'{query}' is a factual query with standard empirical consensus."
+            ans = clean_ans or "I don't know. Verified present live data is unavailable for this query."
 
             return {
                 "success": True,
@@ -253,6 +333,7 @@ def handle_factual(query: str) -> Dict[str, Any]:
                 "factual_answer": ans,
                 "matches": 0,
                 "total_matches": 0,
+                "status_message": ans,
                 "results": []
             }
 
@@ -786,6 +867,8 @@ def run_agent(
         res = handle_factual(expanded_query)
     elif category == "AMBIGUOUS_ACRONYM":
         res = handle_ambiguous(expanded_query)
+    elif category == "IRRELEVANT":
+        res = handle_irrelevant(expanded_query)
     else:  # RESEARCH_CLAIM
         res = run_gemini_devils_advocate(expanded_query, source_filter=source_filter, attack_vector_filter=attack_vector_filter)
 

@@ -84,20 +84,39 @@ def run_adversarial_search(
     # 1. Handle Factual Queries
     if cat == "FACTUAL" or agent_res.get("is_factual"):
         fact_msg = agent_res.get("factual_answer") or agent_res.get("status_message") or f"'{expanded_q}' is a factual query."
+        is_dont_know = "i don't know" in fact_msg.lower() or "don't know" in fact_msg.lower()
         return {
             "user_query": clean_query,
             "expanded_query": expanded_q,
             "transformed_query": f"{expanded_q} [Factual Query - Skipped Transformation]",
             "category": "FACTUAL",
             "total_matches": 0,
-            "is_fact": True,
+            "is_fact": not is_dont_know,
             "is_fallback": False,
-            "status_message": f"No contradictory peer reviews or methodological limitations found for '{expanded_q}'. {fact_msg}",
+            "status_message": fact_msg,
             "attack_vectors": [],
             "results": []
         }
         
-    # 2. Handle Ambiguous Queries
+    # 2. Handle Irrelevant Queries
+    if cat == "IRRELEVANT" or agent_res.get("is_irrelevant"):
+        irr_msg = agent_res.get("status_message") or "I don't know. This query is irrelevant to academic research."
+        return {
+            "user_query": clean_query,
+            "expanded_query": expanded_q,
+            "transformed_query": f"{expanded_q} [Irrelevant Query - Skipped Transformation]",
+            "category": "IRRELEVANT",
+            "status": "IRRELEVANT",
+            "total_matches": 0,
+            "is_fact": False,
+            "is_irrelevant": True,
+            "is_fallback": False,
+            "status_message": irr_msg,
+            "attack_vectors": [],
+            "results": []
+        }
+
+    # 3. Handle Ambiguous Queries
     if cat == "AMBIGUOUS_ACRONYM" or agent_res.get("status") == "NEEDS_CLARIFICATION":
         clarify_msg = agent_res.get("status_message") or f"The query '{expanded_q}' is an acronym that requires clarification."
         return {
@@ -454,6 +473,33 @@ def generate_academic_risk_report(
                 {
                     "title": "Verified Empirical Fact",
                     "detail": "No academic refutation required. Query represents standard factual convention."
+                }
+            ]
+        }
+
+    if cat == "IRRELEVANT" or agent_res.get("is_irrelevant"):
+        irr_msg = agent_res.get("status_message") or "I don't know. This query is irrelevant to academic research."
+        return {
+            "document_id": "AA-2026-IRRELEVANT",
+            "timestamp": get_kolkata_now().strftime("%Y.%m.%d.%H:%M:%S"),
+            "query": user_query,
+            "expanded_query": expanded_q,
+            "claim": f"Irrelevant Query: '{user_query}'",
+            "severity": {
+                "label": "IRRELEVANT / NON-RESEARCH",
+                "badge": "IRRELEVANT QUERY",
+                "reasoning": irr_msg,
+                "vulnerability_score": 0.0
+            },
+            "exposed_flaws": [],
+            "vote_tally": {
+                "yes_votes": 0, "no_votes": 0, "majority_verdict": "IRRELEVANT", "consensus_percentage": "100%", "vote_breakdown": []
+            },
+            "bibliography": [],
+            "suggested_mitigations": [
+                {
+                    "title": "Irrelevant / Non-Research Query",
+                    "detail": "This query does not match academic research literature or verified factual query patterns."
                 }
             ]
         }

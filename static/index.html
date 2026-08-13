@@ -2528,6 +2528,27 @@ ${c.exact_id_fetch ? '<span class="font-mono-data text-[10px] bg-primary text-on
           }
         }
 
+        if (data.is_irrelevant || data.category === "IRRELEVANT") {
+          if (statusBanner) {
+            statusBanner.className = "mb-6 p-6 bg-surface-container-high text-on-surface-variant text-sm font-body-md border-l-4 border-outline rounded paper-shadow";
+            statusBanner.innerHTML = `
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-2xl text-outline">help_outline</span>
+<div>
+<strong class="block text-base font-bold text-on-surface">Irrelevant Query / Non-Research Input</strong>
+<p class="mt-1">${data.status_message}</p>
+</div>
+</div>
+`;
+            statusBanner.classList.remove('hidden');
+          }
+          document.getElementById('feed-severity-badge').className = "bg-surface-container-highest text-secondary px-3 py-1 text-label-sm font-label-sm border border-outline/20";
+          document.getElementById('feed-severity-badge').innerText = "Severity: Unknown / Irrelevant";
+          container.innerHTML = `<div class="p-8 text-center text-secondary font-medium bg-surface border border-outline-variant/20 rounded">${data.status_message}</div>`;
+          updateDynamicQuickDebunk(null, query);
+          return;
+        }
+
         if (data.is_fact) {
           if (statusBanner) {
             statusBanner.className = "mb-6 p-6 bg-primary-container text-on-primary-container text-sm font-body-md border-l-4 border-primary rounded paper-shadow";
@@ -2535,7 +2556,7 @@ ${c.exact_id_fetch ? '<span class="font-mono-data text-[10px] bg-primary text-on
 <div class="flex items-center space-x-3">
 <span class="material-symbols-outlined text-2xl text-on-primary-fixed-variant">check_circle</span>
 <div>
-<strong class="block text-base font-bold">Established Physical Fact / Scientific Consensus</strong>
+<strong class="block text-base font-bold">Verified Factual Information / Scientific Consensus</strong>
 <p class="mt-1">${data.status_message}</p>
 </div>
 </div>
@@ -2544,7 +2565,7 @@ ${c.exact_id_fetch ? '<span class="font-mono-data text-[10px] bg-primary text-on
           }
           document.getElementById('feed-severity-badge').className = "bg-primary-container text-on-primary-container px-3 py-1 text-label-sm font-label-sm border border-primary/20";
           document.getElementById('feed-severity-badge').innerText = "Severity: Clean (0 Flaws)";
-          container.innerHTML = `<div class="p-8 text-center text-secondary italic bg-surface border border-outline-variant/20 rounded">No contradictory peer reviews or methodological flaws found for this query. Claim is verified physics/fact.</div>`;
+          container.innerHTML = `<div class="p-8 text-center text-secondary italic bg-surface border border-outline-variant/20 rounded">No contradictory peer reviews or methodological flaws found for this query. Claim is verified empirical fact.</div>`;
           updateDynamicQuickDebunk(null, query);
           return;
         }
