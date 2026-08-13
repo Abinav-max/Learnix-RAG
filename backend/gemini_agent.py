@@ -9,6 +9,8 @@ import re
 from typing import List, Dict, Any, Tuple, Optional
 import concurrent.futures
 from dotenv import load_dotenv
+load_dotenv()
+
 import warnings
 warnings.filterwarnings("ignore")
 with warnings.catch_warnings():
@@ -25,13 +27,13 @@ def get_gemini_api_key() -> str:
 
 GEMINI_API_KEY = get_gemini_api_key()
 
-def get_generative_model(primary_model: str = "gemini-1.5-flash") -> genai.GenerativeModel:
-    for m_name in [primary_model, "gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro", "gemini-1.5-flash-latest"]:
+def get_generative_model(primary_model: str = "gemini-flash-lite-latest") -> genai.GenerativeModel:
+    for m_name in [primary_model, "gemini-flash-lite-latest", "gemini-flash-latest", "gemini-pro-latest"]:
         try:
             return genai.GenerativeModel(m_name)
         except Exception:
             continue
-    return genai.GenerativeModel("gemini-1.5-flash")
+    return genai.GenerativeModel("gemini-flash-lite-latest")
 
 # ---------------------------------------------------------
 # Step 2: Ambiguity Resolver Agent
@@ -57,68 +59,78 @@ def resolve_acronym(query: str) -> str:
 
     return query
 
-def route_query(query: str) -> Tuple[str, str]:
+def classify_query_gemini(query: str) -> Tuple[str, str]:
     """
-    Step 1: Smart Router Agent (Fast Heuristics First)
-    Routes query into FACTUAL, AMBIGUOUS_ACRONYM, IRRELEVANT, or RESEARCH_CLAIM.
+    Step 1: Gemini API-Driven Smart Query Classifier.
+    Uses a live Gemini API call (temperature=0) to intelligently classify the query
+    into one of four categories:
+    - EDUCATIONAL: Asking for an explanation or definition of any topic.
+    - RESEARCH_CLAIM: A research claim, model comparison, benchmark, flaw, or methodology.
+    - IRRELEVANT: Real-world facts, politicians, people, geography, personal identity.
+    - AMBIGUOUS_ACRONYM: A bare acronym without context.
+    Falls back to a minimal safe heuristic if the API is unavailable.
     """
     q_raw = query.strip()
-    q_clean = q_raw.lower()
-    words = q_clean.split()
+    q_lower = q_raw.lower()
+    words = q_lower.split()
 
-    # 1. Check for Irrelevant / Face Check / Personal Check queries
-    irrelevant_triggers = [
-        "face check", "check face", "check my face", "my face", "who am i", 
-        "what is my name", "check my", "face verification", "photo check", 
-        "who is my neighbor", "who is my neighbour", "am i handsome", "is my photo",
-        "random test", "hello", "hi there", "who are you"
-    ]
-    if any(trig in q_clean for trig in irrelevant_triggers):
-        return "IRRELEVANT", "Query is an irrelevant personal/face check or non-academic query."
-
-    # 2. Bare acronym check
-    if (len(words) <= 2 and q_raw.isupper() and 2 <= len(q_raw) <= 5) or q_clean in ["cm", "cot", "gnn", "rag", "pca", "svm"]:
+    # Fast pre-check: bare single/double uppercase acronym
+    if len(words) <= 2 and q_raw.upper() == q_raw and 2 <= len(q_raw) <= 5:
         return "AMBIGUOUS_ACRONYM", "Bare acronym query without context."
 
-    # 3. Check for explicit scientific hypothesis/comparison/evaluation verbs or terms
-    claim_indicators = [
-        "outperforms", "outperform", "beats", "beat", "overfit", "overfits", "leakage",
-        "should i use", "vs", "versus", "better than", "worse than", "is faster than",
-        "improves", "degrades", "limitations of", "flaw in", "fail on", "fails on",
-        "zero-shot", "fine-tuning", "inference", "generalization", "capable of", "reasoning",
-        "evaluate", "evaluation", "benchmark", "tradeoff", "trade-off"
-    ]
-    is_explicit_claim = any(ind in q_clean for ind in claim_indicators)
+    api_key = get_gemini_api_key()
+    if api_key:
+        candidate_models = ["gemini-flash-lite-latest", "gemini-flash-latest", "gemini-pro-latest"]
+        for m_name in candidate_models:
+            try:
+                genai.configure(api_key=api_key)
+                model = genai.GenerativeModel(m_name)
+                prompt = f"""You are a strict query classifier for an academic peer-review research system.
+Classify the following query into EXACTLY ONE of these four categories:
 
-    # 4. Factual & Definitional Triggers
-    factual_starters = [
-        "what is", "what are", "who is", "who was", "when was", "where is", "where was",
-        "define ", "definition of", "meaning of", "explain ", "tell me about",
-        "how many", "capital of", "chief minister", "prime minister", "president of", "is the sky",
-        "cm of", "pm of", "governor of", "head of state"
-    ]
-    is_factual_query = any(q_clean.startswith(starter) or f" {starter} " in f" {q_clean} " for starter in factual_starters)
+EDUCATIONAL - The query asks for an explanation, definition, overview, or introduction to any CONCEPT, TECHNOLOGY, DRUG, PLANT, PROGRAMMING LANGUAGE, SCIENTIFIC TOPIC, or SUBJECT. The key: the user wants to understand WHAT A THING IS (a concept, not a person or current event).
+Examples: "what is Python", "what is RAG", "what is paracetamol", "explain neural networks", "what is hibiscus", "what is deep learning", "how does DNA replication work", "what is machine learning"
 
-    if is_explicit_claim:
-        return "RESEARCH_CLAIM", "Explicit scientific hypothesis or model evaluation."
+RESEARCH_CLAIM - The query is about a specific research claim, model comparison, benchmark, methodological flaw, limitation, tradeoff, or academic hypothesis. The user wants to INVESTIGATE or CRITIQUE something academically.
+Examples: "limitations of GPT-4", "do Transformers beat GNNs for forecasting", "benchmark contamination in LLMs", "should I use BERT or RoBERTa", "data leakage in time series models"
 
-    if is_factual_query:
-        return "FACTUAL", "Factual or definitional query with no active academic debate."
+IRRELEVANT - The query is about: (1) a real person (politician, celebrity, athlete), (2) current events or news, (3) geography or place facts, (4) personal identity or face checks, (5) chit-chat, OR (6) a simple yes/no question about an established physical or scientific fact that requires no peer review.
+Examples: "who is the CM of Tamil Nadu", "who is Elon Musk", "face check", "what is today's date", "who won the IPL", "check my photo", "who is the president of USA", "what is the capital of France", "Is the sky blue?", "Is water wet?", "Is fire hot?", "Does the sun rise in the east?", "Is the earth round?"
 
-    academic_terms = [
-        "model", "transformer", "neural", "graph", "forecast", "quantum", "algorithm", 
-        "dataset", "learning", "method", "accuracy", "baseline", "reasoning", 
-        "chain-of-thought", "llm", "gnn", "arxiv", "paper", "architecture",
-        "bert", "gpt", "resnet", "attention", "embedding", "loss function", "optimizer"
-    ]
-    if any(term in q_clean for term in academic_terms):
-        return "RESEARCH_CLAIM", "Academic concept or scientific model evaluation."
+AMBIGUOUS_ACRONYM - The query is a bare acronym or abbreviation without enough context to determine its domain.
+Examples: "CM", "GNN", "RAG" (as a standalone query), "PCA", "SVM"
 
-    # Non-academic short queries without clear factual or academic intent
-    if len(words) <= 3 and not is_factual_query:
-        return "IRRELEVANT", "Query is irrelevant to academic research or verified factual search."
+CRITICAL RULE 1: If the query asks about a PERSON (who is X, who was X) or a POLITICAL ROLE (CM, PM, president, governor of a location), it is ALWAYS IRRELEVANT.
+CRITICAL RULE 2: If the query is a simple yes/no question about a well-known physical or scientific fact (e.g. "Is the sky blue?", "Is water a liquid?", "Is the sun a star?"), it is ALWAYS IRRELEVANT — there is no academic controversy to investigate.
 
-    return "RESEARCH_CLAIM", "Default research claim evaluation."
+Reply with ONLY the category name. No explanation. No punctuation.
+
+Query: {q_raw}"""
+                resp = model.generate_content(
+                    prompt,
+                    generation_config=genai.GenerationConfig(temperature=0, max_output_tokens=50)
+                )
+                label = resp.text.strip().upper().split()[0]
+                if label in ("EDUCATIONAL", "RESEARCH_CLAIM", "IRRELEVANT", "AMBIGUOUS_ACRONYM"):
+                    return label, f"Gemini API ({m_name}) classified as {label}."
+            except Exception as e:
+                print(f"[classify_query_gemini {m_name} warning]: {e}")
+                continue
+
+    # Fallback minimal heuristic (only used if Gemini API is unavailable)
+    # 'who is/was' queries about people are always IRRELEVANT
+    if any(q_lower.startswith(t) for t in ["who is", "who was", "who are", "who were"]):
+        return "IRRELEVANT", "Fallback: person-query pattern detected."
+    # Yes/no factual questions about established physical facts → IRRELEVANT
+    if any(q_lower.startswith(t) for t in ["is the", "is it", "is a ", "is an ", "are the", "does the", "does a ", "can a ", "can the"]):
+        return "IRRELEVANT", "Fallback: yes/no established-fact question detected."
+    if any(t in q_lower for t in ["what is", "what are", "explain", "define", "how does", "tell me about", "meaning of"]):
+        return "EDUCATIONAL", "Fallback: definition/explanation pattern detected."
+    if any(t in q_lower for t in ["limitation", "flaw", "vs", "versus", "benchmark", "outperform", "leakage", "overfit", "evaluation"]):
+        return "RESEARCH_CLAIM", "Fallback: research claim pattern detected."
+    if len(words) <= 3:
+        return "IRRELEVANT", "Fallback: short unclassified query."
+    return "RESEARCH_CLAIM", "Fallback: default research claim."
 
 # ---------------------------------------------------------
 # Step 3: Smart Handlers
@@ -126,10 +138,10 @@ def route_query(query: str) -> Tuple[str, str]:
 
 def handle_irrelevant(query: str) -> Dict[str, Any]:
     """
-    Handler C: Irrelevant Query / Face Check / Personal Query
-    Returns a clean 'I don't know' response.
+    Handler: Irrelevant Query / Face Check / Real-world Fact / Personal Query.
+    Returns a clean 'I don't know' response without any search.
     """
-    msg = "I don't know. This query is irrelevant to academic research, and I do not perform face checks or personal identity verification."
+    msg = "I don't know. This query is outside the scope of academic research. I'm built to help with research papers, academic claims, and educational explanations — not real-world facts, politics, or personal queries."
     return {
         "success": True,
         "category": "IRRELEVANT",
@@ -137,10 +149,87 @@ def handle_irrelevant(query: str) -> Dict[str, Any]:
         "is_irrelevant": True,
         "status": "IRRELEVANT",
         "status_message": msg,
-        "factual_answer": "I don't know.",
         "matches": 0,
         "total_matches": 0,
         "results": []
+    }
+
+def handle_educational(query: str, source_filter: str = "All", attack_vector_filter: str = "All") -> Dict[str, Any]:
+    """
+    Handler: Educational Query ("what is X", "explain Y", etc.)
+    1. Fetches web search snippets for grounding.
+    2. Uses Gemini to synthesize a clear 2-4 sentence educational explanation.
+    3. Also fetches related academic papers from the RAG pipeline.
+    Returns: educational_answer (prominent box) + results (papers below).
+    """
+    # Step 1: Web search for grounding context
+    web_context = fetch_realtime_web_search(query)
+
+    # Step 2: Gemini synthesizes educational explanation
+    educational_answer = ""
+    api_key = get_gemini_api_key()
+    if api_key and web_context:
+        for attempt in range(3):
+            try:
+                genai.configure(api_key=api_key)
+                model = get_generative_model("gemini-flash-latest")
+                prompt = f"""You are a clear, concise educational assistant.
+
+Web Search Context:
+{web_context[:2000]}
+
+Based on the web context above, write a clear educational explanation of the following query.
+Requirements:
+- 2 to 4 sentences maximum.
+- Use simple, accessible language.
+- Cover: what it is, what it does / its primary use, and one key fact or example.
+- Do NOT include meta phrases like "Based on the web context" or "According to search results".
+- If the context is insufficient, write a concise explanation from your own knowledge.
+
+Query: {query}"""
+                resp = model.generate_content(prompt)
+                educational_answer = resp.text.strip()
+                break
+            except Exception as e:
+                if "429" in str(e) and attempt < 2:
+                    time.sleep(1.5)
+                    continue
+                print(f"[handle_educational LLM warning]: {e}")
+                break
+
+    # Fallback: extract first clean sentence from web context
+    if not educational_answer and web_context:
+        raw_snippets = web_context.split("\n---\n")
+        for s in raw_snippets:
+            clean_s = re.sub(r'^(Wikipedia|DuckDuckGo Abstract)\s*\([^)]*\):\s*', '', s.strip())
+            sentences = re.split(r'(?<=[.!?])\s+', clean_s)
+            if sentences and len(sentences[0]) > 20:
+                educational_answer = sentences[0].strip()
+                break
+
+    if not educational_answer:
+        educational_answer = f"I found limited information about '{query}'. Please try rephrasing your query."
+
+    # Step 3: Fetch related academic papers from the RAG pipeline
+    papers = []
+    try:
+        papers_res = run_gemini_devils_advocate(
+            query, source_filter=source_filter, attack_vector_filter=attack_vector_filter
+        )
+        papers = papers_res.get("results", [])
+    except Exception as e:
+        print(f"[handle_educational papers warning]: {e}")
+
+    return {
+        "success": True,
+        "category": "EDUCATIONAL",
+        "is_educational": True,
+        "is_factual": False,
+        "educational_answer": educational_answer,
+        "status_message": educational_answer,
+        "matches": len(papers),
+        "total_matches": len(papers),
+        "results": papers
     }
 
 def fetch_realtime_web_search(query: str) -> str:
@@ -255,87 +344,8 @@ def extract_clean_factual_sentence(web_context: str, query: str) -> str:
     sentences = re.split(r'(?<=[.!?])\s+', first_snip)
     return sentences[0].strip() if sentences else first_snip
 
-def handle_factual(query: str) -> Dict[str, Any]:
-    """
-    Handler A: Factual Query (Politician, Date, Geography, History)
-    Fetches real-time web search results and synthesizes a direct factual response.
-    Falls back to 'I don't know' if verified present live data is unavailable.
-    """
-    web_context = fetch_realtime_web_search(query)
-    clean_ans = extract_clean_factual_sentence(web_context, query)
-    kolkata_tz = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
-    current_date_str = datetime.datetime.now(kolkata_tz).strftime("%A, %B %d, %Y")
-
-    if not web_context or len(web_context.strip()) < 15:
-        return {
-            "success": True,
-            "category": "FACTUAL",
-            "is_factual": True,
-            "factual_answer": "I don't know. I could not retrieve verified present live data for this query.",
-            "matches": 0,
-            "total_matches": 0,
-            "severity": "Clean (0 Flaws - Factual)",
-            "status_message": "I don't know. Verified present live data is unavailable for this query.",
-            "results": []
-        }
-
-    for attempt in range(3):
-        try:
-            api_key = get_gemini_api_key()
-            if api_key:
-                genai.configure(api_key=api_key)
-                model = get_generative_model("gemini-1.5-flash-latest")
-            
-            prompt = f"""
-            You are a real-time factual knowledge assistant. 
-            Current Date: {current_date_str}
-
-            Live Realtime Web Search Context:
-            {web_context}
-
-            Instructions:
-            1. Answer the user's question directly, clearly, and concisely in ONE clean sentence stating the PRESENT current answer as of today ({current_date_str}) based strictly on the live search snippets.
-            2. State the fact in PRESENT tense (e.g. "is currently serving as..."). Do NOT output past tense or past term ranges (e.g. "served from 2021 to 2026") unless the context confirms their term has already ended.
-            3. Do NOT include meta phrases like "Based on live real-time web data:" or "According to search results:".
-            4. If the live search context is insufficient, conflicting, or unverified, reply ONLY: "I don't know."
-            
-            Question: {query}
-            """
-            
-            response = model.generate_content(prompt)
-            answer_text = response.text.strip()
-            
-            if "i don't know" in answer_text.lower() or "don't know" in answer_text.lower():
-                answer_text = clean_ans or "I don't know. Verified present live data is unavailable for this query."
-
-            return {
-                "success": True,
-                "category": "FACTUAL",
-                "is_factual": True,
-                "factual_answer": answer_text,
-                "matches": 0,
-                "total_matches": 0,
-                "severity": "Clean (0 Flaws - Factual)",
-                "status_message": answer_text,
-                "results": []
-            }
-        except Exception as e:
-            if "429" in str(e) and attempt < 2:
-                time.sleep(1.5)
-                continue
-            
-            ans = clean_ans or "I don't know. Verified present live data is unavailable for this query."
-
-            return {
-                "success": True,
-                "category": "FACTUAL",
-                "is_factual": True,
-                "factual_answer": ans,
-                "matches": 0,
-                "total_matches": 0,
-                "status_message": ans,
-                "results": []
-            }
+# handle_factual removed — EDUCATIONAL handler covers definition/explanation queries,
+# IRRELEVANT handler covers political/personal real-world fact queries.
 
 def synthesize_gemini_realtime_report(user_query: str, critiques: List[Dict[str, Any]]) -> Optional[str]:
     """
@@ -348,7 +358,7 @@ def synthesize_gemini_realtime_report(user_query: str, critiques: List[Dict[str,
         return None
     try:
         genai.configure(api_key=api_key)
-        model = get_generative_model("gemini-1.5-flash-latest")
+        model = get_generative_model("gemini-flash-latest")
         
         context_str = "\n".join([
             f"- [{c.get('source', 'Academic')}] {c.get('title')}: {c.get('raw_text', c.get('text', ''))[:300]}"
@@ -396,7 +406,7 @@ def generate_dynamic_mitigations(user_query: str, critiques: Optional[List[Dict[
     if api_key:
         try:
             genai.configure(api_key=api_key)
-            model = get_generative_model("gemini-1.5-flash-latest")
+            model = get_generative_model("gemini-flash-latest")
             
             prompt = f"""
 You are an expert scientific peer-reviewer and research methodology advisor.
@@ -476,7 +486,7 @@ def handle_ambiguous(query: str) -> Dict[str, Any]:
             api_key = get_gemini_api_key()
             if api_key:
                 genai.configure(api_key=api_key)
-                model = get_generative_model("gemini-1.5-flash-latest")
+                model = get_generative_model("gemini-flash-latest")
             
             prompt = f"""
             The query "{query}" is ambiguous or an acronym with multiple meanings.
@@ -616,7 +626,7 @@ def run_gemini_devils_advocate(
         fetch_arxiv_realtime, fetch_openreview_realtime, fetch_pubpeer_realtime,
         fetch_biorxiv_realtime, fetch_medrxiv_realtime, fetch_openalex_realtime,
         fetch_semanticscholar_realtime, fetch_pmc_realtime, fetch_doaj_realtime,
-        fetch_zenodo_realtime, fetch_openaire_realtime,
+        fetch_zenodo_realtime, fetch_openaire_realtime, fetch_core_realtime,
         detect_query_domain, get_domain_categories, get_paper_domain,
         filter_by_domain, is_supportive_marketing_fluff,
         keyword_overlap_filter, has_explicit_ids, fetch_all_exact_ids
@@ -708,17 +718,17 @@ def run_gemini_devils_advocate(
     src_lower = (source_filter or "all").lower()
 
     fetch_tasks = []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=12) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=14) as executor:
         if src_lower in ["all", "arxiv"]:
             fetch_tasks.append(executor.submit(fetch_arxiv_realtime, user_query, 5, target_categories))
 
-        if src_lower == "biorxiv" or (src_lower == "all" and target_domain == "BIOLOGY/MEDICINE"):
+        if src_lower in ["all", "biorxiv"]:
             fetch_tasks.append(executor.submit(fetch_biorxiv_realtime, user_query, 4))
 
-        if src_lower == "medrxiv" or (src_lower == "all" and target_domain == "BIOLOGY/MEDICINE"):
+        if src_lower in ["all", "medrxiv"]:
             fetch_tasks.append(executor.submit(fetch_medrxiv_realtime, user_query, 4))
 
-        if src_lower in ["pmc", "pubmed"] or (src_lower == "all" and target_domain == "BIOLOGY/MEDICINE"):
+        if src_lower in ["all", "pmc", "pubmed"]:
             fetch_tasks.append(executor.submit(fetch_pmc_realtime, user_query, 4))
 
         if src_lower in ["all", "openalex"]:
@@ -736,6 +746,9 @@ def run_gemini_devils_advocate(
         if src_lower in ["all", "openaire"]:
             fetch_tasks.append(executor.submit(fetch_openaire_realtime, user_query, 4))
 
+        if src_lower in ["all", "core"]:
+            fetch_tasks.append(executor.submit(fetch_core_realtime, user_query, 4))
+
         if src_lower in ["all", "openreview"]:
             fetch_tasks.append(executor.submit(fetch_openreview_realtime, user_query, 4))
 
@@ -750,15 +763,17 @@ def run_gemini_devils_advocate(
             except Exception:
                 pass
 
-    # 3. Post-fetch domain filter safety net
+    # 3. Post-fetch domain filter
     domain_filtered = filter_by_domain(all_hits, target_domain)
     if not domain_filtered and all_hits:
         domain_filtered = [h for h in all_hits if get_paper_domain(h.get("title", ""), h.get("raw_text", ""), h.get("source", "")) == target_domain]
-    if not domain_filtered and all_hits:
+    if not domain_filtered:
         domain_filtered = all_hits
 
-    # 3b. Keyword overlap filter — require ≥2 query keyword matches in title+abstract
-    keyword_filtered = keyword_overlap_filter(user_query, domain_filtered, min_overlap=2)
+    # 3b. Keyword overlap filter — require ≥1 query keyword matches in title/abstract
+    keyword_filtered = keyword_overlap_filter(user_query, domain_filtered, min_overlap=1)
+    if not keyword_filtered and domain_filtered:
+        keyword_filtered = domain_filtered
 
     # Strict source filter check
     if src_lower != "all":
@@ -771,19 +786,16 @@ def run_gemini_devils_advocate(
 
     # 4. Sentiment filter: discard supportive/marketing papers
     critical_hits = [h for h in keyword_filtered if not is_supportive_marketing_fluff(h.get("title", ""), h.get("raw_text", h.get("text", "")))]
-    if not critical_hits and keyword_filtered:
+    if not critical_hits:
         critical_hits = keyword_filtered
-    if not critical_hits and all_hits:
-        critical_hits = all_hits
 
     # 5. Semantic Re-Ranker (TF-IDF Cosine Similarity against query)
-    from backend.live_agent import rerank_results_tfidf
+    from backend.live_agent import rerank_results_tfidf, gemini_smart_relevance_gate
     ranked_hits = rerank_results_tfidf(user_query, critical_hits)
     
-    # Relevance threshold limitation: retain top hits, fallback if empty
-    relevant_hits = [h for h in ranked_hits if h.get("relevance_score", 0) >= 0.05]
-    if not relevant_hits and ranked_hits:
-        relevant_hits = ranked_hits
+    # 6. Apply Gemini Smart Relevance Gate to ensure 100% topic relevance
+    relevant_hits = gemini_smart_relevance_gate(user_query, ranked_hits)
+    relevant_hits = [h for h in relevant_hits if h.get("relevance_score", 0) >= 0.15]
 
     # 6. Build results from filtered hits (return up to 6 when All, up to 4 when specific)
     limit = 6 if src_lower == "all" else 4
@@ -858,17 +870,17 @@ def run_agent(
     """
     # 1. Resolve acronyms
     expanded_query = resolve_acronym(user_query)
-    
-    # 2. Route query
-    category, reasoning = route_query(expanded_query)
-    
+
+    # 2. Classify query via Gemini API (no keyword lists)
+    category, reasoning = classify_query_gemini(expanded_query)
+
     # 3. Dispatch to matching handler
-    if category == "FACTUAL":
-        res = handle_factual(expanded_query)
-    elif category == "AMBIGUOUS_ACRONYM":
-        res = handle_ambiguous(expanded_query)
+    if category == "EDUCATIONAL":
+        res = handle_educational(expanded_query, source_filter=source_filter, attack_vector_filter=attack_vector_filter)
     elif category == "IRRELEVANT":
         res = handle_irrelevant(expanded_query)
+    elif category == "AMBIGUOUS_ACRONYM":
+        res = handle_ambiguous(expanded_query)
     else:  # RESEARCH_CLAIM
         res = run_gemini_devils_advocate(expanded_query, source_filter=source_filter, attack_vector_filter=attack_vector_filter)
 

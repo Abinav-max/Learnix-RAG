@@ -1366,6 +1366,12 @@
           <span class="material-symbols-outlined text-sm">public</span>
           <span>OpenAIRE</span>
         </button>
+        <button id="sidebar-btn-core"
+          class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onclick="filterBySource('CORE')">
+          <span class="material-symbols-outlined text-sm">hub</span>
+          <span>CORE Open Access</span>
+        </button>
         <button id="sidebar-btn-openreview"
           class="w-full flex items-center space-x-2 px-3 py-1.5 font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-high transition-all"
           onclick="filterBySource('OpenReview')">
@@ -1542,14 +1548,94 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-[#1c1b1b]">
-        <a href="https://arxiv.org" target="_blank"
+        <a href="https://info.arxiv.org/help/api/index.html" target="_blank"
           class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
           <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
             <span>ArXiv Pre-Prints</span>
             <span class="material-symbols-outlined text-xs">open_in_new</span>
           </div>
-          <p class="text-xs text-[#5e5f5c] mt-1">Open-access research papers across AI, Computer Science, and Physics.
-          </p>
+          <p class="text-xs text-[#5e5f5c] mt-1">Open-access research papers across AI, Computer Science, and Physics.</p>
+        </a>
+
+        <a href="https://api.biorxiv.org/" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>bioRxiv Preprints</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">Open-access repository for biological and life sciences preprints.</p>
+        </a>
+
+        <a href="https://api.biorxiv.org/" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>medRxiv Preprints</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">Clinical, medical, and health science research preprints.</p>
+        </a>
+
+        <a href="https://doaj.org/api/v2/docs" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>DOAJ Open Access</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">Directory of 20,000+ peer-reviewed open access journals worldwide.</p>
+        </a>
+
+        <a href="https://core.ac.uk/services#api" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>CORE Index</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">Connecting repositories: global aggregator of open access research outputs.</p>
+        </a>
+
+        <a href="https://develop.openaire.eu/" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>OpenAIRE Graph</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">European and global open science research graph and publications index.</p>
+        </a>
+
+        <a href="https://developers.zenodo.org/" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>Zenodo CERN Repository</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">Multidisciplinary CERN repository for datasets, preprints, and publications.</p>
+        </a>
+
+        <a href="https://pmc.ncbi.nlm.nih.gov/tools/" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>PubMed Central (PMC)</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">NLM/NIH archive of biomedical and life sciences journal literature.</p>
+        </a>
+
+        <a href="https://api.semanticscholar.org/" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>Semantic Scholar Graph</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">AI-backed engine for 200M+ scholarly papers and citation graphs.</p>
+        </a>
+
+        <a href="https://openalex.org" target="_blank"
+          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
+          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
+            <span>OpenAlex Index</span>
+            <span class="material-symbols-outlined text-xs">open_in_new</span>
+          </div>
+          <p class="text-xs text-[#5e5f5c] mt-1">Global catalog of 250M+ scholarly works, citations, and authors.</p>
         </a>
 
         <a href="https://openreview.net" target="_blank"
@@ -1567,17 +1653,7 @@
             <span>PubPeer Audits</span>
             <span class="material-symbols-outlined text-xs">open_in_new</span>
           </div>
-          <p class="text-xs text-[#5e5f5c] mt-1">Post-publication critique feed for image manipulation and
-            methodological flaws.</p>
-        </a>
-
-        <a href="https://openalex.org" target="_blank"
-          class="p-4 bg-[#f6f3f2] border border-[#c3c8c1]/50 rounded-xl hover:border-[#061b0e] transition-all group">
-          <div class="font-bold text-[#061b0e] group-hover:underline flex items-center justify-between">
-            <span>OpenAlex Index</span>
-            <span class="material-symbols-outlined text-xs">open_in_new</span>
-          </div>
-          <p class="text-xs text-[#5e5f5c] mt-1">Global catalog of 250M+ scholarly works, citations, and authors.</p>
+          <p class="text-xs text-[#5e5f5c] mt-1">Post-publication critique feed for image manipulation and methodological flaws.</p>
         </a>
       </div>
     </div>
@@ -2491,10 +2567,19 @@ ${c.exact_id_fetch ? '<span class="font-mono-data text-[10px] bg-primary text-on
         window.lastSearchResults = data.results || [];
         
         const sourceBadgeMap = {
-          'All': 'Source: All Active Attacks',
-          'OpenReview': 'Source: OpenReview Forum',
+          'All': 'Source: All Connected Scholarly APIs (11+)',
           'ArXiv': 'Source: ArXiv Pre-Prints',
-          'PubPeer': 'Source: PubPeer Feed'
+          'bioRxiv': 'Source: bioRxiv Biology',
+          'medRxiv': 'Source: medRxiv Clinical',
+          'OpenAlex': 'Source: OpenAlex Catalog',
+          'SemanticScholar': 'Source: Semantic Scholar Graph',
+          'PMC': 'Source: PubMed Central (PMC)',
+          'DOAJ': 'Source: DOAJ Open Access',
+          'Zenodo': 'Source: Zenodo CERN Repository',
+          'OpenAIRE': 'Source: OpenAIRE Research Graph',
+          'CORE': 'Source: CORE Open Access Index',
+          'OpenReview': 'Source: OpenReview Forum',
+          'PubPeer': 'Source: PubPeer Post-Publication Audit'
         };
         const sourceBadgeEl = document.getElementById('feed-source-badge');
         if (sourceBadgeEl) {
@@ -2528,6 +2613,86 @@ ${c.exact_id_fetch ? '<span class="font-mono-data text-[10px] bg-primary text-on
           }
         }
 
+        // ─── EDUCATIONAL: Prominent answer box + related papers below ───
+        if (data.is_educational || data.category === "EDUCATIONAL") {
+          if (statusBanner) {
+            statusBanner.className = "mb-6 rounded-xl overflow-hidden paper-shadow border border-primary/20";
+            statusBanner.innerHTML = `
+<div style="background: linear-gradient(135deg, rgba(var(--md-sys-color-primary-container-rgb,208,188,255),0.25) 0%, rgba(var(--md-sys-color-surface-container-high-rgb,236,232,240),0.6) 100%); padding: 1.5rem;">
+  <div class="flex items-start gap-4">
+    <span class="material-symbols-outlined text-3xl shrink-0" style="color: var(--md-sys-color-primary); margin-top:2px">school</span>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xs font-bold uppercase tracking-widest px-2 py-0.5 rounded" style="background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary)">Educational Overview</span>
+      </div>
+      <p class="text-base leading-relaxed font-medium" style="color:var(--md-sys-color-on-surface)">${data.educational_answer || data.status_message || ''}</p>
+      <p class="text-xs mt-2" style="color:var(--md-sys-color-outline)">Powered by Gemini · Grounded with live web search</p>
+    </div>
+  </div>
+</div>`;
+            statusBanner.classList.remove('hidden');
+          }
+          document.getElementById('feed-severity-badge').className = "px-3 py-1 text-label-sm font-label-sm border rounded";
+          document.getElementById('feed-severity-badge').style.cssText = "background:var(--md-sys-color-primary-container);color:var(--md-sys-color-on-primary-container);border-color:var(--md-sys-color-primary)";
+          document.getElementById('feed-severity-badge').innerText = "Educational Query";
+          if (matchCount) matchCount.innerText = `${data.total_matches} Related Paper${data.total_matches === 1 ? '' : 's'} Found`;
+
+          if (data.results && data.results.length > 0) {
+            container.innerHTML = data.results.map((card, idx) => `
+<article class="bg-surface border border-outline-variant/20 hover:border-outline transition-all p-6 relative overflow-hidden group paper-shadow">
+<div class="absolute left-0 top-0 bottom-0 w-1" style="background:var(--md-sys-color-primary)"></div>
+<div class="flex justify-between items-center mb-4 gap-2 flex-wrap sm:flex-nowrap min-w-0">
+<div class="flex items-center space-x-3 min-w-0 truncate">
+<span class="text-label-sm font-mono-data text-outline shrink-0">SOURCE: ${(card.source||'').toUpperCase()}</span>
+<span class="text-outline shrink-0">•</span>
+<span class="text-label-sm font-mono-data text-outline truncate" title="${card.source_id||''}">ID: #${card.source_id||'N/A'}</span>
+</div>
+<div class="flex items-center space-x-2 shrink-0 ml-auto">
+<span class="text-[10px] font-mono-data text-secondary bg-surface-container-highest px-2 py-0.5 shrink-0">Relevance: ${(card.relevance_score || 0.85).toFixed(2)}</span>
+<span class="px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest shrink-0" style="background:var(--md-sys-color-primary-container);color:var(--md-sys-color-on-primary-container)">Related</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-3 font-bold text-primary">${card.title||'Untitled'}</h3>
+<blockquote class="font-body-lg text-body-lg text-on-surface mb-4 leading-relaxed italic">
+"${card.text||card.raw_text||''}"
+</blockquote>
+<div class="mb-4 text-xs font-mono-data text-on-tertiary-container bg-tertiary-fixed/30 p-2 rounded">
+Adversarial Tag: ${card.adversarial_tag || card.distilbert_tag || 'Academic Paper'}
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/10 pt-4">
+<div class="flex flex-wrap gap-6">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline font-bold uppercase">Publisher / Venue</span>
+<span class="text-label-md font-label-md text-on-surface font-semibold">${card.publisher || card.source || 'Academic'}</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] text-outline font-bold uppercase">Attack Vector</span>
+<span class="text-label-md font-label-md text-on-surface">${card.attack_vector||'Related Research'}</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] text-outline font-bold uppercase">Authors / Reviewer</span>
+<span class="text-label-md font-label-md text-on-surface">${card.authors||'Unknown'} (${card.year||'2024'})</span>
+</div>
+</div>
+<div class="flex space-x-3 ml-auto items-center">
+<button class="flex items-center space-x-1 text-secondary hover:text-[#dc790a] font-label-sm transition-colors" onclick="toggleSavePaper('${card.id||idx}')" title="Save Article">
+<span class="material-symbols-outlined text-sm text-[#dc790a]" id="save-icon-${card.id||idx}">${isPaperSaved(card.id||idx) ? 'bookmark_added' : 'bookmark'}</span>
+<span id="save-text-${card.id||idx}" class="text-xs font-semibold">${isPaperSaved(card.id||idx) ? 'Saved' : 'Save'}</span>
+</button>
+<button class="flex items-center space-x-1 text-primary font-label-sm hover:underline ml-2" onclick="openDeepDive('${card.id||idx}')">
+<span>Inspect Thread</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>`).join('');
+          } else {
+            container.innerHTML = `<div class="p-8 text-center text-secondary font-medium bg-surface border border-outline-variant/20 rounded">No related academic papers found for this topic. Try a more specific research query.</div>`;
+          }
+          updateDynamicQuickDebunk(data.results ? data.results[0] : null, query);
+          return;
+        }
+
         if (data.is_irrelevant || data.category === "IRRELEVANT") {
           if (statusBanner) {
             statusBanner.className = "mb-6 p-6 bg-surface-container-high text-on-surface-variant text-sm font-body-md border-l-4 border-outline rounded paper-shadow";
@@ -2549,7 +2714,8 @@ ${c.exact_id_fetch ? '<span class="font-mono-data text-[10px] bg-primary text-on
           return;
         }
 
-        if (data.is_fact) {
+        // ─── is_fact (legacy factual status banner, shown when RESEARCH path has zero flaws) ───
+        if (data.is_fact && !data.is_educational) {
           if (statusBanner) {
             statusBanner.className = "mb-6 p-6 bg-primary-container text-on-primary-container text-sm font-body-md border-l-4 border-primary rounded paper-shadow";
             statusBanner.innerHTML = `

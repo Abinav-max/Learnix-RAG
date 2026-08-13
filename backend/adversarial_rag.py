@@ -13,8 +13,8 @@ from backend.database import search_critiques_db, CRITIQUE_DATABASE
 from backend.gemini_agent import (
     run_agent,
     resolve_acronym,
-    route_query,
-    handle_factual,
+    classify_query_gemini,
+    handle_educational,
     handle_ambiguous,
     run_gemini_devils_advocate,
     tag_severity_gemini
@@ -69,8 +69,8 @@ def run_adversarial_search(
 ) -> Dict[str, Any]:
     """
     Full Three-Agent Adversarial Search Pipeline:
-    1. Runs Ambiguity Resolver to expand acronyms (e.g. 'who is the Cm of tamilnadu' -> 'Who is the Chief Minister of Tamil Nadu?').
-    2. Runs Smart Router Agent to classify into FACTUAL, RESEARCH_CLAIM, or AMBIGUOUS_ACRONYM.
+    1. Runs Ambiguity Resolver to expand acronyms.
+    2. Runs Gemini API classifier to categorize into EDUCATIONAL, RESEARCH_CLAIM, IRRELEVANT, or AMBIGUOUS_ACRONYM.
     3. Invokes the matching domain handler.
     """
     clean_query = user_query.strip()
@@ -81,21 +81,24 @@ def run_adversarial_search(
     expanded_q = agent_res.get("expanded_query", clean_query)
     cat = agent_res.get("category", "RESEARCH_CLAIM")
     
-    # 1. Handle Factual Queries
-    if cat == "FACTUAL" or agent_res.get("is_factual"):
-        fact_msg = agent_res.get("factual_answer") or agent_res.get("status_message") or f"'{expanded_q}' is a factual query."
-        is_dont_know = "i don't know" in fact_msg.lower() or "don't know" in fact_msg.lower()
+    # 1. Handle Educational Queries (explanation + related papers)
+    if cat == "EDUCATIONAL" or agent_res.get("is_educational"):
+        edu_answer = agent_res.get("educational_answer") or agent_res.get("status_message") or ""
+        edu_results = agent_res.get("results", [])
         return {
             "user_query": clean_query,
             "expanded_query": expanded_q,
-            "transformed_query": f"{expanded_q} [Factual Query - Skipped Transformation]",
-            "category": "FACTUAL",
-            "total_matches": 0,
-            "is_fact": not is_dont_know,
+            "transformed_query": f"{expanded_q} [Educational Query]",
+            "category": "EDUCATIONAL",
+            "is_educational": True,
+            "educational_answer": edu_answer,
+            "total_matches": len(edu_results),
+            "is_fact": False,
+            "is_irrelevant": False,
             "is_fallback": False,
-            "status_message": fact_msg,
+            "status_message": edu_answer,
             "attack_vectors": [],
-            "results": []
+            "results": edu_results
         }
         
     # 2. Handle Irrelevant Queries
@@ -450,31 +453,30 @@ def generate_academic_risk_report(
     expanded_q = agent_res.get("expanded_query", user_query)
     cat = agent_res.get("category", "RESEARCH_CLAIM")
     
-    if cat == "FACTUAL" or agent_res.get("is_factual"):
-        fact_answer = agent_res.get("factual_answer") or agent_res.get("status_message") or f"'{expanded_q}' is an established fact."
+    if cat == "EDUCATIONAL" or agent_res.get("is_educational"):
+        edu_answer = agent_res.get("educational_answer") or agent_res.get("status_message") or f"'{expanded_q}' is an educational query."
+        edu_results = agent_res.get("results", [])
         return {
-            "document_id": "AA-2026-FACT",
+            "document_id": "AA-2026-EDUCATIONAL",
             "timestamp": get_kolkata_now().strftime("%Y.%m.%d.%H:%M:%S"),
             "query": user_query,
             "expanded_query": expanded_q,
-            "claim": f"Evaluation of factual query: '{expanded_q}'",
+            "is_educational": True,
+            "educational_answer": edu_answer,
+            "claim": f"Educational Query: '{expanded_q}'",
             "severity": {
-                "label": "CLEAN (0 Flaws)",
-                "badge": "FACTUAL QUERY / CONSENSUS",
-                "reasoning": f"Factual query with standard empirical consensus. {fact_answer}",
+                "label": "EDUCATIONAL QUERY",
+                "badge": "EDUCATIONAL",
+                "reasoning": edu_answer,
                 "vulnerability_score": 0.0
             },
             "exposed_flaws": [],
             "vote_tally": {
-                "yes_votes": 0, "no_votes": 0, "majority_verdict": "CLEAN FACT", "consensus_percentage": "100%", "vote_breakdown": []
+                "yes_votes": 0, "no_votes": 0, "majority_verdict": "EDUCATIONAL", "consensus_percentage": "100%", "vote_breakdown": []
             },
-            "bibliography": ["Standard Empirical Knowledge Base."],
-            "suggested_mitigations": [
-                {
-                    "title": "Verified Empirical Fact",
-                    "detail": "No academic refutation required. Query represents standard factual convention."
-                }
-            ]
+            "bibliography": [],
+            "results": edu_results,
+            "suggested_mitigations": []
         }
 
     if cat == "IRRELEVANT" or agent_res.get("is_irrelevant"):

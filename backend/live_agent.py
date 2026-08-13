@@ -31,13 +31,13 @@ def get_gemini_api_key() -> str:
 
 GEMINI_API_KEY = get_gemini_api_key()
 
-def get_generative_model(primary_model: str = "gemini-1.5-flash") -> genai.GenerativeModel:
-    for m_name in [primary_model, "gemini-1.5-flash", "gemini-2.0-flash", "gemini-1.5-pro"]:
+def get_generative_model(primary_model: str = "gemini-flash-lite-latest") -> genai.GenerativeModel:
+    for m_name in [primary_model, "gemini-flash-lite-latest", "gemini-flash-latest", "gemini-pro-latest"]:
         try:
             return genai.GenerativeModel(m_name)
         except Exception:
             continue
-    return genai.GenerativeModel("gemini-1.5-flash")
+    return genai.GenerativeModel("gemini-flash-lite-latest")
 
 def detect_sentiment(title: str, text: str) -> str:
     """
@@ -562,7 +562,7 @@ def gemini_smart_relevance_gate(query: str, papers: List[Dict[str, Any]]) -> Lis
         
     try:
         genai.configure(api_key=gemini_key)
-        model = get_generative_model("gemini-1.5-flash")
+        model = get_generative_model("gemini-flash-lite-latest")
         
         candidates_text = ""
         for idx, p in enumerate(papers[:8]):
@@ -607,12 +607,12 @@ def gemini_smart_relevance_gate(query: str, papers: List[Dict[str, Any]]) -> Lis
             if is_rel and score >= 0.40:
                 smart_filtered.append(paper)
                 
-        return sorted(smart_filtered, key=lambda x: x.get("relevance_score", 0), reverse=True) if smart_filtered else papers[:5]
+        return sorted(smart_filtered, key=lambda x: x.get("relevance_score", 0), reverse=True)
     except Exception as e:
         print(f"[Gemini Smart Relevance Gate warning]: {e}")
         # Fallback to relevance filtering if AI is unavailable (quota or missing module)
-        strict_fallback = [p for p in papers if p.get("relevance_score", 0.0) >= 0.10 or p.get("keyword_overlap", 0) >= 1]
-        return strict_fallback if strict_fallback else papers[:5]
+        strict_fallback = [p for p in papers if p.get("relevance_score", 0.0) >= 0.15 or p.get("keyword_overlap", 0) >= 1]
+        return sorted(strict_fallback, key=lambda x: x.get("relevance_score", 0), reverse=True)
 
 def rerank_results_tfidf(query: str, papers: List[Dict[str, Any]], top_k: Optional[int] = None) -> List[Dict[str, Any]]:
     """
@@ -1589,4 +1589,59 @@ def fetch_openaire_realtime(query: str, max_results: int = 5) -> List[Dict[str, 
     except Exception as e:
         print(f"[fetch_openaire_realtime warning]: {e}")
     return results
+
+
+def fetch_core_realtime(query: str, max_results: int = 5) -> List[Dict[str, Any]]:
+    """
+    Fetches real-time open access publications from CORE API (COnecting REpositories).
+    """
+    results = []
+    try:
+        clean_q = re.sub(r'[^\w\s]', '', query).strip()
+        words = clean_q.split()
+        core_search = " ".join(words[:4]) if words else query
+        term = urllib.parse.quote(core_search)
+        url = f"https://api.core.ac.uk/v3/search/works?q={term}&limit={max_results}"
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+        with urllib.request.urlopen(req, timeout=6) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+            hits = data.get('results', [])
+            for item in hits:
+                title = item.get('title') or 'CORE Open Access Research'
+                abstract = item.get('abstract') or title
+                year = item.get('yearPublished') or 2024
+                cid = item.get('id') or random.randint(10000, 99999)
+                
+                authors_list = item.get('authors', [])
+                authors = [a.get('name') for a in authors_list if isinstance(a, dict) and a.get('name')] if isinstance(authors_list, list) else ["CORE Contributor"]
+                if not authors:
+                    authors = ["CORE Researcher"]
+
+                download_url = item.get('downloadUrl') or f"https://core.ac.uk/works/{cid}"
+                vector, severity, adversarial_tag, skep_score = detect_fine_grained_attack_vector(title, abstract)
+
+                results.append({
+                    "id": f"core-{cid}",
+                    "source_id": str(cid),
+                    "title": title,
+                    "authors": authors[:3],
+                    "publisher": "CORE Open Access",
+                    "year": int(year) if str(year).isdigit() else 2024,
+                    "source": "CORE",
+                    "url": download_url,
+                    "section": "Global Repository Index",
+                    "attack_vector": vector,
+                    "target": title[:45] + "...",
+                    "risk_level": severity,
+                    "skepticism_score": skep_score,
+                    "replication_prob": round(100.0 - skep_score, 1),
+                    "paragraph_type": "Limitation/Critique",
+                    "adversarial_tag": adversarial_tag,
+                    "text": abstract[:400],
+                    "raw_text": abstract
+                })
+    except Exception as e:
+        print(f"[fetch_core_realtime warning]: {e}")
+    return results
+
 
